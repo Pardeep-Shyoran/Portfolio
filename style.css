@@ -1,0 +1,330 @@
+@import url('https://fonts.googleapis.com/css2?family=Fragment+Mono:ital@1&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", serif;
+}
+
+:root {
+    --text-color: rgb(239, 239, 239);
+    --secondary-text-color: rgb(147, 56, 245);
+    --background-color: #0c253d;
+    --secondary-bg-color: #344c64a4;
+    --border-color: rgb(255, 0, 0);
+    --nav-bg-color: #13293dc1;
+    --hover-color: rgb(255, 232, 188);
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    height: 80px;
+    background-color: var(--nav-bg-color);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 5;
+    backdrop-filter: blur(10px);
+}
+
+nav ul {
+    display: flex;
+    align-items: center;
+    gap: 50px;
+}
+
+nav ul li {
+    list-style: none;
+    cursor: pointer;
+    transition: all 0.4s ease;
+}
+
+nav ul li:hover {
+    color: var(--secondary-text-color);
+    font-size: 1.11rem;
+    transition: all 0.4s ease;
+}
+
+.left {
+    font-size: 1.6rem;
+}
+
+.nav-bar a {
+    text-decoration: none;
+    color: var(--text-color);
+}
+
+.right {
+    font-size: 1.1rem;
+}
+
+.right ul li a:hover {
+    color: var(--secondary-text-color);
+    font-size: 1.11rem;
+    transition: all 0.4s ease;
+}
+
+main hr {
+    border: 0;
+    background-color: var(--secondary-text-color);
+    height: 2px;
+    margin: 0 80px;
+}
+
+.firstSection {
+    padding-top: 80px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 125px 0px 50px;
+    height: 76vh;
+    flex-wrap: wrap;
+}
+
+.leftSection {
+    /* background-color: var(--border-color); */
+    font-size: 3rem;
+    width: 53%;
+}
+
+.leftSection .name {
+    color: var(--secondary-text-color);
+}
+
+.rightSection {
+    /* background-color: var(--border-color); */
+    width: 30%;
+}
+
+.rightSection img {
+    /* height: 450px; */
+    width: 94%;
+}
+
+#element {
+    color: var(--secondary-text-color);
+}
+
+.btn-container a{
+    padding: 10px 20px;
+    background-color: var(--secondary-text-color);
+    color: var(--text-color);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    font-size: 1rem;
+    text-decoration: none;
+}
+
+.btn-container a:hover{
+    background-color: var(--hover-color);
+    color: var(--background-color);
+}
+
+/* AI generated all second section */
+
+.secondSection {
+    min-height: 100vh;
+    padding: 80px 0;
+}
+
+.secondSection h1 {
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 40px;
+    text-decoration: underline;
+}
+
+.about-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.about-content p {
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+.thirdSection {
+    padding-top: 80px;
+    /* height: 76vh; */
+    display: flex;
+    flex-direction: column;
+}
+
+.thirdSection h1 {
+    font-size: 2rem;
+    text-align: center;
+    margin: 20px 0;
+    text-decoration: underline;
+}
+
+.thirdSection .cards {
+    padding: 0 0 50px 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 60px;
+    flex-wrap: wrap;
+}
+
+.thirdSection .cards .project-card {
+    width: 350px;
+    height: 450px;
+    background: var(--secondary-bg-color);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    transition: all 0.4s ease;
+}
+
+.thirdSection .cards .project-card:hover {
+    transform: scale(1.03);
+    box-shadow: 0px 0px 20px var(--hover-color);
+    transition: all 0.4s ease;
+}
+
+.thirdSection .cards .project-card .card-image img {
+    width: 300px;
+    border-radius: 10px;
+}
+
+.thirdSection .cards .project-card h2 {
+    margin: 20px 0;
+}
+
+.thirdSection .cards .project-card a {
+    text-decoration: none;
+    color: var(--secondary-text-color);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.thirdSection .cards .project-card a:hover {
+    transform: scale(1.02);
+}
+
+.fourthSection {
+    height: 76vh;
+}
+
+.foot {
+    display: flex;
+    height: 70px;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+/* AI generated content all media query */
+
+@media (max-width: 768px) {
+
+    .leftSection,
+    .rightSection {
+        width: 90%;
+        text-align: center;
+    }
+
+    .rightSection img {
+        width: 100%;
+    }
+
+    nav ul {
+        gap: 20px;
+    }
+
+    .left {
+        font-size: 1.2rem;
+    }
+
+    .right {
+        font-size: 0.9rem;
+    }
+}
+
+/* AI generated content all fouth section */
+
+.fourthSection {
+    min-height: 100vh;
+    padding: 80px 0;
+}
+
+.fourthSection h1 {
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 40px;
+    text-decoration: underline;
+}
+
+.social-links {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.social-links h2 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: var(--secondary-text-color);
+}
+
+.social-links ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.social-links ul li a {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: var(--secondary-bg-color);
+    color: var(--text-color);
+    text-decoration: none;
+    border-radius: 5px;
+    transition: all 0.4s ease;
+}
+
+.social-links ul li a:hover {
+    background-color: var(--secondary-text-color);
+    color: var(--background-color);
+}
+
+.contact-btn-container{ 
+    max-width: 600px;
+    margin: 20px auto;
+    text-align: center;
+}
+
+.email-button, .btn{
+    padding: 10px 20px;
+    background-color: var(--secondary-text-color);
+    color: var(--text-color);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    font-size: 1rem;
+}
+
+.email-button:hover, .btn:hover {
+    background-color: var(--hover-color);
+    color: var(--background-color);
+}
