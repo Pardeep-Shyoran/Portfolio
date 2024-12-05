@@ -194,6 +194,7 @@ main hr {
     transform: scale(1.03);
     box-shadow: 0px 0px 20px var(--hover-color);
     transition: all 0.4s ease;
+    backdrop-filter: blur(30px);
 }
 
 .thirdSection .cards .project-card .card-image img {
@@ -300,6 +301,7 @@ main hr {
     text-decoration: none;
     border-radius: 5px;
     transition: all 0.4s ease;
+    box-shadow: 0px 0px 5px wheat;
 }
 
 .social-links ul li a:hover {

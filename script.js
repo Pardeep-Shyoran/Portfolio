@@ -17,38 +17,25 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 
-    // Form submission handling
-    document.getElementById('contact-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        var name = this.name.value;
-        var email = this.email.value;
-        var message = this.message.value;
-
-        // Display the message in the modal
-        document.getElementById('modal-message').innerHTML = `
-            <strong>Name:</strong> ${name}<br>
-            <strong>Email:</strong> ${email}<br>
-            <strong>Message:</strong> ${message}
-        `;
-
-        // Show the modal
-        modal.style.display = "block";
-
-        // Here you would typically send the form data to a server
-        console.log('Form submitted:', { name, email, message });
-
-        // Reset the form
-        this.reset();
-    });
-
     // Email button click handling
+    // document.getElementById('email-button').addEventListener('click', function() {
+    //     var recipient = 'pardeepsheoran2004@gmail.com';
+    //     var subject = 'Inquiry from Portfolio Website';
+    //     var body = 'Hello Pardeep Shyoran,\n\nI visited your portfolio website and I would like to get in touch with you regarding...';
+
+    //     var mailtoLink = 'mailto:' + recipient + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+
+    //     window.location.href = mailtoLink;
+    // });
+
     document.getElementById('email-button').addEventListener('click', function() {
-        var recipient = 'your.email@example.com';
+        var recipient = 'pardeepsheoran2004@gmail.com';
         var subject = 'Inquiry from Portfolio Website';
-        var body = 'Hello Pardeep Shyoran,\n\nI visited your portfolio website and I would like to get in touch with you regarding...';
-
-        var mailtoLink = 'mailto:' + recipient + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
-
+        var body = `Hello Pardeep Sheoran,\n\nI visited your portfolio website and I would like to get in touch with you regarding...`;
+    
+        var mailtoLink = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    
         window.location.href = mailtoLink;
     });
+    
 });
