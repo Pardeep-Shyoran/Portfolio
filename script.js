@@ -16,6 +16,21 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    const cardWrapper = document.querySelector('.cards');
+        const cards = document.querySelectorAll('.project-card');
+
+        cards.forEach(card => {
+            const clone = card.cloneNode(true);
+            cardWrapper.appendChild(clone);
+        });
+
+        const totalWidth = cards.length * (350 + 60);
+
+        cardWrapper.style.width = `${totalWidth * 2}px`;
+
+        const animationDuration = cards.length * 3;
+        cardWrapper.style.animationDuration = `${animationDuration}s`;
+
 
     // Email button click handling
     // document.getElementById('email-button').addEventListener('click', function() {
