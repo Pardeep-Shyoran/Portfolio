@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // });
 
     document.getElementById('email-button').addEventListener('click', function() {
-        var recipient = 'pardeepsheoran2004@gmail.com';
+        var recipient = 'pardeep75889@gmail.com';
         var subject = 'Inquiry from Portfolio Website';
         var body = `Hello Pardeep Shyoran,\n\nI visited your portfolio website and I would like to get in touch with you regarding...`;
     
