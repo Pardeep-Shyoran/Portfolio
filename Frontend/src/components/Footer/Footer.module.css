@@ -19,7 +19,7 @@
 
 .footerHeading1{
     text-align: center;
-    font-size: clamp(3rem, 12vw, 14rem);
+    font-size: clamp(3rem, 14vw, 14rem);
     font-weight: 700;
     color: var(--text-color);
     text-transform: uppercase;
