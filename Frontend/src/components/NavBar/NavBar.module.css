@@ -1,0 +1,39 @@
+.NavBar {
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4rem;
+}
+
+.NavLink {
+    font-size: 1.2rem;
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    color: var(--text-color);
+    padding: 0.4rem 0;
+    transition: color 0.2s;
+}
+
+.NavLink:hover {
+    color: var(--text-color2); /* Example hover effect */
+}
+
+.NavLink[aria-current="page"]{
+    color: var(--text-color2);
+}
+
+/* --- Responsive Styles for Mobile --- */
+@media (max-width: 768px) {
+    .NavBar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .NavLink {
+        font-size: 1.15rem;
+        padding: 0.6rem 0.2rem;
+    }
+}

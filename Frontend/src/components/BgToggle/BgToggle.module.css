@@ -1,0 +1,80 @@
+/* Toggle button container */
+.toggle {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.4rem 0.7rem;
+	border-radius: 999px;
+	border: 1px solid var(--border-color);
+	background: color-mix(in oklab, var(--background-color) 85%, var(--text-color) 15%);
+	color: var(--text-color);
+	cursor: pointer;
+	outline: none;
+	transition: background 160ms ease, border-color 160ms ease, transform 80ms ease;
+	user-select: none;
+}
+
+.toggle:hover {
+	border-color: color-mix(in oklab, var(--border-color) 60%, var(--text-color) 40%);
+}
+
+.toggle:active {
+	transform: translateY(1px);
+}
+
+.icon {
+	font-size: 1rem;
+	line-height: 1;
+}
+
+.text {
+	font-size: 0.9rem;
+}
+
+.toggle {
+  position: relative;
+  width: 60px;
+  height: 32px;
+  background-color: #e6e6e6; /* light gray when off */
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  transition: background-color 0.3s ease;
+  padding: 0;
+}
+
+
+.toggle::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 24px;
+  height: 24px;
+  background-color: #fff;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+}
+
+
+.toggle[aria-pressed="true"] {
+  background-color: var(--text-color2);
+}
+
+
+.toggle[aria-pressed="true"]::before {
+  transform: translateX(28px);
+}
+
+
+.toggle:focus-visible {
+  outline: 2px solid var(--text-color2);
+  outline-offset: 3px;
+}
+
+/* Hide inner text/icons visually (optional) */
+.icon, .text {
+  display: none;
+}

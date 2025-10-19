@@ -1,0 +1,33 @@
+.Logo{
+    height: 60px;
+    /* width: 120px; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.LogoImage{
+    height: 100%;
+    /* width: 100%; */
+    aspect-ratio: 16/9;
+    /* object-fit: contain; */
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+.LogoText{
+        font-size: 1.4rem;
+    font-weight: bold;
+    color: var(--text-color2);
+    cursor: pointer;
+    user-select: none;
+    text-align: center;
+    text-decoration: none;
+}
+
+@media (max-width: 900px){
+    .LogoText{
+        font-size: 1.25rem;
+    }
+}

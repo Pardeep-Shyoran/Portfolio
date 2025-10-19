@@ -1,0 +1,141 @@
+.Header{
+        height: 10vh;
+        width: 100%;
+        box-shadow: 0 2px 4px var(--box-shadow-color);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 0 16px;
+        position: sticky;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+        background: var(--background-color-opacity);
+        backdrop-filter: blur(8px);
+}
+
+.left{ display: flex; align-items: center; min-width: 0; }
+.right{ display: flex; align-items: center; gap: 12px; }
+
+.desktopNav{ display: flex; align-items: center; }
+
+/* Menu button (hamburger) - hidden on desktop */
+.menuButton{
+    display: none;
+    position: relative;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    background: color-mix(in oklab, var(--background-color) 85%, var(--text-color) 15%);
+    cursor: pointer;
+}
+
+.bar{
+    position: absolute;
+    left: 9px;
+    right: 9px;
+    height: 2px;
+    background: var(--text-color);
+    border-radius: 2px;
+    transition: transform 180ms ease, opacity 180ms ease, top 180ms ease;
+}
+.bar:nth-child(1){ top: 12px; }
+.bar:nth-child(2){ top: 19px; }
+.bar:nth-child(3){ top: 26px; }
+
+.toggleWrap{ display: flex; align-items: center; }
+
+/* Backdrop for mobile menu */
+.backdrop{
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.25);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 180ms ease;
+    z-index: 999;
+}
+.backdrop.show{ opacity: 1; pointer-events: auto; }
+
+/* Mobile menu panel */
+.mobileMenu{
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: min(86vw, 420px);
+    transform: translateX(100%);
+    opacity: 0;
+    pointer-events: none;
+    background: var(--background-color);
+    border-left: 1px solid var(--border-color);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    transition: transform 200ms ease, opacity 200ms ease;
+    z-index: 1001; /* over backdrop and header */
+}
+.mobileMenu.open{
+    transform: translateX(0);
+    opacity: 1;
+    pointer-events: auto;
+}
+.mobileTop{
+    position: sticky;
+    top: 0;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 16px;
+    background: var(--background-color);
+    border-bottom: 1px solid var(--border-color);
+    z-index: 1;
+}
+
+.closeButton{
+    position: relative;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    background: color-mix(in oklab, var(--background-color) 85%, var(--text-color) 15%);
+    cursor: pointer;
+}
+
+.xbar{
+    position: absolute;
+    left: 9px;
+    right: 9px;
+    top: 19px;
+    height: 2px;
+    background: var(--text-color);
+    border-radius: 2px;
+}
+.xbar:first-child{ transform: rotate(45deg); }
+.xbar:last-child{ transform: rotate(-45deg); }
+
+.mobileMenu nav{
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 16px; /* top bar already accounts for spacing */
+}
+.mobileExtras{
+    margin-top: 8px;
+    display: flex;
+    justify-content: flex-start;
+}
+
+/* Responsive rules */
+@media (max-width: 768px){
+    .desktopNav{ display: none; }
+    .menuButton{ display: inline-block; }
+    /* hide toggle in header on mobile; it appears inside the slide-in menu */
+    .toggleWrap{ display: none; }
+}
+
+/* Hamburger to X animation */
+.open .bar:nth-child(1){ top: 19px; transform: rotate(45deg); }
+.open .bar:nth-child(2){ opacity: 0; }
+.open .bar:nth-child(3){ top: 19px; transform: rotate(-45deg); }
