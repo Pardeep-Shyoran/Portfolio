@@ -6,7 +6,7 @@ import Contact from '../Contact/Contact'
 const Home = () => {
 
   const onButtonClick = () => {
-    const pdfUrl = "https://drive.google.com/file/d/1OQ9FV8CBDfWfb29yxdQxFlw79SbDRUZW/view?usp=drive_link";  // Your PDF file URL
+    const pdfUrl = "https://drive.google.com/file/d/1xanOw0mqgqmVEqKn7VI4I2795ZhmDizT/view";
     window.open(pdfUrl, "_blank");
   };
 
