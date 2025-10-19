@@ -1,5 +1,4 @@
 import styles from './ProjectCard.module.css';
-// You can add icons from react-icons if you like:
 import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
 
 const ProjectCard = ({ project }) => {
@@ -7,9 +6,8 @@ const ProjectCard = ({ project }) => {
   const themeName = project.theme || 'General'
   return (
     <div className={styles["project-card"]} style={{
-      // Expose per-card CSS variables used by global styles
       ['--project-accent']: accent,
-      ['--project-accent-weak']: `${accent}20`, // ~12% opacity
+      ['--project-accent-weak']: `${accent}20`,
     }}>
       <div className={styles["project-image-container"]}>
         <img
