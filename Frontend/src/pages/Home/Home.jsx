@@ -12,12 +12,12 @@ const Home = () => {
 
   return (
     <>
-    <div className={styles.home}>
+    <section id="home" className={styles.home}>
       <div className={styles.title1}>Full Stack</div>
       <div className={styles.title2}>Developer</div>
       <img className={styles.image} src="https://ik.imagekit.io/00zfvrear/Images/man-in-long-shirt-white-pointing-side-with-both-index-fingers-3d-illustration-of-a-smart-businessman-pointing-png.webp?updatedAt=1760714540976" alt="" />
       <button className={styles.button} onClick={onButtonClick}>Resume</button>
-    </div>
+    </section>
     <About />
     <Projects />
     <Contact />

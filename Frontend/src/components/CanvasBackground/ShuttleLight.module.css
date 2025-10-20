@@ -1,0 +1,14 @@
+.shuttleLight {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  height: 300px;
+  pointer-events: none;
+  z-index: 2;
+  background: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(255,255,255,0.85) 0%, rgba(255, 255, 255, 0.45) 50%, rgba(0,0,0,0) 100%);
+  filter: blur(32px) brightness(0.6) drop-shadow(0 0 80px #7f7e7e);
+  opacity: 1;
+  transition: opacity 0.3s;
+}

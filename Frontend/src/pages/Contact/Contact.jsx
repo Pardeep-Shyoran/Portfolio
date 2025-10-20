@@ -2,7 +2,7 @@ import styles from './Contact.module.css'
 
 const Contact = () => {
   return (
-    <div className={styles.contact}>
+    <section id='contact' className={styles.contact}>
       <div className={styles.contactLeft}>
           <div className={styles.contactTitle}>Get in touch</div>
           <div className={styles.contactDescription}>
@@ -41,7 +41,7 @@ const Contact = () => {
       <div className={styles.contactRight}>
         <img src="https://ik.imagekit.io/00zfvrear/Images/man-in-long-shirt-white-pointing-side-with-both-index-fingers-3d-illustration-of-a-smart-businessman-pointing-png.webp?updatedAt=1760714540976" alt="" />
       </div>
-    </div>
+    </section>
   )
 }
 

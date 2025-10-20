@@ -4,7 +4,7 @@ import styles from "./About.module.css";
 const About = () => {
   return (
     <>
-      <div className={styles.about}>
+      <section id="about" className={styles.about}>
         <div className={styles.aboutLeft}>
           <h1 className={styles.title}>About Me</h1>
           <p>
@@ -29,7 +29,7 @@ const About = () => {
             alt="About Me"
           />
         </div>
-      </div>
+      </section>
 
       <Skills />
     </>

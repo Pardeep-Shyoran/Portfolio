@@ -1,5 +1,5 @@
 .home{
-    min-height: 90vh;
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -28,7 +28,7 @@
     color: var(--text-color2);
     margin-left: 10px;
     position: absolute;
-    top: 25%;
+    top: 23%;
     transform: rotate(-10deg);
     line-height: 1;
 }
@@ -59,13 +59,13 @@
 /* Tablet and smaller screens */
 @media (max-width: 1024px) {
     .title1 {
-        font-size: clamp(2.5rem, 10vw + 0.5rem, 10rem);
-        top: 35%;
+        font-size: clamp(2.5rem, 14vw + 0.5rem, 10rem);
+        top: 25%;
     }
     
     .title2 {
-        font-size: clamp(1.2rem, 3.5vw + 0.5rem, 4rem);
-        top: 20%;
+        font-size: clamp(1.2rem, 6vw + 0.5rem, 6rem);
+        top: 22%;
     }
     
     .image {
@@ -79,13 +79,11 @@
     .home {
     flex-direction: column;
     padding: 2rem 1rem;
-    min-height: 60vh;
+    min-height: 80vh;
     align-items: center; /* Center align items */
   }
   
   .button {
-    position: relative; /* Change absolute to relative so it flows with columns */
-    bottom: auto;
     left: auto;
     margin-top: 1rem;
     width: auto;
@@ -94,27 +92,24 @@
   }
   
   .image {
-    position: relative; /* Change from absolute to relative for better stacking */
-    width: clamp(150px, 60%, 400px);
-    opacity: 0.9;
+    /* position: relative; */
+    width: clamp(150px, 80%, 500px);
+    bottom: 20%;
+    /* opacity: 0.9; */
     margin-top: 1rem; /* spacing between text and image */
   }
     
     .title1 {
-        font-size: clamp(2rem, 8vw + 0.5rem, 6rem);
-        top: 30%;
+        font-size: clamp(2rem, 14vw + 0.5rem, 10rem);
+        top: 20%;
     }
     
     .title2 {
-        font-size: clamp(1rem, 3vw + 0.5rem, 2.5rem);
-        top: 15%;
-        transform: rotate(-8deg);
+        font-size: clamp(1rem, 10vw + 0.5rem, 3.5rem);
+        top: 17%;
+        transform: rotate(-10deg);
     }
     
-    .image {
-        width: clamp(150px, 60%, 400px);
-        opacity: 0.9;
-    }
 }
 
 /* Small mobile devices */
@@ -124,23 +119,24 @@
     }
     
     .title1 {
-        font-size: clamp(1.5rem, 7vw + 0.5rem, 4rem);
-        top: 25%;
+        font-size: clamp(1.5rem, 12vw + 0.5rem, 4rem);
+        top: 18%;
     }
     
     .title2 {
-        font-size: clamp(0.875rem, 2.5vw + 0.5rem, 2rem);
-        top: 12%;
+        font-size: clamp(0.875rem, 6vw + 0.5rem, 2rem);
+        top: 16%;
         margin-left: 5px;
-        transform: rotate(-6deg);
+        transform: rotate(-10deg);
     }
     
     .image {
-        width: clamp(120px, 70%, 300px);
+        bottom: 25%;
+        width: clamp(120px, 100%, 400px);
     }
 
     .button {
-    font-size: clamp(0.875rem, 2.5vw + 0.5rem, 1rem);
+    font-size: clamp(0.875rem, 7vw + 0.5rem, 1.4rem);
     padding: 0.4rem 0.8rem;
   }
 }

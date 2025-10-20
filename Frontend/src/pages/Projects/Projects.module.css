@@ -1,8 +1,8 @@
 
 .projects-section {
-  padding: 4rem 1rem;
+  padding: 4rem 0rem;
   text-align: center;
-  width: 90%;
+  width: 95%;
   margin: 0 auto;
 }
 
@@ -27,6 +27,7 @@
 
 @media (min-width: 480px) {
   .projects-section {
+    width: 95%;
     padding: 3.5rem 1rem;
   }
   .projects-grid {
@@ -36,6 +37,7 @@
 
 @media (min-width: 768px) {
   .projects-section {
+    width: 90%;
     padding: 4rem 1rem;
   }
   .projects-grid {
@@ -45,6 +47,10 @@
 }
 
 @media (min-width: 1200px) {
+  .projects-section {
+    padding: 4rem 2rem;
+    width: 90%;
+  }
   .projects-grid {
     grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
   }
