@@ -1,5 +1,5 @@
 {
-  "rewrites": [
-    { "source": "/(.*)", "destination": "https://www.pardeep-shyoran.me", "permanent": true }
-  ]
+    "rewrites": [
+        { "source": "/(.*)", "destination": "/" }
+    ]
 }
