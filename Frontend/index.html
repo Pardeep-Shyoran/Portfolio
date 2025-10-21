@@ -2,28 +2,53 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="https://ik.imagekit.io/00zfvrear/Images/man-in-long-shirt-white-pointing-side-with-both-index-fingers-3d-illustration-of-a-smart-businessman-pointing-png.webp?updatedAt=1760714540976" />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="https://ik.imagekit.io/00zfvrear/Images/man-in-long-shirt-white-pointing-side-with-both-index-fingers-3d-illustration-of-a-smart-businessman-pointing-png.webp?updatedAt=1760714540976"
+    />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Explore Pardeep Shyoran's full stack development journey—backend architecture, milestone visuals, and impactful branding."
+    />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Pardeep Shyoran",
+        "url": "https://pardeep-shyoran.me",
+        "sameAs": [
+          "https://github.com/pardeep-shyoran",
+          "https://www.linkedin.com/in/pardeepshyoran/"
+        ]
+      }
+    </script>
     <title>Pardeep Shyoran || Portfolio</title>
+  </head>
+  <body>
+    <div id="root"></div>
     <script>
       (function () {
         try {
-          var stored = localStorage.getItem('theme');
-          if (stored === 'light' || stored === 'dark') {
-            document.documentElement.setAttribute('data-theme', stored);
+          var stored = localStorage.getItem("theme");
+          if (stored === "light" || stored === "dark") {
+            document.documentElement.setAttribute("data-theme", stored);
             return;
           }
         } catch (e) {}
         var prefersDark = false;
         try {
-          prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          prefersDark =
+            window.matchMedia &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches;
         } catch (e) {}
-        document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+        document.documentElement.setAttribute(
+          "data-theme",
+          prefersDark ? "dark" : "light"
+        );
       })();
     </script>
-  </head>
-  <body>
-    <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
