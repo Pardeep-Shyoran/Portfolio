@@ -102,7 +102,7 @@ For me, development is more than code — it's about designing intuitive digital
 
 Feel free to reach out if you'd like to collaborate on a project, need a developer, or just want to connect!
 
-- **Portfolio:** [Live Demo](#)
+- **Portfolio:** [Live Demo](https://pardeep-shyoran.vercel.app/)
 - **GitHub:** [@Pardeep-Shyoran](https://github.com/Pardeep-Shyoran)
 
 ## 📄 License
