@@ -1,9 +1,22 @@
 import Skills from "../../components/Skills/Skills";
 import styles from "./About.module.css";
+import { Helmet } from "react-helmet";
 
 const About = () => {
   return (
     <>
+      <Helmet>
+        <title>About Pardeep Shyoran | Developer & Creator</title>
+        <meta
+          name="description"
+          content="Learn more about Pardeep Shyoran—his background, technical skills, creative vision, and passion for impactful development."
+        />
+        <meta
+          name="keywords"
+          content="About Pardeep Shyoran, Developer Bio, Full Stack Journey, Tech Background"
+        />
+      </Helmet>
+
       <section id="about" className={styles.about}>
         <div className={styles.aboutLeft}>
           <h1 className={styles.title}>About Me</h1>

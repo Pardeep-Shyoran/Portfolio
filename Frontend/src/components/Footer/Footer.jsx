@@ -20,7 +20,7 @@ Best regards,
   };
 
   return (
-    <div className={styles.footer}>
+    <footer className={styles.footer}>
       <div className={styles.footerContent}>
         <div className={styles.footerHeading1}>Thank You</div>
         <div className={styles.footerHeading2}>For Your Attention!</div>
@@ -84,7 +84,7 @@ Best regards,
       <div className={styles.footerCopyright}>
         &copy; {new Date().getFullYear()} Pardeep Shyoran. All rights reserved.
       </div>
-    </div>
+    </footer>
   );
 };
 

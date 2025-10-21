@@ -70,7 +70,7 @@ const Header = () => {
 
   return (
     <>
-      <div className={styles.Header}>
+      <header className={styles.Header}>
         <div className={styles.left}>
           <Logo />
         </div>
@@ -97,7 +97,7 @@ const Header = () => {
             <span className={styles.bar} />
           </button>
         </div>
-      </div>
+      </header>
 
       {/* Backdrop */}
       <button
