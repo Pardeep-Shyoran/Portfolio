@@ -1,11 +1,12 @@
 .skills {
-    height: 100vh;
+    height: 80vh;
     width: 90%;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 2rem;
     margin: 0 auto;
+    padding: 5rem 0;
 }
 
 .title{
@@ -73,7 +74,7 @@
 
 @media (min-width: 1024px) {
     .skills{
-        height: 90vh;
+        height: 100vh;
     }
     .skillItem {
         flex-wrap: nowrap;
