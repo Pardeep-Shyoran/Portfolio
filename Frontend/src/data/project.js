@@ -1,6 +1,17 @@
 const projectsData = [
   {
     id: 1,
+    title: 'Rivo - Your Music, Your Way',
+    description: 'Rivo – A scalable MERN‑based music streaming platform featuring multi‑role access, microservices architecture, JWT authentication, RabbitMQ messaging, AWS S3 cloud storage.',
+    imageUrl: 'https://ik.imagekit.io/00zfvrear/Portfolio%20Assets/Screenshot%202025-10-19%20at%2022.36.59.png?updatedAt=1760893650849',
+    tags: ['React', 'Node.js', 'Express', 'MongoDB', 'JWT', 'RabbitMQ',],
+    theme: 'Music',
+    accentColor: '#7abbff',
+    demoUrl: 'https://rivo-music.vercel.app/',
+    repoUrl: 'https://github.com/Pardeep-Shyoran/Rivo',
+  },
+  {
+    id: 1,
     title: 'Lite-Insta - Social Media App',
     description: 'A full-stack social media application built with the MERN stack, featuring user authentication, post creation with an AI-powered caption generator, and the ability to update and delete posts.',
     imageUrl: 'https://ik.imagekit.io/00zfvrear/Portfolio%20Assets/Screenshot%202025-10-19%20at%2022.36.59.png?updatedAt=1760893650849',

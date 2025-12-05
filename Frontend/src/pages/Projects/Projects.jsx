@@ -1,11 +1,16 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import ProjectCard from "../../components/ProjectCard/ProjectCard.jsx";
 import projectsData from "../../data/project.js";
 import styles from "./Projects.module.css";
 import { Helmet } from "react-helmet";
+import gsap from "gsap";
 
 const ProjectsPage = () => {
   const [selectedTheme, setSelectedTheme] = useState("All");
+
+  useEffect(() => {
+    gsap.to(window, { scrollTo: 0, duration: 0.5 });
+  }, []);
 
   const themes = useMemo(() => {
     const set = new Set(projectsData.map((p) => p.theme || "General"));

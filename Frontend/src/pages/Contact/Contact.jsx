@@ -1,7 +1,12 @@
 import styles from "./Contact.module.css";
 import { Helmet } from "react-helmet";
+import { useEffect } from "react";
+import gsap from "gsap";
 
 const Contact = () => {
+  useEffect(() => {
+    gsap.to(window, { scrollTo: 0, duration: 0.5 });
+  }, []);
   return (
     <>
       <Helmet>

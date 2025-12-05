@@ -1,8 +1,13 @@
 import Skills from "../../components/Skills/Skills";
 import styles from "./About.module.css";
 import { Helmet } from "react-helmet";
+import { useEffect } from "react";
+import gsap from "gsap";
 
 const About = () => {
+  useEffect(() => {
+    gsap.to(window, { scrollTo: 0, duration: 0.5 });
+  }, []);
   return (
     <>
       <Helmet>

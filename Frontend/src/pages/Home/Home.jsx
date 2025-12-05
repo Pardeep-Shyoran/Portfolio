@@ -1,8 +1,9 @@
 import About from "../About/About";
 import styles from "./Home.module.css";
-import Projects from "../Projects/Projects";
+// import Projects from "../Projects/Projects";
 import Contact from "../Contact/Contact";
 import { Helmet } from "react-helmet";
+import FeaturedProjects from "../../components/FeaturedProjects/FeaturedProjects";
 
 const Home = () => {
   const onButtonClick = () => {
@@ -38,7 +39,8 @@ const Home = () => {
         </button>
       </section>
       <About />
-      <Projects />
+      {/* <Projects /> */}
+      <FeaturedProjects />
       <Contact />
     </>
   );
