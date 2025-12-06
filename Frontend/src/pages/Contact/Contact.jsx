@@ -64,7 +64,7 @@ const Contact = () => {
   return (
     <>
       <Helmet>
-        <title>Contact | Pardeep Shyoran</title>
+        <title>Portfolio | Pardeep Shyoran</title>
         <meta
           name="description"
           content="Start a project, discuss collaboration, or ask about the stack behind recent work."
