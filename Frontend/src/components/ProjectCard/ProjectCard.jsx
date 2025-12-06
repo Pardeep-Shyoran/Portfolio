@@ -20,8 +20,7 @@ const ProjectCard = ({ project }) => {
       style={{
         ['--project-accent']: accent,
         ['--project-accent-weak']: `${accent}20`,
-        ['--project-theme-bg']: background,
-        background: `var(--project-theme-bg)`,
+        ['--project-accent-strong']: `${accent}40`,
       }}
     >
       <div className={styles["project-card-content"]}>

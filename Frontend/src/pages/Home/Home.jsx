@@ -8,7 +8,14 @@ import Button from "../../components/Button/Button";
 import Certificates from "../Certificates/Certificates";
 
 const Home = () => {
-  const onButtonClick = () => {
+  const onLetsTalkClick = () => {
+    const contactSection = document.getElementById("contact");
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  const onResumeClick = () => {
     const pdfUrl =
       "https://drive.google.com/file/d/1MZEmMEvYlfCkLt4I3PyEYByxNI6X3QXw/view";
     window.open(pdfUrl, "_blank");
@@ -31,19 +38,41 @@ const Home = () => {
       <section id="home" className={styles.home}>
         <div className={styles.title1}>Full Stack</div>
         <div className={styles.title2}>Developer</div>
-        <img
-          className={styles.image}
-          src="https://ik.imagekit.io/00zfvrear/Images/man-in-long-shirt-white-pointing-side-with-both-index-fingers-3d-illustration-of-a-smart-businessman-pointing-png.webp?updatedAt=1760714540976"
-          alt=""
-        />
-        <Button
-          onClick={onButtonClick}
-          variant="primary"
-          size="lg"
-          className={styles.button}
-        >
-          Resume
-        </Button>
+        {/* Hero content positioned at bottom right */}
+        <div className={styles.heroContent}>
+          <div className={styles.heroTitle}>Hello, I'm Pardeep 👋</div>
+          <p className={styles.heroDescription}>
+            A passionate Full Stack Developer crafting seamless web experiences with modern technologies.
+          </p>
+          {/* <div className={styles.heroStats}>
+            <div className={styles.statItem}>
+              <span className={styles.statNumber}>50+</span>
+              <span className={styles.statLabel}>Projects</span>
+            </div>
+            <div className={styles.statItem}>
+              <span className={styles.statNumber}>3+</span>
+              <span className={styles.statLabel}>Years Exp</span>
+            </div>
+          </div> */}
+        </div>
+        <div className={styles.buttonContainer}>
+          <Button
+            onClick={onResumeClick}
+            variant="primary"
+            size="lg"
+            className={styles.resumeButton}
+          >
+            Resume
+          </Button>
+          <Button
+            onClick={onLetsTalkClick}
+            variant="primary"
+            size="lg"
+            className={styles.letsTalkButton}
+          >
+            Let's Talk
+          </Button>
+        </div>
       </section>
       <About />
       {/* <Projects /> */}

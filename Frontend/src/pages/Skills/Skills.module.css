@@ -1,0 +1,247 @@
+.skillsSection {
+	width: 80%;
+	margin: 0 auto;
+	padding: 5rem 0 4rem 0;
+	display: flex;
+	flex-direction: column;
+	gap: 2.5rem;
+}
+
+.header {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+	max-width: 900px;
+	text-align: center;
+	margin: 0 auto;
+}
+
+.eyebrow {
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	font-size: 0.9rem;
+	color: var(--text-color3);
+	font-weight: 700;
+}
+
+.title {
+	font-size: clamp(2rem, 5vw + 0.5rem, 4rem);
+	font-weight: 700;
+	color: var(--text-color2);
+	text-transform: uppercase;
+	letter-spacing: 0.02em;
+}
+
+.subtitle {
+	color: var(--text-color5);
+	line-height: 1.6;
+	max-width: 760px;
+	margin: 0 auto;
+}
+
+.grid {
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+	width: 100%;
+}
+
+.card {
+	--card-radius: 20px;
+	--card-padding: 1.85rem;
+	position: relative;
+	padding: var(--card-padding);
+	border-radius: var(--card-radius);
+	border: 1px solid var(--border-color);
+	background: color-mix(in oklab, var(--skill-accent-weak) 45%, var(--background-color));
+	box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+	backdrop-filter: blur(8px);
+	overflow: hidden;
+	transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+}
+
+.card::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+	background: radial-gradient(circle at 18% 18%, var(--skill-accent-strong), transparent 38%),
+		radial-gradient(circle at 88% 10%, var(--skill-accent-weak), transparent 30%);
+	opacity: 0.65;
+}
+
+.card:hover {
+	transform: translateY(-6px);
+	box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
+	border-color: var(--skill-accent);
+}
+
+.cardContent {
+	display: flex;
+	flex-direction: column;
+	gap: 1.25rem;
+	position: relative;
+	z-index: 1;
+}
+
+.cardHeader {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+}
+
+.categoryBadge {
+	background: var(--skill-accent);
+	color: #0b0b0b;
+	font-weight: 800;
+	border-radius: 50%;
+	width: 48px;
+	height: 48px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 0.95rem;
+	box-shadow: 0 6px 18px color-mix(in oklab, var(--skill-accent) 45%, transparent);
+	flex-shrink: 0;
+}
+
+.categoryNumber {
+	letter-spacing: 0.05em;
+}
+
+.categoryTitle {
+	font-size: 1.6rem;
+	font-weight: 700;
+	color: var(--text-color);
+	line-height: 1.25;
+}
+
+.summary {
+	color: var(--text-color);
+	line-height: 1.55;
+	margin-bottom: 0.5rem;
+}
+
+.skillsGrid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+	gap: 1rem;
+	width: 100%;
+}
+
+.skillItem {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	padding: 1rem;
+	border-radius: 12px;
+	background: color-mix(in oklab, var(--skill-accent-weak) 20%, transparent);
+	border: 1px solid color-mix(in oklab, var(--skill-accent) 20%, transparent);
+	transition: all 0.25s ease;
+}
+
+.skillItem:hover {
+	background: color-mix(in oklab, var(--skill-accent-weak) 30%, transparent);
+	border-color: color-mix(in oklab, var(--skill-accent) 35%, transparent);
+	transform: translateY(-3px);
+	box-shadow: 0 4px 12px color-mix(in oklab, var(--skill-accent) 25%, transparent);
+}
+
+.skillIcon {
+	width: 40px;
+	height: 40px;
+	flex-shrink: 0;
+	color: var(--skill-accent);
+	transition: transform 0.3s ease;
+}
+
+.skillItem:hover .skillIcon {
+	transform: scale(1.1);
+}
+
+.skillInfo {
+	display: flex;
+	align-items: center;
+	flex: 1;
+}
+
+.skillName {
+	font-size: 1rem;
+	font-weight: 600;
+	color: var(--text-color);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+	.skillsSection {
+		width: 85%;
+	}
+
+	.skillsGrid {
+		grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+	}
+}
+
+@media (max-width: 768px) {
+	.skillsSection {
+		width: 90%;
+		padding: 4rem 0 3rem 0;
+	}
+
+	.title {
+		font-size: clamp(1.75rem, 5vw, 3rem);
+	}
+
+	.card {
+		--card-padding: 1.5rem;
+	}
+
+	.categoryTitle {
+		font-size: 1.4rem;
+	}
+
+	.skillsGrid {
+		grid-template-columns: 1fr;
+		gap: 0.85rem;
+	}
+
+	.skillIcon {
+		width: 36px;
+		height: 36px;
+	}
+}
+
+@media (max-width: 480px) {
+	.skillsSection {
+		width: 95%;
+		padding: 3rem 0 2.5rem 0;
+	}
+
+	.card {
+		--card-padding: 1.25rem;
+	}
+
+	.categoryBadge {
+		width: 40px;
+		height: 40px;
+		font-size: 0.85rem;
+	}
+
+	.categoryTitle {
+		font-size: 1.25rem;
+	}
+
+	.skillIcon {
+		width: 32px;
+		height: 32px;
+	}
+
+	.skillItem {
+		padding: 0.85rem;
+		gap: 0.75rem;
+	}
+
+	.skillName {
+		font-size: 0.95rem;
+	}
+}

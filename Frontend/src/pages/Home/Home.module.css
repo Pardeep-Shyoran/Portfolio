@@ -1,3 +1,117 @@
+.heroContent {
+    position: absolute;
+    bottom: 2rem;
+    right: 5%;
+    z-index: 2;
+    backdrop-filter: blur(16px);
+    border-radius: 1.5rem;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    max-width: 400px;
+    min-width: 320px;
+    transition: all 0.3s ease;
+}
+
+/* Light mode styling */
+[data-theme="light"] .heroContent {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(248, 250, 252, 0.9));
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08),
+                0 2px 8px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(229, 231, 235, 0.8);
+}
+
+/* Dark mode styling */
+[data-theme="dark"] .heroContent {
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.85));
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4),
+                0 2px 8px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(71, 85, 105, 0.3);
+}
+
+.heroTitle {
+    font-size: 1.875rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--text-color), var(--text-color2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.heroDescription {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--text-color);
+    margin: 0;
+}
+
+[data-theme="light"] .heroDescription {
+    opacity: 0.8;
+}
+
+[data-theme="dark"] .heroDescription {
+    opacity: 0.9;
+}
+
+.heroStats {
+    display: flex;
+    gap: 2.5rem;
+    margin-top: 0.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid;
+}
+
+[data-theme="light"] .heroStats {
+    border-top-color: rgba(229, 231, 235, 0.8);
+}
+
+[data-theme="dark"] .heroStats {
+    border-top-color: rgba(71, 85, 105, 0.3);
+}
+
+.statItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.statNumber {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--text-color2);
+    line-height: 1;
+}
+
+.statLabel {
+    font-size: 0.875rem;
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+[data-theme="light"] .statLabel {
+    opacity: 0.7;
+}
+
+[data-theme="dark"] .statLabel {
+    opacity: 0.8;
+}
+
+.buttonContainer {
+    position: absolute;
+    bottom: 2rem;
+    left: 5%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    z-index: 10;
+}
+
 .home{
     min-height: 100vh;
     /* margin-top: 4rem; */
@@ -66,25 +180,36 @@
     .image {
         width: clamp(180px, 45%, 500px);
     }
+
+    .heroContent {
+        right: 3%;
+        max-width: 350px;
+        min-width: 280px;
+        padding: 1.5rem;
+    }
+
+    .buttonContainer {
+        left: 3%;
+    }
 }
 
 /* Mobile devices */
 @media (max-width: 768px) {
 
     .home {
-    flex-direction: column;
-    padding: 2rem 1rem;
-    min-height: 80vh;
-    align-items: center; /* Center align items */
-  }
+        flex-direction: column;
+        padding: 2rem 1rem;
+        min-height: 80vh;
+        align-items: center;
+    }
   
-  .button {
-    position: relative;
-    bottom: auto;
-    left: auto;
-    z-index: auto;
-    margin-top: 1.5rem;
-  }
+    .button {
+        position: relative;
+        bottom: auto;
+        left: auto;
+        z-index: auto;
+        margin-top: 1.5rem;
+    }
     
     .title1 {
         font-size: clamp(2rem, 14vw + 0.5rem, 10rem);
@@ -95,6 +220,35 @@
         font-size: clamp(1rem, 10vw + 0.5rem, 3.5rem);
         top: 17%;
         transform: rotate(-10deg);
+    }
+
+    .heroContent {
+        position: relative;
+        bottom: auto;
+        right: auto;
+        max-width: 100%;
+        min-width: auto;
+        width: 90%;
+        margin-top: auto;
+        margin-bottom: 2rem;
+    }
+
+    .heroTitle {
+        font-size: 1.5rem;
+    }
+
+    .heroDescription {
+        font-size: 0.95rem;
+    }
+
+    .buttonContainer {
+        position: relative;
+        bottom: auto;
+        left: auto;
+        flex-direction: row;
+        justify-content: center;
+        width: 100%;
+        gap: 0.75rem;
     }
     
 }
@@ -123,6 +277,26 @@
     }
 
     .button {
-    margin-top: 1.5rem;
-  }
+        margin-top: 1.5rem;
+    }
+
+    .heroContent {
+        width: 95%;
+        padding: 1.25rem;
+        gap: 1rem;
+    }
+
+    .heroTitle {
+        font-size: 1.25rem;
+    }
+
+    .heroDescription {
+        font-size: 0.875rem;
+    }
+
+    .buttonContainer {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+    }
 }

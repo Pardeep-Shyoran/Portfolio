@@ -1,113 +1,304 @@
-.about{
-    min-height: 100vh;
-    /* margin-top: 4rem; */
+.aboutSection {
+    --about-accent: var(--text-color2);
+    width: 80%;
+    margin: 0 auto;
+    padding: 5rem 0 4rem 0;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 6rem 1rem 1rem 1rem;
-    gap: 2rem;
-}
-
-.aboutLeft{
-    width: 40%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     flex-direction: column;
-    gap: 2rem;
+    gap: 2.5rem;
 }
 
-.aboutLeft p {
-    line-height: 1.6;
-    text-align: justify;
-}
-
-.aboutRight{
-    width: 40%;
+.header {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    filter: drop-shadow(4px 4px 6px var(--drop-shadow-color));
+    flex-direction: column;
+    gap: 0.75rem;
+    max-width: 900px;
+    text-align: center;
+    margin: 0 auto;
 }
 
-.image {
-    max-width: 100%;
-    height: auto;
-    object-fit: contain;
+.eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.9rem;
+    color: var(--text-color3);
+    font-weight: 700;
 }
 
 .title {
-    font-size: clamp(2rem, 6vw + 0.5rem, 4rem);
+    font-size: clamp(2rem, 5vw + 0.5rem, 4rem);
     font-weight: 700;
     color: var(--text-color2);
-    text-align: center;
     text-transform: uppercase;
+    letter-spacing: 0.02em;
 }
 
-/* Tablet (Portrait) - 768px and below */
+.subtitle {
+    color: var(--text-color5);
+    line-height: 1.6;
+    max-width: 760px;
+    margin: 0 auto;
+}
+
+.heroGrid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.5rem;
+    align-items: stretch;
+}
+
+.introCard,
+.card {
+    --card-radius: 20px;
+    position: relative;
+    border-radius: var(--card-radius);
+    border: 1px solid var(--border-color);
+    background: color-mix(in oklab, var(--about-accent) 12%, var(--background-color));
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(8px);
+    overflow: hidden;
+}
+
+.introCard {
+    padding: 1.85rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+}
+
+.introCard::after,
+.card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(circle at 18% 18%, color-mix(in oklab, var(--about-accent) 40%, transparent), transparent 38%),
+        radial-gradient(circle at 88% 10%, color-mix(in oklab, var(--about-accent) 20%, transparent), transparent 30%);
+    opacity: 0.7;
+}
+
+.introCopy {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    position: relative;
+    z-index: 1;
+}
+
+.overline {
+    font-size: 0.95rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-color3);
+    font-weight: 700;
+}
+
+.heroHeading {
+    font-size: clamp(1.75rem, 4vw + 0.5rem, 2.7rem);
+    color: var(--text-color2);
+    line-height: 1.2;
+}
+
+.body {
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+.tagRow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    position: relative;
+    z-index: 1;
+}
+
+.tag {
+    padding: 0.45rem 0.85rem;
+    border-radius: 12px;
+    background: color-mix(in oklab, var(--about-accent) 12%, transparent);
+    border: 1px solid color-mix(in oklab, var(--about-accent) 32%, transparent);
+    color: var(--text-color);
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.calloutRow {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0.85rem;
+    position: relative;
+    z-index: 1;
+}
+
+.calloutBox {
+    padding: 1rem;
+    border-radius: 14px;
+    border: 1px solid color-mix(in oklab, var(--about-accent) 28%, transparent);
+    background: color-mix(in oklab, var(--about-accent) 18%, transparent);
+}
+
+.calloutLabel {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.85rem;
+    color: var(--text-color3);
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.calloutValue {
+    color: var(--text-color);
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.cardsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.25rem;
+}
+
+.card {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+}
+
+.card:hover,
+.introCard:hover {
+    transform: translateY(-6px) scale(1.01);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
+    border-color: var(--about-accent);
+}
+
+.cardLabel {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.85rem;
+    color: var(--text-color3);
+    font-weight: 700;
+}
+
+.cardTitle {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-color);
+}
+
+.listStack {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+}
+
+.listItem {
+    padding: 0.9rem;
+    border-radius: 12px;
+    border: 1px solid color-mix(in oklab, var(--about-accent) 26%, transparent);
+    background: color-mix(in oklab, var(--about-accent) 14%, transparent);
+}
+
+.listHeading {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-color);
+    margin-bottom: 0.3rem;
+}
+
+.listCopy {
+    color: var(--text-color);
+    line-height: 1.5;
+}
+
+.statsList {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.statRow {
+    display: grid;
+    grid-template-columns: 0.55fr 1.45fr;
+    gap: 0.5rem;
+    padding: 0.75rem 0.85rem;
+    border-radius: 12px;
+    border: 1px solid color-mix(in oklab, var(--about-accent) 24%, transparent);
+    background: color-mix(in oklab, var(--about-accent) 12%, transparent);
+}
+
+.statRow dt {
+    font-weight: 700;
+    color: var(--text-color2);
+    letter-spacing: 0.01em;
+}
+
+.statRow dd {
+    margin: 0;
+    color: var(--text-color);
+    line-height: 1.4;
+}
+
+.principlesList {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.principle {
+    position: relative;
+    padding-left: 1.3rem;
+    color: var(--text-color);
+    line-height: 1.5;
+}
+
+.principle::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: var(--about-accent);
+    font-weight: 800;
+}
+
+@media (max-width: 1024px) {
+    .aboutSection {
+        width: 88%;
+        padding: 3.5rem 0 3rem 0;
+    }
+}
+
 @media (max-width: 768px) {
-    .about {
-        flex-direction: column;
-        min-height: auto;
-        margin-top: 2rem;
-        padding: 1.5rem;
-    }
-
-    .aboutLeft {
-        width: 100%;
-        gap: 1.5rem;
-    }
-
-    .aboutRight {
-        width: 80%;
-        max-width: 400px;
+    .aboutSection {
+        width: 92%;
+        gap: 2rem;
     }
 
     .title {
-        font-size: 3rem;
+        font-size: clamp(1.75rem, 5vw, 3rem);
+    }
+
+    .card,
+    .introCard {
+        padding: 1.35rem;
     }
 }
-
-/* Mobile (Landscape) - 576px and below */
-@media (max-width: 576px) {
-    .about {
-        margin-top: 1.5rem;
-        padding: 1rem;
+@media (max-width: 480px) {
+    .aboutSection {
+        width: 94%;
+        padding: 3rem 0 2.5rem 0;
     }
 
-    .aboutLeft {
-        gap: 1rem;
-    }
-
-    .aboutLeft p {
-        font-size: 0.95rem;
-    }
-
-    .aboutRight {
-        width: 90%;
-        max-width: 300px;
-    }
-
-    .title {
-        font-size: 2.5rem;
-    }
-}
-
-/* Mobile (Small) - 400px and below */
-@media (max-width: 400px) {
-    .about {
-        padding: 0.75rem;
-    }
-
-    .title {
+    .heroHeading {
         font-size: 2rem;
     }
 
-    .aboutLeft p {
-        font-size: 0.9rem;
-    }
-
-    .aboutRight {
-        width: 100%;
+    .statRow {
+        grid-template-columns: 1fr;
     }
 }
