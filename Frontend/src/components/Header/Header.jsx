@@ -26,6 +26,17 @@ const Header = () => {
     return () => window.removeEventListener('keydown', onKey)
   }, [])
 
+  // Close mobile menu on scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      if (menuOpen) {
+        setMenuOpen(false)
+      }
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [menuOpen])
+
   // Focus management: focus trap inside mobile menu when open
   useEffect(() => {
     if (!menuOpen) {
