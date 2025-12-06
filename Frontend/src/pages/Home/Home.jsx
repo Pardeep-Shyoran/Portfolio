@@ -5,6 +5,7 @@ import Contact from "../Contact/Contact";
 import { Helmet } from "react-helmet";
 import FeaturedProjects from "../../components/FeaturedProjects/FeaturedProjects";
 import Button from "../../components/Button/Button";
+import Certificates from "../Certificates/Certificates";
 
 const Home = () => {
   const onButtonClick = () => {
@@ -47,6 +48,7 @@ const Home = () => {
       <About />
       {/* <Projects /> */}
       <FeaturedProjects />
+      <Certificates />
       <Contact />
     </>
   );

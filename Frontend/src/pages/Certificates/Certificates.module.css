@@ -1,0 +1,265 @@
+.certificatesSection {
+	width: 80%;
+	margin: 0 auto;
+	padding: 5rem 0 4rem 0;
+	display: flex;
+	flex-direction: column;
+	gap: 2.5rem;
+}
+
+.header {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+	max-width: 900px;
+	text-align: center;
+	margin: 0 auto;
+}
+
+.eyebrow {
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	font-size: 0.9rem;
+	color: var(--text-color3);
+	font-weight: 700;
+}
+
+.title {
+	font-size: clamp(2rem, 5vw + 0.5rem, 4rem);
+	font-weight: 700;
+	color: var(--text-color2);
+	text-transform: uppercase;
+	letter-spacing: 0.02em;
+}
+
+.subtitle {
+	color: var(--text-color5);
+	line-height: 1.6;
+	max-width: 760px;
+}
+
+.grid {
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+	width: 100%;
+}
+
+.card {
+	--card-radius: 20px;
+	--card-padding: 1.85rem;
+	position: relative;
+	padding: var(--card-padding);
+	border-radius: var(--card-radius);
+	border: 1px solid var(--border-color);
+	background: color-mix(in oklab, var(--cert-accent-weak) 45%, var(--background-color));
+	box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+	backdrop-filter: blur(8px);
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	gap: 1.5rem;
+	overflow: hidden;
+	transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+}
+
+.card::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+	background: radial-gradient(circle at 18% 18%, var(--cert-accent-strong), transparent 38%),
+		radial-gradient(circle at 88% 10%, var(--cert-accent-weak), transparent 30%);
+	opacity: 0.65;
+}
+
+.card:hover {
+	transform: translateY(-6px);
+	box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
+	border-color: var(--cert-accent);
+}
+
+.cardLeft {
+	flex: 3;
+	display: flex;
+	flex-direction: column;
+	gap: 0.85rem;
+	position: relative;
+	z-index: 1;
+}
+
+.cardRight {
+	flex: 1.3;
+	min-width: 220px;
+	align-self: stretch;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	gap: 1rem;
+	background: color-mix(in oklab, var(--cert-accent-weak) 30%, transparent);
+	border: 1px solid color-mix(in oklab, var(--cert-accent) 28%, transparent);
+	border-radius: 14px;
+	padding: 1rem;
+}
+
+.cardTop {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 1rem;
+}
+
+.cardHeading {
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+}
+
+.issuer {
+	font-size: 0.95rem;
+	color: var(--cert-accent);
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	font-weight: 700;
+}
+
+.certTitle {
+	font-size: 1.6rem;
+	font-weight: 700;
+	color: var(--text-color);
+	line-height: 1.25;
+}
+
+.yearBadge {
+	background: var(--cert-accent);
+	color: #0b0b0b;
+	font-weight: 800;
+	border-radius: 999px;
+	padding: 0.55rem 0.95rem;
+	font-size: 0.9rem;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	box-shadow: 0 6px 18px color-mix(in oklab, var(--cert-accent) 45%, transparent);
+}
+
+.summary {
+	color: var(--text-color);
+	line-height: 1.55;
+}
+
+.skillRow {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.55rem;
+}
+
+.skillTag {
+	padding: 0.4rem 0.95rem;
+	border-radius: 14px;
+	background: color-mix(in oklab, var(--cert-accent) 12%, transparent);
+	border: 1px solid color-mix(in oklab, var(--cert-accent) 40%, transparent);
+	color: var(--cert-accent);
+	font-weight: 600;
+	font-size: 0.92rem;
+}
+
+.credentialBlock {
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+}
+
+.credentialLabel {
+	font-size: 0.85rem;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var(--text-color4);
+	font-weight: 700;
+}
+
+.credentialValue {
+	font-size: 1rem;
+	font-weight: 700;
+	color: var(--text-color);
+}
+
+.credentialId {
+	color: var(--text-color4);
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+}
+
+.linkButton {
+	align-self: flex-start;
+}
+
+@media (max-width: 1024px) {
+	.certificatesSection {
+		width: 88%;
+		padding: 3.5rem 0 3rem 0;
+	}
+
+	.card {
+		padding: 1.5rem;
+		flex-direction: column;
+	}
+
+	.cardRight {
+		width: 100%;
+		min-width: unset;
+		flex-direction: row;
+		align-items: center;
+		gap: 1rem;
+	}
+
+	.linkButton {
+		width: auto;
+	}
+}
+
+@media (max-width: 768px) {
+	.certificatesSection {
+		width: 92%;
+		gap: 2rem;
+	}
+
+	.grid {
+		gap: 1.25rem;
+	}
+
+	.cardTop {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+
+	.footerRow {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+
+	.cardRight {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+
+	.linkButton {
+		width: 100%;
+		justify-content: center;
+	}
+}
+
+@media (max-width: 480px) {
+	.certificatesSection {
+		width: 94%;
+		padding: 3rem 0 2.5rem 0;
+	}
+
+	.title {
+		font-size: 1.9rem;
+	}
+
+	.card {
+		padding: 1.25rem;
+	}
+}

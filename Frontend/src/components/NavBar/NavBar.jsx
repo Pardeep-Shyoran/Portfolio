@@ -44,6 +44,7 @@ const NavBar = () => {
       <a className={styles.NavLink} href="#home" onClick={(e) => handleClick(e, 'home')}>Home</a>
       <a className={styles.NavLink} href="#about" onClick={(e) => handleClick(e, 'about')}>About</a>
       <a className={styles.NavLink} href="#featuredProjects" onClick={(e) => handleClick(e, 'featuredProjects')}>Projects</a>
+      <a className={styles.NavLink} href="#certificates" onClick={(e) => handleClick(e, 'certificates')}>Certificates</a>
       <a className={styles.NavLink} href="#contact" onClick={(e) => handleClick(e, 'contact')}>Contact</a>
     </div>
   )
