@@ -4,11 +4,12 @@ import styles from "./Home.module.css";
 import Contact from "../Contact/Contact";
 import { Helmet } from "react-helmet";
 import FeaturedProjects from "../../components/FeaturedProjects/FeaturedProjects";
+import Button from "../../components/Button/Button";
 
 const Home = () => {
   const onButtonClick = () => {
     const pdfUrl =
-      "https://drive.google.com/file/d/1xanOw0mqgqmVEqKn7VI4I2795ZhmDizT/view";
+      "https://drive.google.com/file/d/1MZEmMEvYlfCkLt4I3PyEYByxNI6X3QXw/view";
     window.open(pdfUrl, "_blank");
   };
 
@@ -34,9 +35,14 @@ const Home = () => {
           src="https://ik.imagekit.io/00zfvrear/Images/man-in-long-shirt-white-pointing-side-with-both-index-fingers-3d-illustration-of-a-smart-businessman-pointing-png.webp?updatedAt=1760714540976"
           alt=""
         />
-        <button className={styles.button} onClick={onButtonClick}>
+        <Button
+          onClick={onButtonClick}
+          variant="primary"
+          size="lg"
+          className={styles.button}
+        >
           Resume
-        </button>
+        </Button>
       </section>
       <About />
       {/* <Projects /> */}

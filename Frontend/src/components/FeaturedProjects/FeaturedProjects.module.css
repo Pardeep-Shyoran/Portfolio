@@ -19,35 +19,25 @@
 }
 
 .projectsGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
   width: 100%;
+  perspective: 1200px;
+  position: relative;
+  padding: 2rem 0;
+}
+
+.project-card-stack {
+  transform-style: preserve-3d;
+  transform-origin: center center;
+  will-change: transform, opacity;
+  position: relative;
+  margin-bottom: 2rem;
 }
 
 .seeMoreBtn {
-  padding: 0.75rem 2.5rem;
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--text-color2);
-  background: transparent;
-  border: 2px solid var(--text-color2);
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.seeMoreBtn:hover {
-  background: var(--text-color2);
-  color: var(--bg-color);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-}
-
-.seeMoreBtn:active {
-  transform: translateY(0);
+  margin-top: 1rem;
 }
 
 /* Tablets and below (768px) */
