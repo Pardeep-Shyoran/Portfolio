@@ -54,7 +54,7 @@ const ProjectCard = ({ project }) => {
             </a>
           </div>
         </div>
-        <div className={styles["project-card-right"]}>
+        {/* <div className={styles["project-card-right"]}>
           <img
             src={project.imageUrl}
             alt={`${project.title} screenshot`}
@@ -62,7 +62,31 @@ const ProjectCard = ({ project }) => {
             loading="lazy"
             decoding="async"
           />
+        </div> */}
+
+        <div className={styles["project-card-right"]}>
+          <div className={styles["project-hover-preview"]}>
+
+            {/* Static Image (default state) */}
+            <img
+              src={project.imageUrl}
+              alt={`${project.title} screenshot`}
+              className={styles["project-card-image"]}
+              loading="lazy"
+              decoding="async"
+            />
+
+            {/* Live Iframe (appears on hover) */}
+            <iframe
+              src={project.demoUrl}
+              title={`${project.title} live preview`}
+              className={styles["project-card-iframe"]}
+              loading="lazy"
+            />
+
+          </div>
         </div>
+
       </div>
     </div>
   );
