@@ -6,12 +6,26 @@ import { Helmet } from "react-helmet";
 import FeaturedProjects from "../../components/FeaturedProjects/FeaturedProjects";
 import Button from "../../components/Button/Button";
 import Certificates from "../Certificates/Certificates";
+import gsap from "gsap";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+
+gsap.registerPlugin(ScrollToPlugin);
 
 const Home = () => {
   const onLetsTalkClick = () => {
     const contactSection = document.getElementById("contact");
     if (contactSection) {
-      contactSection.scrollIntoView({ behavior: "smooth" });
+      const stickyHeader = document.querySelector("header");
+      const offsetY = (stickyHeader?.offsetHeight ?? 0) + 16;
+
+      gsap.to(window, {
+        duration: 1,
+        scrollTo: {
+          y: contactSection,
+          offsetY,
+        },
+        ease: "power2.inOut",
+      });
     }
   };
 

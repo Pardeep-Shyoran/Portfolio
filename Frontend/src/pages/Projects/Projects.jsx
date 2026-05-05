@@ -33,9 +33,8 @@ const ProjectsPage = () => {
     
     if (!cards || cards.length === 0) return;
 
-    // Clear any existing animations
-    ScrollTrigger.getAll().forEach(trigger => trigger.kill());
     gsap.killTweensOf(cards);
+    const localTriggers = [];
 
     cards.forEach((card, index) => {
       // Initial state - stack the cards
@@ -48,7 +47,7 @@ const ProjectsPage = () => {
       });
 
       // Animate when scrolling
-      gsap.to(card, {
+      const tween = gsap.to(card, {
         scrollTrigger: {
           trigger: card,
           start: "top 80%",
@@ -63,10 +62,15 @@ const ProjectsPage = () => {
         duration: 0.8,
         ease: "power2.out",
       });
+
+      if (tween.scrollTrigger) {
+        localTriggers.push(tween.scrollTrigger);
+      }
     });
 
     return () => {
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+      localTriggers.forEach((trigger) => trigger.kill());
+      gsap.killTweensOf(cards);
     };
   }, [visible]);
 

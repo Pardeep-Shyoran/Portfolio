@@ -14,14 +14,28 @@ gsap.registerPlugin(ScrollTrigger, ScrollSmoother, ScrollToPlugin);
 const App = () => {
 
   useGSAP(() => {
-    ScrollSmoother.create({
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
+
+    if (prefersReducedMotion) {
+      return undefined;
+    }
+
+    gsap.ticker.lagSmoothing(1000, 16);
+
+    const smoother = ScrollSmoother.create({
       wrapper: "#smooth-wrapper",
       content: "#smooth-content",
-      smooth: 1.2,
-      effects: true,
-      smoothTouch: 0.1,
+      smooth: isTouchDevice ? 0.35 : 1.2,
+      effects: !isTouchDevice,
+      smoothTouch: isTouchDevice ? 0.05 : 0.1,
       normalizeScroll: true,
+      ignoreMobileResize: true,
     })
+
+    return () => {
+      smoother.kill();
+    }
   }, []);
 
   return (
