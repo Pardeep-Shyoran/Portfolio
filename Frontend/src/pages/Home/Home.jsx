@@ -7,12 +7,11 @@ import FeaturedProjects from "../../components/FeaturedProjects/FeaturedProjects
 import Button from "../../components/Button/Button";
 import Certificates from "../Certificates/Certificates";
 import gsap from "gsap";
-<<<<<<< HEAD
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 
-gsap.registerPlugin(ScrollToPlugin)
+gsap.registerPlugin(ScrollToPlugin);
 
 const ResumeIcon = () => (
   <svg className={styles.buttonIcon} viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -54,7 +53,8 @@ const Home = () => {
     const element = document.getElementById(targetId)
     if (!element) return
 
-    const headerOffset = document.querySelector("header")?.offsetHeight ?? 0
+      const headerOffset = document.querySelector("header")?.offsetHeight ?? 0;
+      const offsetY = headerOffset + 16;
 
     gsap.to(window, {
       duration: 1,
@@ -81,10 +81,10 @@ const Home = () => {
         scrollTo: {
           y: contactSection,
 <<<<<<< HEAD
-          offsetY: headerOffset,
+          offsetY,
         },
         ease: "power2.inOut",
-      })
+      });
 =======
           offsetY,
         },
