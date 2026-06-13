@@ -1,9 +1,20 @@
 const projectsData = [
   {
     id: 1,
+    title: 'KodraX - Real-time Collaborative Code Editor',
+    description: 'KodraX is a real-time collaborative coding platform supports live code synchronization, secure authentication, and an interactive workspace for team-based development.',
+    imageUrl: 'https://ik.imagekit.io/00zfvrear/Portfolio%20Assets/Screenshot_5-5-2026_84031_kodraxlive.vercel.app.jpeg?updatedAt=1777951868866',
+    tags: ['React', 'Node.js', 'Express', 'MongoDB', 'JWT', 'Judge0 CE',],
+    theme: 'Code',
+    accentColor: '#b3aeae',
+    demoUrl: 'https://kodraxlive.vercel.app/',
+    repoUrl: 'https://github.com/Pardeep-Shyoran/KodraX',
+  },
+  {
+    id: 2,
     title: 'Rivo - Your Music, Your Way',
     description: 'Rivo – A scalable MERN‑based music streaming platform featuring multi‑role access, microservices architecture, JWT authentication, RabbitMQ messaging, AWS S3 cloud storage.',
-    imageUrl: 'https://ik.imagekit.io/00zfvrear/Portfolio%20Assets/image.png',
+    imageUrl: 'https://ik.imagekit.io/00zfvrear/Portfolio%20Assets/image.png?updatedAt=1777951800968',
     tags: ['React', 'Node.js', 'Express', 'MongoDB', 'JWT', 'RabbitMQ',],
     theme: 'Music',
     accentColor: '#7abbff',
@@ -11,7 +22,7 @@ const projectsData = [
     repoUrl: 'https://github.com/Pardeep-Shyoran/Rivo',
   },
   {
-    id: 2,
+    id: 3,
     title: 'Lite-Insta - Social Media App',
     description: 'A full-stack social media application built with the MERN stack, featuring user authentication, post creation with an AI-powered caption generator, and the ability to update and delete posts.',
     imageUrl: 'https://ik.imagekit.io/00zfvrear/Portfolio%20Assets/Screenshot%202025-10-19%20at%2022.36.59.png?updatedAt=1760893650849',
@@ -22,7 +33,7 @@ const projectsData = [
     repoUrl: 'https://github.com/Pardeep-Shyoran/Lite-Insta',
   },
   {
-    id: 3,
+    id: 4,
     title: 'MoodSwinger - Moody Player',
     description: 'MoodSwinger is an intelligent web-based music player that detects your mood through facial expression analysis and automatically plays music that matches your emotions.',
     imageUrl: 'https://ik.imagekit.io/00zfvrear/Portfolio%20Assets/Screenshot%202025-10-19%20at%2022.38.57.png?updatedAt=1760893752687',
@@ -33,7 +44,7 @@ const projectsData = [
     repoUrl: 'https://github.com/Pardeep-Shyoran/Moody-Player',
   },
   {
-    id: 4,
+    id: 5,
     title: 'FOKUS - Energy Drink',
     description: 'A responsive landing page for an energy drink brand, built with React.js and styled using modular CSS. All frontend tasks are managed with a dummy JSON server.',
     imageUrl: 'https://ik.imagekit.io/00zfvrear/Portfolio%20Assets/Screenshot%202025-10-19%20at%2022.39.54.png?updatedAt=1760893814665',
@@ -44,7 +55,7 @@ const projectsData = [
     repoUrl: 'https://github.com/Pardeep-Shyoran/Hackathon-Project',
   },
   // {
-  //   id: 4,
+  //   id: 6,
   //   title: 'SwiftCart - E-Commerce Website',
   //   description: 'Built e-commerce app with user login, admin product management, and cart functionality, powered by React.js and a Dummy JSON Server for full frontend data handling.',
   //   imageUrl: 'https://thumbs.dreamstime.com/b/projects-concept-black-chalkboard-d-rendering-handwritten-top-view-office-desk-lot-business-office-supplies-79906734.jpg',
@@ -55,7 +66,7 @@ const projectsData = [
   //   repoUrl: 'https://github.com/Pardeep-Shyoran/E-Commerce',
   // },
   {
-    id: 6,
+    id: 7,
     title: 'Windows 11 Web-Based Experience',
     description: 'A fully functional, browser-based Windows 11 clone built using HTML, CSS, and Vanilla JavaScript, without relying on any frameworks.',
     imageUrl: 'https://ik.imagekit.io/00zfvrear/Portfolio%20Assets/Screenshot%202025-10-19%20at%2022.41.18.png?updatedAt=1760893908876',
@@ -66,7 +77,7 @@ const projectsData = [
     repoUrl: 'https://github.com/Pardeep-Shyoran/Windows-11',
   },
   {
-    id: 7,
+    id: 8,
     title: 'Github Profile Search',
     description: 'A web application that searches for and displays GitHub user profiles and repositories using the GitHub API.',
     imageUrl: 'https://ik.imagekit.io/00zfvrear/Portfolio%20Assets/Screenshot%202025-10-19%20at%2022.42.49.png?updatedAt=1760893985410',

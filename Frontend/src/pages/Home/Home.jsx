@@ -7,6 +7,7 @@ import FeaturedProjects from "../../components/FeaturedProjects/FeaturedProjects
 import Button from "../../components/Button/Button";
 import Certificates from "../Certificates/Certificates";
 import gsap from "gsap";
+<<<<<<< HEAD
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
@@ -35,6 +36,11 @@ const ArrowIcon = () => (
     <path d="m13 7 6 5-6 5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 )
+=======
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+
+gsap.registerPlugin(ScrollToPlugin);
+>>>>>>> 95237f81405e6e3b316b288cb273ef57459a0e3a
 
 const Home = () => {
   const location = useLocation()
@@ -63,16 +69,28 @@ const Home = () => {
   const onLetsTalkClick = () => {
     const contactSection = document.getElementById("contact");
     if (contactSection) {
+<<<<<<< HEAD
       const headerOffset = document.querySelector("header")?.offsetHeight ?? 0
+=======
+      const stickyHeader = document.querySelector("header");
+      const offsetY = (stickyHeader?.offsetHeight ?? 0) + 16;
+>>>>>>> 95237f81405e6e3b316b288cb273ef57459a0e3a
 
       gsap.to(window, {
         duration: 1,
         scrollTo: {
           y: contactSection,
+<<<<<<< HEAD
           offsetY: headerOffset,
         },
         ease: "power2.inOut",
       })
+=======
+          offsetY,
+        },
+        ease: "power2.inOut",
+      });
+>>>>>>> 95237f81405e6e3b316b288cb273ef57459a0e3a
     }
   };
 

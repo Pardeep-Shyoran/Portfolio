@@ -3,6 +3,7 @@
     width: 80%;
     margin: 0 auto;
     padding: 5rem 0 4rem 0;
+    scroll-margin-top: calc(10vh + 1rem);
     display: flex;
     flex-direction: column;
     gap: 2rem;

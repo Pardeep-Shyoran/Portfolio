@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { useRef, useEffect } from 'react'
+import { useMemo, useRef, useEffect } from 'react'
 import styles from './FeaturedProjects.module.css'
 import ProjectCard from '../ProjectCard/ProjectCard'
 import projectsData from '../../data/project'
@@ -12,7 +12,7 @@ gsap.registerPlugin(ScrollTrigger)
 const FeaturedProjects = () => {
   const navigate = useNavigate()
   const containerRef = useRef(null)
-  const topProjects = projectsData.slice(0, 2)
+  const topProjects = useMemo(() => projectsData.slice(0, 2), [])
 
   // Stack effect animation
   useEffect(() => {
@@ -20,9 +20,8 @@ const FeaturedProjects = () => {
     
     if (!cards || cards.length === 0) return
 
-    // Clear any existing animations
-    ScrollTrigger.getAll().forEach(trigger => trigger.kill())
     gsap.killTweensOf(cards)
+    const localTriggers = []
 
     cards.forEach((card, index) => {
       // Initial state - stack the cards
@@ -35,7 +34,7 @@ const FeaturedProjects = () => {
       })
 
       // Animate when scrolling
-      gsap.to(card, {
+      const tween = gsap.to(card, {
         scrollTrigger: {
           trigger: card,
           start: "top 80%",
@@ -50,10 +49,15 @@ const FeaturedProjects = () => {
         duration: 0.8,
         ease: "power2.out",
       })
+
+      if (tween?.scrollTrigger) {
+        localTriggers.push(tween.scrollTrigger)
+      }
     })
 
     return () => {
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill())
+      localTriggers.forEach((trigger) => trigger.kill())
+      gsap.killTweensOf(cards)
     }
   }, [topProjects])
 
