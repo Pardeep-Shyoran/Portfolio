@@ -35,11 +35,7 @@ const ArrowIcon = () => (
     <path d="m13 7 6 5-6 5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 )
-=======
-import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 
-gsap.registerPlugin(ScrollToPlugin);
->>>>>>> 95237f81405e6e3b316b288cb273ef57459a0e3a
 
 const Home = () => {
   const location = useLocation()
@@ -56,41 +52,30 @@ const Home = () => {
       const headerOffset = document.querySelector("header")?.offsetHeight ?? 0;
       const offsetY = headerOffset + 16;
 
-    gsap.to(window, {
-      duration: 1,
-      scrollTo: {
-        y: element,
-        offsetY: headerOffset,
-      },
-      ease: "power2.inOut",
-    })
+      gsap.to(window, {
+        duration: 1,
+        scrollTo: {
+          y: element,
+          offsetY,
+        },
+        ease: "power2.inOut",
+      });
   }, [location.state])
 
   const onLetsTalkClick = () => {
     const contactSection = document.getElementById("contact");
     if (contactSection) {
-<<<<<<< HEAD
-      const headerOffset = document.querySelector("header")?.offsetHeight ?? 0
-=======
       const stickyHeader = document.querySelector("header");
       const offsetY = (stickyHeader?.offsetHeight ?? 0) + 16;
->>>>>>> 95237f81405e6e3b316b288cb273ef57459a0e3a
 
       gsap.to(window, {
         duration: 1,
         scrollTo: {
           y: contactSection,
-<<<<<<< HEAD
           offsetY,
         },
         ease: "power2.inOut",
       });
-=======
-          offsetY,
-        },
-        ease: "power2.inOut",
-      });
->>>>>>> 95237f81405e6e3b316b288cb273ef57459a0e3a
     }
   };
 
