@@ -14,11 +14,7 @@ const NavBar = () => {
     
     // If not on home page, navigate to home first
     if (location.pathname !== '/') {
-      navigate('/')
-      // Use setTimeout to allow navigation to complete before scrolling
-      setTimeout(() => {
-        scrollToElement(targetId)
-      }, 100)
+      navigate('/', { state: { scrollTarget: targetId } })
     } else {
       // Already on home page, scroll directly
       scrollToElement(targetId)
@@ -28,11 +24,13 @@ const NavBar = () => {
   const scrollToElement = (targetId) => {
     const element = document.getElementById(targetId)
     if (element) {
+      const headerOffset = document.querySelector('header')?.offsetHeight ?? 0
+
       gsap.to(window, {
         duration: 1,
         scrollTo: {
           y: element,
-          offsetY: 0
+          offsetY: headerOffset
         },
         ease: 'power2.inOut'
       })

@@ -56,11 +56,30 @@
 
 html, body, #root {
   font-family: var(--font-family4);
-  min-height: 100%;
+  width: 100%;
+  min-height: 100vh;
   background-color: var(--background-color);
   color: var(--text-color);
   max-width: 1550px;
   margin: 0 auto;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+}
+
+#smooth-wrapper,
+#smooth-content {
+  width: 100%;
+}
+
+#smooth-content {
+  min-height: 100vh;
 }
 
 ::selection {

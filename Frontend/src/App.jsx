@@ -14,14 +14,18 @@ gsap.registerPlugin(ScrollTrigger, ScrollSmoother, ScrollToPlugin);
 const App = () => {
 
   useGSAP(() => {
-    ScrollSmoother.create({
+    const smoother = ScrollSmoother.create({
       wrapper: "#smooth-wrapper",
       content: "#smooth-content",
-      smooth: 1.2,
+      smooth: 0.25,
       effects: true,
-      smoothTouch: 0.1,
+      smoothTouch: 0.03,
       normalizeScroll: true,
     })
+
+    return () => {
+      smoother.kill()
+    }
   }, []);
 
   return (

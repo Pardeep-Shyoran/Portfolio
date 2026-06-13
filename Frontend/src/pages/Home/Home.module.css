@@ -3,15 +3,24 @@
     bottom: 2rem;
     right: 5%;
     z-index: 2;
-    backdrop-filter: blur(16px);
-    border-radius: 1.5rem;
-    padding: 2rem;
+    backdrop-filter: blur(20px);
+    border-radius: 1.75rem;
+    padding: 1.75rem 1.85rem;
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
-    max-width: 400px;
+    gap: 1rem;
+    max-width: 440px;
     min-width: 320px;
     transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.heroContent::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.18), transparent 42%);
+    pointer-events: none;
 }
 
 /* Light mode styling */
@@ -31,7 +40,25 @@
     border: 1px solid rgba(71, 85, 105, 0.3);
 }
 
+.heroEyebrow {
+    position: relative;
+    z-index: 1;
+    margin: 0;
+    width: fit-content;
+    padding: 0.45rem 0.75rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text-color2);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
 .heroTitle {
+    position: relative;
+    z-index: 1;
     font-size: 1.875rem;
     font-weight: 700;
     background: linear-gradient(135deg, var(--text-color), var(--text-color2));
@@ -43,6 +70,8 @@
 }
 
 .heroDescription {
+    position: relative;
+    z-index: 1;
     font-size: 1rem;
     line-height: 1.7;
     color: var(--text-color);
@@ -55,6 +84,25 @@
 
 [data-theme="dark"] .heroDescription {
     opacity: 0.9;
+}
+
+.heroHighlights {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+}
+
+.heroHighlight {
+    padding: 0.55rem 0.8rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-color);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
 }
 
 .heroStats {
@@ -106,21 +154,123 @@
     bottom: 2rem;
     left: 5%;
     display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.85rem;
+    z-index: 10;
+    max-width: min(52rem, 90vw);
+}
+
+.resumeButton,
+.letsTalkButton {
+    min-width: clamp(11.75rem, 18vw, 14rem);
+}
+
+.buttonIcon {
+    width: 1.15rem;
+    height: 1.15rem;
+    flex-shrink: 0;
+    display: block;
+    color: inherit;
+}
+
+.codolioButton {
+    width: clamp(18rem, 34vw, 28rem);
+    min-height: 4.9rem;
+    padding: 0.85rem 1rem !important;
+    border-radius: 1.5rem !important;
+    border: 1px solid rgba(255, 255, 255, 0.18) !important;
+    background: linear-gradient(108deg, rgba(46, 46, 46, 0.92), rgba(18, 22, 28, 0.96)) !important;
+    color: #f3f4f6 !important;
+    text-transform: none !important;
+    letter-spacing: 0 !important;
+    justify-content: space-between !important;
+    gap: 0.8rem;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.38),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+.codolioButton:hover {
+    background: linear-gradient(108deg, rgba(56, 56, 56, 0.96), rgba(22, 26, 32, 1)) !important;
+    border-color: rgba(255, 255, 255, 0.26) !important;
+}
+
+.codolioLeft {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-width: 0;
+}
+
+.codolioIconWrap {
+    width: 3.1rem;
+    height: 3.1rem;
+    border-radius: 0.95rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+    flex-shrink: 0;
+}
+
+.codolioTextBlock {
+    display: inline-flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 1rem;
-    z-index: 10;
+    gap: 0.3rem;
+    min-width: 0;
+}
+
+.codolioTitle {
+    font-size: clamp(1.02rem, 1.25vw, 1.35rem);
+    font-weight: 700;
+    line-height: 1.15;
+    color: #f8fafc;
+}
+
+.codolioSubtitle {
+    font-size: clamp(0.78rem, 0.85vw, 0.95rem);
+    line-height: 1.2;
+    color: rgba(226, 232, 240, 0.86);
+}
+
+.codolioArrowIcon {
+    width: 1.45rem;
+    height: 1.45rem;
+    color: #f59e0b;
+    flex-shrink: 0;
+}
+
+.codolioIcon {
+    width: 1.75rem;
+    height: 1.75rem;
+    object-fit: contain;
+    flex-shrink: 0;
 }
 
 .home{
     min-height: 100vh;
-    /* margin-top: 4rem; */
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
     overflow: hidden;
-    padding: 0 1rem;
+    padding: clamp(4.5rem, 8vh, 6rem) clamp(1rem, 2vw, 2rem) clamp(6.5rem, 12vh, 8.5rem);
+}
+
+.titleWrap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    pointer-events: none;
 }
 
 .title1 {
@@ -165,16 +315,43 @@
     display: inline-flex !important;
 }
 
+@media (max-width: 1280px) {
+    .heroContent {
+        max-width: 400px;
+        min-width: 290px;
+        right: 3%;
+        bottom: 1.75rem;
+    }
+
+    .buttonContainer {
+        left: 3%;
+        max-width: min(48rem, 94vw);
+    }
+
+    .title1 {
+        top: 22%;
+    }
+
+    .title2 {
+        top: 20.5%;
+    }
+}
+
 /* Tablet and smaller screens */
 @media (max-width: 1024px) {
+    .home {
+        padding-top: 5rem;
+        padding-bottom: 7rem;
+    }
+
     .title1 {
         font-size: clamp(2.5rem, 14vw + 0.5rem, 10rem);
-        top: 25%;
+        top: 18%;
     }
     
     .title2 {
         font-size: clamp(1.2rem, 6vw + 0.5rem, 6rem);
-        top: 22%;
+        top: 16.5%;
     }
     
     .image {
@@ -183,13 +360,93 @@
 
     .heroContent {
         right: 3%;
-        max-width: 350px;
+        max-width: 380px;
         min-width: 280px;
-        padding: 1.5rem;
+        padding: 1.5rem 1.45rem;
+        bottom: 1.25rem;
     }
 
     .buttonContainer {
         left: 3%;
+        bottom: 1.25rem;
+        max-width: min(44rem, 94vw);
+    }
+
+    .resumeButton,
+    .letsTalkButton {
+        min-width: 10.75rem;
+    }
+
+    .codolioButton {
+        width: clamp(16.5rem, 42vw, 24rem);
+    }
+}
+
+@media (max-width: 900px) {
+    .home {
+        min-height: auto;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 1rem;
+        padding: 5.5rem 1rem 2rem;
+    }
+
+    .titleWrap {
+        position: relative;
+        top: auto;
+        left: auto;
+        right: auto;
+        width: auto;
+        height: auto;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin-top: 0.2rem;
+        margin-bottom: 0.35rem;
+    }
+
+    .title1,
+    .title2 {
+        position: relative;
+        top: auto;
+    }
+
+    .title1 {
+        font-size: clamp(2.2rem, 12vw + 0.4rem, 6.5rem);
+        text-align: center;
+    }
+
+    .title2 {
+        font-size: clamp(1rem, 5vw + 0.2rem, 2.7rem);
+        margin-left: 0;
+        margin-top: -0.6rem;
+    }
+
+    .heroContent,
+    .buttonContainer {
+        position: relative;
+        left: auto;
+        right: auto;
+        bottom: auto;
+    }
+
+    .heroContent {
+        width: min(40rem, 94vw);
+        min-width: 0;
+        max-width: none;
+        margin-top: 0.4rem;
+    }
+
+    .buttonContainer {
+        width: min(40rem, 94vw);
+        max-width: none;
+        justify-content: center;
+    }
+
+    .resumeButton,
+    .letsTalkButton {
+        min-width: 11.5rem;
     }
 }
 
@@ -198,8 +455,8 @@
 
     .home {
         flex-direction: column;
-        padding: 2rem 1rem;
-        min-height: 80vh;
+        padding: 5rem 1rem 2rem;
+        min-height: auto;
         align-items: center;
     }
   
@@ -212,14 +469,14 @@
     }
     
     .title1 {
-        font-size: clamp(2rem, 14vw + 0.5rem, 10rem);
-        top: 20%;
+        font-size: clamp(2rem, 14vw + 0.5rem, 4.75rem);
+        text-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
     }
     
     .title2 {
-        font-size: clamp(1rem, 10vw + 0.5rem, 3.5rem);
-        top: 17%;
+        font-size: clamp(1rem, 10vw + 0.5rem, 2.3rem);
         transform: rotate(-10deg);
+        text-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
     }
 
     .heroContent {
@@ -228,9 +485,10 @@
         right: auto;
         max-width: 100%;
         min-width: auto;
-        width: 90%;
-        margin-top: auto;
+        width: min(38rem, 94vw);
+        margin-top: 0.5rem;
         margin-bottom: 2rem;
+        padding: 1.4rem;
     }
 
     .heroTitle {
@@ -246,9 +504,20 @@
         bottom: auto;
         left: auto;
         flex-direction: row;
+        flex-wrap: wrap;
         justify-content: center;
-        width: 100%;
+        width: min(38rem, 94vw);
         gap: 0.75rem;
+        max-width: none;
+    }
+
+    .resumeButton,
+    .letsTalkButton {
+        min-width: min(14rem, 45vw);
+    }
+
+    .codolioButton {
+        width: min(100%, 28rem);
     }
     
 }
@@ -256,19 +525,25 @@
 /* Small mobile devices */
 @media (max-width: 480px) {
     .home {
-        padding: 1rem 0.5rem;
+        padding: 4.5rem 0.65rem 1.5rem;
     }
     
+    .titleWrap {
+        margin-top: 0;
+        margin-bottom: 0.5rem;
+    }
+
     .title1 {
-        font-size: clamp(1.5rem, 12vw + 0.5rem, 4rem);
-        top: 18%;
+        font-size: clamp(2rem, 10vw + 0.4rem, 3.05rem);
+        top: auto;
     }
     
     .title2 {
-        font-size: clamp(0.875rem, 6vw + 0.5rem, 2rem);
-        top: 16%;
-        margin-left: 5px;
-        transform: rotate(-10deg);
+        font-size: clamp(1rem, 4.8vw + 0.3rem, 1.5rem);
+        top: auto;
+        margin-left: 0;
+        transform: rotate(-7deg);
+        margin-top: -0.4rem;
     }
     
     .image {
@@ -282,7 +557,7 @@
 
     .heroContent {
         width: 95%;
-        padding: 1.25rem;
+        padding: 1.15rem;
         gap: 1rem;
     }
 
@@ -298,5 +573,55 @@
         flex-direction: column;
         align-items: center;
         gap: 0.75rem;
+        width: 100%;
+        max-width: min(24rem, 100%);
+    }
+
+    .resumeButton,
+    .letsTalkButton {
+        width: 100%;
+        min-width: 0;
+        justify-content: center;
+    }
+
+    .codolioButton {
+        width: min(100%, 24rem);
+        min-height: 4.65rem;
+        padding: 0.8rem 0.9rem !important;
+        border-radius: 1.2rem !important;
+    }
+
+    .codolioIconWrap {
+        width: 3rem;
+        height: 3rem;
+        border-radius: 0.95rem;
+    }
+
+    .codolioIcon {
+        width: 1.6rem;
+        height: 1.6rem;
+    }
+
+    .codolioTitle {
+        font-size: 1rem;
+    }
+
+    .codolioSubtitle {
+        font-size: 0.78rem;
+    }
+
+    .codolioArrowIcon {
+        width: 1.4rem;
+        height: 1.4rem;
+    }
+
+    .heroEyebrow {
+        font-size: 0.65rem;
+        letter-spacing: 0.1em;
+    }
+
+    .heroHighlight {
+        font-size: 0.75rem;
+        padding: 0.45rem 0.7rem;
     }
 }
