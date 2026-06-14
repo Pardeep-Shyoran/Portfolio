@@ -1,15 +1,17 @@
 .Header{
         height: 10vh;
-        width: 100%;
+    width: min(100vw, 1550px);
         box-shadow: 0 2px 4px var(--box-shadow-color);
         display: flex;
         align-items: center;
         justify-content: space-between;
         gap: 12px;
         padding: 0 16px;
-        position: sticky;
-        top: 0;
-        left: 0;
+    position: fixed;
+    top: 0;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
         z-index: 1000;
         background: var(--background-color-opacity);
         backdrop-filter: blur(8px);
