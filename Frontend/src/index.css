@@ -78,10 +78,6 @@ body {
   width: 100%;
 }
 
-#smooth-wrapper {
-  padding-top: 10vh;
-}
-
 #smooth-content {
   min-height: 100vh;
 }
