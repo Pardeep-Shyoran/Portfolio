@@ -8,6 +8,7 @@ import { ScrollSmoother } from "gsap/ScrollSmoother";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import CanvasBackground from "./components/CanvasBackground/CanvasBackground";
 import ShuttleLight from "./components/CanvasBackground/ShuttleLight";
+import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
 
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother, ScrollToPlugin);
 
@@ -40,6 +41,7 @@ const App = () => {
 
   return (
     <>
+        <ScrollToTop />
         <CanvasBackground cellSize={49} opacity={0.4} lineWidth={1} />
         <ShuttleLight />
         <Header />

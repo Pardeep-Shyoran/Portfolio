@@ -1,13 +1,9 @@
 import Skills from "../Skills/Skills";
 import styles from "./About.module.css";
 import { Helmet } from "react-helmet";
-import { useEffect, useMemo } from "react";
-import gsap from "gsap";
+import { useMemo } from "react";
 
 const About = () => {
-  useEffect(() => {
-    gsap.to(window, { scrollTo: 0, duration: 0.5 });
-  }, []);
 
   const focusAreas = useMemo(
     () => [

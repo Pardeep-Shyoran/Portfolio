@@ -5,14 +5,6 @@ import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
 const ProjectCard = ({ project }) => {
   const accent = project.accentColor || 'var(--primary-color)';
   const themeName = project.theme || 'General';
-  
-  // Generate a subtle background from accent color
-  const generateBackground = (accentColor) => {
-    // Use the accent color with reduced opacity to create a solid background
-    return `${accentColor}35`;
-  };
-  
-  const background = generateBackground(accent);
 
   return (
     <div

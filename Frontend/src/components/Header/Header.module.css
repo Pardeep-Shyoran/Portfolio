@@ -130,7 +130,7 @@
 }
 
 /* Responsive rules */
-@media (max-width: 768px){
+@media (max-width: 960px){
     .desktopNav{ display: none; }
     .menuButton{ display: inline-block; }
     /* hide toggle in header on mobile; it appears inside the slide-in menu */

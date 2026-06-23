@@ -1,5 +1,6 @@
 {
     "rewrites": [
+        { "source": "/api/gfg/:username", "destination": "https://gfgstatscard.vercel.app/:username?raw=true" },
         { "source": "/(.*)", "destination": "/" }
     ]
 }

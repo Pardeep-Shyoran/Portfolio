@@ -1,0 +1,834 @@
+.leetCodeContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1.5rem;
+}
+
+/* Glassmorphism base cards */
+.profileCard,
+.circleCard,
+.progressBarsCard,
+.calendarCard,
+.skeletonCard {
+    border-radius: 20px;
+    border: 1px solid var(--border-color);
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+[data-theme="light"] .profileCard,
+[data-theme="light"] .circleCard,
+[data-theme="light"] .progressBarsCard,
+[data-theme="light"] .calendarCard,
+[data-theme="light"] .skeletonCard {
+    background: rgba(0, 0, 0, 0.02);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.05);
+}
+
+/* Profile Card Styling */
+.profileCard {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 3rem;
+    padding: 3rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.profileCard:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255, 161, 22, 0.3);
+    box-shadow: 0 12px 40px 0 rgba(255, 161, 22, 0.15);
+}
+
+.logoWrapper {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    flex-shrink: 0;
+}
+
+.leetcodeLogoBg {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 3px solid var(--border-color);
+    background-color: rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+[data-theme="light"] .leetcodeLogoBg {
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+.leetcodeLogo {
+    font-size: 3.5rem;
+    color: #ffa116;
+    transition: all 0.4s ease;
+}
+
+.profileCard:hover .leetcodeLogoBg {
+    transform: scale(1.05) rotate(5deg);
+    border-color: #ffa116;
+}
+
+.logoGlow {
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ffa116, #ff6a00);
+    z-index: -1;
+    opacity: 0.2;
+    filter: blur(12px);
+    transition: opacity 0.4s ease, filter 0.4s ease;
+}
+
+.profileCard:hover .logoGlow {
+    opacity: 0.5;
+    filter: blur(16px);
+}
+
+.profileInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    flex-grow: 1;
+}
+
+.profileMeta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.name {
+    font-family: var(--font-family6);
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-color);
+    letter-spacing: -0.5px;
+}
+
+.username {
+    font-family: var(--font-family4);
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #ffa116;
+}
+
+.statsBadges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.badgeItem {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color);
+    padding: 0.6rem 1.2rem;
+    border-radius: 12px;
+}
+
+[data-theme="light"] .badgeItem {
+    background: rgba(0, 0, 0, 0.01);
+}
+
+.badgeIcon {
+    font-size: 1.2rem;
+    color: var(--secondary-color);
+}
+
+.badgeText {
+    display: flex;
+    flex-direction: column;
+}
+
+.badgeLabel {
+    font-size: 0.75rem;
+    opacity: 0.6;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.badgeVal {
+    font-family: var(--font-family1);
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-color);
+}
+
+.actionButtons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.leetcodeLink {
+    background: linear-gradient(135deg, #ffa116 0%, #ff6a00 100%);
+    color: #ffffff !important;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 0.8rem 1.8rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    width: fit-content;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 161, 22, 0.2);
+}
+
+.leetcodeLink:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255, 161, 22, 0.35);
+}
+
+.syncButton {
+    background: rgba(255, 255, 255, 0.02);
+    color: var(--text-color) !important;
+    border: 1px solid var(--border-color);
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 0.8rem 1.8rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    width: fit-content;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+[data-theme="light"] .syncButton {
+    background: rgba(0, 0, 0, 0.02);
+}
+
+.syncButton:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: #ffa116;
+    transform: translateY(-2px);
+}
+
+[data-theme="light"] .syncButton:hover {
+    background: rgba(0, 0, 0, 0.04);
+}
+
+.syncIcon {
+    font-size: 0.9rem;
+    transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.syncButton:hover .syncIcon {
+    transform: rotate(180deg);
+}
+
+.btnIcon {
+    font-size: 0.9rem;
+}
+
+/* Layout for circular progress + difficulty details */
+.statsLayout {
+    display: grid;
+    grid-template-columns: 350px 1fr;
+    gap: 1.5rem;
+}
+
+/* Overall Solved Circular Card */
+.circleCard {
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    text-align: center;
+}
+
+.circleCard:hover {
+    transform: translateY(-3px);
+    border-color: rgba(255, 161, 22, 0.2);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="light"] .circleCard:hover {
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+}
+
+.circleWrapper {
+    position: relative;
+    width: 160px;
+    height: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.progressSvg {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.circleTrack {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="light"] .circleTrack {
+    stroke: rgba(0, 0, 0, 0.05);
+}
+
+.circleProgress {
+    fill: none;
+    stroke: #ffa116;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 1s ease-in-out;
+    filter: drop-shadow(0 0 6px rgba(255, 161, 22, 0.5));
+}
+
+.circleContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.solvedCount {
+    font-family: var(--font-family1);
+    font-size: 3.2rem;
+    font-weight: 700;
+    color: var(--text-color);
+    line-height: 1.1;
+}
+
+.solvedLabel {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.6;
+    font-weight: 600;
+}
+
+.totalCount {
+    font-size: 0.9rem;
+    opacity: 0.5;
+    margin-top: 0.1rem;
+}
+
+.solvedPercentageText {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    line-height: 1.5;
+}
+
+.solvedPercentageText strong {
+    color: #ffa116;
+}
+
+/* Difficulties Breakdown Card */
+.progressBarsCard {
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.5rem;
+}
+
+.progressBarsCard:hover {
+    transform: translateY(-3px);
+    border-color: rgba(59, 130, 246, 0.2);
+}
+
+.cardTitle {
+    font-family: var(--font-family6);
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text-color);
+}
+
+.difficultyList {
+    display: flex;
+    flex-direction: column;
+    gap: 1.8rem;
+}
+
+.difficultyRow {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.rowHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.diffName {
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: var(--diff-color);
+}
+
+.rowStats {
+    font-size: 0.95rem;
+    opacity: 0.85;
+}
+
+.rowStats strong {
+    color: var(--text-color);
+    font-size: 1.1rem;
+}
+
+.divider {
+    opacity: 0.3;
+    margin: 0 0.2rem;
+}
+
+.barTrack {
+    height: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+}
+
+[data-theme="light"] .barTrack {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.barFill {
+    height: 100%;
+    background-color: var(--diff-color);
+    border-radius: 6px;
+    transition: width 1.2s cubic-bezier(0.1, 0.8, 0.2, 1);
+    box-shadow: 0 0 10px var(--diff-color);
+}
+
+/* Contribution Calendar Card */
+.calendarCard {
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.calendarCard:hover {
+    border-color: rgba(255, 161, 22, 0.2);
+    box-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="light"] .calendarCard:hover {
+    box-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.06);
+}
+
+.calendarHeader h3 {
+    font-family: var(--font-family6);
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 0.25rem;
+}
+
+.calendarHeader p {
+    font-family: var(--font-family4);
+    font-size: 0.95rem;
+    color: var(--text-color);
+    opacity: 0.7;
+}
+
+.calendarWrapper {
+    width: 100%;
+    overflow-x: auto;
+    padding: 0.5rem 0;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-x;
+}
+
+/* Custom scrollbars inside the calendar wrapper */
+.calendarWrapper::-webkit-scrollbar {
+    height: 6px;
+}
+
+.calendarWrapper::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.calendarWrapper::-webkit-scrollbar-thumb {
+    background-color: var(--border-color);
+    border-radius: 10px;
+}
+
+.calendarWrapper::-webkit-scrollbar-thumb:hover {
+    background-color: var(--text-color2);
+}
+
+/* Calendar styling overrides for standard classes in react-activity-calendar */
+.calendarWrapper :global(.react-activity-calendar) {
+    margin: 0 auto;
+    color: var(--text-color) !important;
+}
+
+.calendarWrapper :global(.react-activity-calendar__label) {
+    fill: var(--text-color) !important;
+}
+
+.mobileScrollTip {
+    display: none;
+    font-size: 0.8rem;
+    color: var(--text-color2);
+    opacity: 0.7;
+    text-align: center;
+    margin-top: 0.25rem;
+}
+
+/* Loading Skeleton styling */
+.loadingContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    width: 100%;
+}
+
+.skeletonCard {
+    animation: pulse 1.6s ease-in-out infinite;
+    background: linear-gradient(90deg,
+            rgba(255, 255, 255, 0.02) 25%,
+            rgba(255, 255, 255, 0.05) 37%,
+            rgba(255, 255, 255, 0.02) 63%);
+    background-size: 400% 100%;
+}
+
+[data-theme="light"] .skeletonCard {
+    background: linear-gradient(90deg,
+            rgba(0, 0, 0, 0.02) 25%,
+            rgba(0, 0, 0, 0.05) 37%,
+            rgba(0, 0, 0, 0.02) 63%);
+    background-size: 400% 100%;
+}
+
+.profileSkeleton {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 3rem;
+    padding: 3rem;
+    min-height: 210px;
+}
+
+.skeletonLogo {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.04);
+}
+
+[data-theme="light"] .skeletonLogo {
+    background: rgba(0, 0, 0, 0.04);
+}
+
+.skeletonInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    flex-grow: 1;
+}
+
+.skeletonLineShort {
+    width: 30%;
+    height: 20px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.skeletonLineMedium {
+    width: 50%;
+    height: 20px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.skeletonLineLong {
+    width: 80%;
+    height: 16px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.03);
+}
+
+[data-theme="light"] .skeletonLineShort {
+    background: rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="light"] .skeletonLineMedium {
+    background: rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="light"] .skeletonLineLong {
+    background: rgba(0, 0, 0, 0.03);
+}
+
+.statsLayoutSkeleton {
+    display: grid;
+    grid-template-columns: 350px 1fr;
+    gap: 1.5rem;
+}
+
+.circleSkeletonCard {
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 270px;
+}
+
+.skeletonCircle {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    border: 8px solid rgba(255, 255, 255, 0.03);
+}
+
+[data-theme="light"] .skeletonCircle {
+    border-color: rgba(0, 0, 0, 0.03);
+}
+
+.progressBarsSkeleton {
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.8rem;
+    justify-content: center;
+    border: 1px solid var(--border-color);
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 20px;
+}
+
+[data-theme="light"] .progressBarsSkeleton {
+    background: rgba(0, 0, 0, 0.02);
+}
+
+.progressBarSkeletonItem {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.skeletonBar {
+    height: 10px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 6px;
+    width: 100%;
+}
+
+[data-theme="light"] .skeletonBar {
+    background: rgba(0, 0, 0, 0.03);
+}
+
+.submissionsSkeleton {
+    padding: 2.5rem;
+    min-height: 250px;
+}
+
+.submissionSkeletonRow {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* Error Container */
+.errorContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 4rem 2rem;
+    border-radius: 20px;
+    border: 1px dashed var(--border-color);
+    background: rgba(255, 255, 255, 0.01);
+    gap: 1.25rem;
+}
+
+.errorIcon {
+    font-size: 3.5rem;
+    color: #ffa116;
+    animation: float 3s ease-in-out infinite;
+}
+
+.errorContainer h3 {
+    font-family: var(--font-family6);
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.errorMsg {
+    font-size: 1rem;
+    color: #ef4743;
+    font-weight: 600;
+    margin: 0;
+}
+
+.errorHint {
+    font-size: 0.9rem;
+    color: var(--text-color);
+    opacity: 0.6;
+    max-width: 450px;
+    margin: 0;
+}
+
+.retryButton {
+    background: transparent;
+    color: #ffa116;
+    border: 1px solid #ffa116;
+    border-radius: 30px;
+    padding: 0.7rem 1.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    transition: all 0.3s ease;
+}
+
+.retryButton:hover {
+    background: #ffa116;
+    color: #ffffff;
+    box-shadow: 0 4px 15px rgba(255, 161, 22, 0.3);
+}
+
+.retryIcon {
+    font-size: 0.95rem;
+}
+
+/* Animations */
+@keyframes pulse {
+    0% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+/* Responsiveness Media Queries */
+@media (max-width: 900px) {
+
+    .profileSkeleton,
+    .profileCard {
+        flex-direction: column;
+        text-align: center;
+        align-items: center;
+        gap: 1.5rem;
+        padding: 2rem;
+    }
+
+    .profileInfo {
+        align-items: center;
+    }
+
+    .statsBadges {
+        justify-content: center;
+    }
+
+    .leetcodeLink {
+        margin-top: 0.5rem;
+    }
+
+    .statsLayout,
+    .statsLayoutSkeleton {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .leetCodeContainer {
+        padding: 1rem;
+    }
+
+    .name {
+        font-size: 1.7rem;
+    }
+
+    .calendarCard {
+        padding: 1.5rem;
+    }
+
+    .mobileScrollTip {
+        display: block;
+    }
+
+    .calendarWrapper :global(.react-activity-calendar) {
+        min-width: 650px;
+    }
+}
+
+@media (max-width: 480px) {
+    .name {
+        font-size: 1.4rem;
+    }
+
+    .username {
+        font-size: 0.95rem;
+    }
+
+    .statsBadges {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+        gap: 0.75rem;
+    }
+
+    .badgeItem {
+        justify-content: center;
+    }
+
+    .solvedCount {
+        font-size: 2.8rem;
+    }
+
+    .circleWrapper {
+        transform: scale(0.9);
+    }
+
+    .calendarWrapper :global(.react-activity-calendar) {
+        min-width: 550px;
+    }
+}

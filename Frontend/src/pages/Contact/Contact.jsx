@@ -1,13 +1,9 @@
 import styles from "./Contact.module.css";
 import { Helmet } from "react-helmet";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import Button from "../../components/Button/Button";
-import gsap from "gsap";
 
 const Contact = () => {
-  useEffect(() => {
-    gsap.to(window, { scrollTo: 0, duration: 0.5 });
-  }, []);
 
   const channels = useMemo(
     () => [

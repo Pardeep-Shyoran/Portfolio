@@ -1,7 +1,5 @@
-import About from "../About/About";
+import React, { lazy, Suspense } from "react";
 import styles from "./Home.module.css";
-// import Projects from "../Projects/Projects";
-import Contact from "../Contact/Contact";
 import { Helmet } from "react-helmet";
 import FeaturedProjects from "../../components/FeaturedProjects/FeaturedProjects";
 import Button from "../../components/Button/Button";
@@ -10,6 +8,10 @@ import gsap from "gsap";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+
+const About = lazy(() => import("../About/About"));
+const Contact = lazy(() => import("../Contact/Contact"));
+const Stats = lazy(() => import("../Stats/Stats"));
 
 gsap.registerPlugin(ScrollToPlugin);
 
@@ -160,11 +162,18 @@ const Home = () => {
           </Button>
         </div>
       </section>
-      <About />
+      <Suspense fallback={<div style={{ minHeight: '300px' }} />}>
+        <About />
+      </Suspense>
       {/* <Projects /> */}
       <FeaturedProjects />
       <Certificates />
-      <Contact />
+      <Suspense fallback={<div style={{ minHeight: '300px' }} />}>
+        <Stats />
+      </Suspense>
+      <Suspense fallback={<div style={{ minHeight: '300px' }} />}>
+        <Contact />
+      </Suspense>
     </>
   );
 };
