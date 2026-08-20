@@ -11,6 +11,9 @@ const GFG = () => {
 
     const username = 'pardeepsheqqo4';
     const apiEndpoint = `/api/gfg/${username}`;
+    const summaryEndpoint = `/api/gfg-summary/${username}`;
+    const heatmapEndpoint = `/api/gfg-heatmap/${username}`;
+    const cacheKey = 'gfg-v5';
     const profileUrl = `https://www.geeksforgeeks.org/profile/${username}/?tab=activity`;
 
     // Verified GFG stats for pardeepsheqqo4 as of June 2026
@@ -35,7 +38,7 @@ const GFG = () => {
         try {
             if (!force) {
                 // 1. Try to load valid cache first (instant paint)
-                const cached = statsCache.get('gfg');
+                const cached = statsCache.get(cacheKey);
                 if (cached) {
                     setData(cached);
                     setIsLive(true);
@@ -44,19 +47,26 @@ const GFG = () => {
                 }
 
                 // 2. Expired or empty? Try raw cache fallback and sync in background
-                const rawCached = statsCache.getRaw('gfg');
+                const rawCached = statsCache.getRaw(cacheKey);
                 if (rawCached) {
                     setData(rawCached);
                     setIsLive(true);
                     setLoading(false);
                     // Background sync
                     try {
-                        const response = await fetch(apiEndpoint);
-                        if (response.ok) {
+                        const [response, summaryResponse, heatmapResponse] = await Promise.all([
+                            fetch(apiEndpoint),
+                            fetch(summaryEndpoint),
+                            fetch(heatmapEndpoint)
+                        ]);
+                        if (response.ok && summaryResponse.ok && heatmapResponse.ok) {
                             const result = await response.json();
-                            if (result && typeof result.total_problems_solved !== 'undefined') {
-                                setData(result);
-                                statsCache.set('gfg', result);
+                            const summary = await summaryResponse.json();
+                            const heatmap = await heatmapResponse.json();
+                            const stats = normalizeStats(result, summary, heatmap);
+                            if (stats) {
+                                setData(stats);
+                                statsCache.set(cacheKey, stats);
                             }
                         }
                     } catch (bgErr) {
@@ -68,24 +78,31 @@ const GFG = () => {
 
             // 3. No cache or forced sync
             setLoading(true);
-            const response = await fetch(apiEndpoint);
-            if (!response.ok) {
+            const [response, summaryResponse, heatmapResponse] = await Promise.all([
+                fetch(apiEndpoint),
+                fetch(summaryEndpoint),
+                fetch(heatmapEndpoint)
+            ]);
+            if (!response.ok || !summaryResponse.ok || !heatmapResponse.ok) {
                 throw new Error('API response failed');
             }
             const result = await response.json();
+            const summary = await summaryResponse.json();
+            const heatmap = await heatmapResponse.json();
+            const stats = normalizeStats(result, summary, heatmap);
 
             // Validate response has key statistics
-            if (!result || typeof result.total_problems_solved === 'undefined') {
+            if (!stats) {
                 throw new Error('Invalid stats data structure');
             }
 
-            setData(result);
-            statsCache.set('gfg', result);
+            setData(stats);
+            statsCache.set(cacheKey, stats);
             setIsLive(true);
         } catch (err) {
             console.warn('GFG live fetch error, falling back to cached portfolio stats:', err);
             // Gracefully fall back to local/cached data
-            const rawCached = statsCache.getRaw('gfg');
+            const rawCached = statsCache.getRaw(cacheKey);
             if (rawCached) {
                 setData(rawCached);
                 setIsLive(true);
@@ -96,6 +113,28 @@ const GFG = () => {
         } finally {
             setLoading(false);
         }
+    };
+
+    const normalizeStats = (result, summaryResult, heatmapResult) => {
+        const stats = result?.data;
+        const summary = summaryResult?.data;
+        const heatmap = heatmapResult?.data;
+        if (!stats || typeof stats.totalSolved !== 'number') return null;
+
+        const byDifficulty = stats.byDifficulty || {};
+        return {
+            total_problems_solved: stats.totalSolved,
+            School: byDifficulty.school || 0,
+            Basic: byDifficulty.basic || 0,
+            Easy: byDifficulty.easy || 0,
+            Medium: byDifficulty.medium || 0,
+            Hard: byDifficulty.hard || 0,
+            total_active_days: summary?.totalActiveDays || 0,
+            total_contests: summary?.totalContests || 0,
+            current_streak: heatmap?.currentStreak || 0,
+            longest_streak: heatmap?.longestStreak || 0,
+            max_daily_submissions: heatmap?.maxDailySubmissions || 0
+        };
     };
 
     useEffect(() => {
@@ -138,12 +177,12 @@ const GFG = () => {
 
     // Destructure stats from data
     const {
-        total_score = 0,
-        monthly_score = 0,
         total_problems_solved = 0,
-        pod_solved_longest_streak = 0,
-        pod_solved_current_streak = 0,
-        pod_correct_submissions_count = 0,
+        total_active_days = 0,
+        total_contests = 0,
+        current_streak = 0,
+        longest_streak = 0,
+        max_daily_submissions = 0,
         School = 0,
         Basic = 0,
         Easy = 0,
@@ -170,7 +209,6 @@ const GFG = () => {
     const easyPercentage = Math.min(100, Easy > 0 ? (Easy / targetMilestone) * 100 : 0).toFixed(1);
     const mediumPercentage = Math.min(100, Medium > 0 ? (Medium / targetMilestone) * 100 : 0).toFixed(1);
     const hardPercentage = Math.min(100, Hard > 0 ? (Hard / targetMilestone) * 100 : 0).toFixed(1);
-
     return (
         <div className={styles.gfgContainer}>
             {/* Profile Info Header */}
@@ -196,22 +234,22 @@ const GFG = () => {
                         <div className={styles.badgeItem}>
                             <FaCode className={styles.badgeIcon} />
                             <div className={styles.badgeText}>
-                                <span className={styles.badgeLabel}>Coding Score</span>
-                                <span className={styles.badgeVal}>{total_score}</span>
+                                <span className={styles.badgeLabel}>Problems Solved</span>
+                                <span className={styles.badgeVal}>{total_problems_solved}</span>
                             </div>
                         </div>
-                        <div className={styles.badgeItem}>
-                            <FaTrophy className={styles.badgeIcon} />
-                            <div className={styles.badgeText}>
-                                <span className={styles.badgeLabel}>Correct Submissions</span>
-                                <span className={styles.badgeVal}>{pod_correct_submissions_count}</span>
+                            <div className={styles.badgeItem}>
+                                <FaTrophy className={styles.badgeIcon} />
+                                <div className={styles.badgeText}>
+                                    <span className={styles.badgeLabel}>Active Days</span>
+                                    <span className={styles.badgeVal}>{total_active_days}</span>
+                                </div>
                             </div>
-                        </div>
                         <div className={styles.badgeItem}>
                             <FaFire className={styles.badgeIcon} style={{ color: '#ff6a00' }} />
                             <div className={styles.badgeText}>
-                                <span className={styles.badgeLabel}>Current Streak</span>
-                                <span className={styles.badgeVal}>{pod_solved_current_streak} Days</span>
+                                <span className={styles.badgeLabel}>Total Contests</span>
+                                <span className={styles.badgeVal}>{total_contests}</span>
                             </div>
                         </div>
                     </div>
@@ -337,7 +375,7 @@ const GFG = () => {
                             <FaFire />
                         </div>
                         <div className={styles.streakInfo}>
-                            <span className={styles.streakVal}>{pod_solved_current_streak} Days</span>
+                            <span className={styles.streakVal}>{current_streak} Days</span>
                             <span className={styles.streakLabel}>Current Streak</span>
                         </div>
                     </div>
@@ -346,7 +384,7 @@ const GFG = () => {
                             <FaTrophy />
                         </div>
                         <div className={styles.streakInfo}>
-                            <span className={styles.streakVal}>{pod_solved_longest_streak} Days</span>
+                            <span className={styles.streakVal}>{longest_streak} Days</span>
                             <span className={styles.streakLabel}>Longest Streak</span>
                         </div>
                     </div>
@@ -355,8 +393,8 @@ const GFG = () => {
                             <FaCalendarDays />
                         </div>
                         <div className={styles.streakInfo}>
-                            <span className={styles.streakVal}>{monthly_score} XP</span>
-                            <span className={styles.streakLabel}>Monthly Coding Score</span>
+                            <span className={styles.streakVal}>{max_daily_submissions}</span>
+                            <span className={styles.streakLabel}>Peak Daily Submissions</span>
                         </div>
                     </div>
                     <div className={styles.streakItem}>

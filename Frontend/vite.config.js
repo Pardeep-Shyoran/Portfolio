@@ -6,10 +6,20 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '/api/gfg': {
-        target: 'https://gfgstatscard.vercel.app',
+      '/api/gfg-summary': {
+        target: 'https://gfg-stats.tashif.codes',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api\/gfg/, '') + '?raw=true'
+        rewrite: (path) => path.replace(/^\/api\/gfg-summary\//, '/')
+      },
+      '/api/gfg-heatmap': {
+        target: 'https://gfg-stats.tashif.codes',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/gfg-heatmap\//, '/') + '/heatmap'
+      },
+      '/api/gfg': {
+        target: 'https://gfg-stats.tashif.codes',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/gfg\//, '/') + '/stats'
       }
     }
   }

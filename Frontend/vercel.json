@@ -1,6 +1,8 @@
 {
     "rewrites": [
-        { "source": "/api/gfg/:username", "destination": "https://gfgstatscard.vercel.app/:username?raw=true" },
+        { "source": "/api/gfg/:username", "destination": "https://gfg-stats.tashif.codes/:username/stats" },
+        { "source": "/api/gfg-summary/:username", "destination": "https://gfg-stats.tashif.codes/:username" },
+        { "source": "/api/gfg-heatmap/:username", "destination": "https://gfg-stats.tashif.codes/:username/heatmap" },
         { "source": "/(.*)", "destination": "/" }
     ]
 }
