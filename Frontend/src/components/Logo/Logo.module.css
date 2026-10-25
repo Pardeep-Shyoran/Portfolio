@@ -1,33 +1,104 @@
-.Logo{
-    height: 60px;
-    /* width: 120px; */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
+.Logo {
+  display: flex;
+  align-items: center;
+  height: 100%;
 }
 
-.LogoImage{
-    height: 100%;
-    /* width: 100%; */
-    aspect-ratio: 16/9;
-    /* object-fit: contain; */
-    border-radius: 2px;
-    cursor: pointer;
+.LogoLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  text-decoration: none;
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--color-text);
+  transition: opacity var(--transition-fast), color var(--transition-fast);
+  user-select: none;
+  border-radius: var(--radius-sm);
+  padding: 0.25rem 0.35rem;
+  margin-left: -0.35rem;
 }
 
-.LogoText{
-        font-size: 1.4rem;
-    font-weight: bold;
-    color: var(--text-color2);
-    cursor: pointer;
-    user-select: none;
-    text-align: center;
-    text-decoration: none;
+.LogoLink:hover {
+  opacity: 0.85;
 }
 
-@media (max-width: 900px){
-    .LogoText{
-        font-size: 1.25rem;
-    }
+.LogoLink:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.logoMark {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.logoImg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* Dark Theme Default: Show Cream/Light Emblem */
+.darkThemeLogo {
+  display: block;
+}
+
+.lightThemeLogo {
+  display: none;
+}
+
+/* Light Theme: Show Dark/Black Emblem with optical scale matching */
+:global([data-theme="light"]) .darkThemeLogo {
+  display: none;
+}
+
+:global([data-theme="light"]) .lightThemeLogo {
+  display: block;
+  transform: scale(1.52);
+  transform-origin: center;
+}
+
+.brandName {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.accentDot {
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-weight: 800;
+  margin-left: 2px;
+}
+
+@media (max-width: 640px) {
+  .LogoLink {
+    font-size: 1.1rem;
+    gap: 0.5rem;
+  }
+
+  .logoMark {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+@media (max-width: 380px) {
+  .brandName {
+    display: none;
+  }
+
+  .accentDot {
+    display: none;
+  }
 }

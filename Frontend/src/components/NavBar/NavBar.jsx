@@ -1,51 +1,109 @@
-import styles from './NavBar.module.css'
+import { useEffect, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import gsap from 'gsap'
-import { ScrollToPlugin } from 'gsap/ScrollToPlugin'
+import styles from './NavBar.module.css'
+import { smoothScrollTo } from '../../utils/scrollHelper'
 
-gsap.registerPlugin(ScrollToPlugin)
+const DESKTOP_NAV_ITEMS = [
+  { id: 'about', label: 'About', targetId: 'about', path: '/about' },
+  { id: 'projects', label: 'Projects', targetId: 'featuredProjects', path: '/projects' },
+  { id: 'certificates', label: 'Certificates', targetId: 'certificates', path: '/certificates' },
+  { id: 'stats', label: 'Stats', targetId: 'stats', path: '/stats' },
+]
 
-const NavBar = () => {
+const MOBILE_NAV_ITEMS = [
+  { id: 'home', label: 'Home', targetId: 'home', path: '/' },
+  { id: 'about', label: 'About', targetId: 'about', path: '/about' },
+  { id: 'projects', label: 'Projects', targetId: 'featuredProjects', path: '/projects' },
+  { id: 'certificates', label: 'Certificates', targetId: 'certificates', path: '/certificates' },
+  { id: 'stats', label: 'Stats', targetId: 'stats', path: '/stats' },
+  { id: 'contact', label: 'Contact', targetId: 'contact', path: '/contact' },
+]
+
+const NavBar = ({ onNavigate, isMobile = false }) => {
   const navigate = useNavigate()
   const location = useLocation()
+  const [activeSection, setActiveSection] = useState('')
 
-  const handleClick = (e, targetId) => {
-    e.preventDefault()
-    
-    // If not on home page, navigate to home first
+  const items = isMobile ? MOBILE_NAV_ITEMS : DESKTOP_NAV_ITEMS
+
+  // Track active section on scroll when on home page using viewport coordinates
+  useEffect(() => {
     if (location.pathname !== '/') {
-      navigate('/', { state: { scrollTarget: targetId } })
+      setActiveSection('')
+      return
+    }
+
+    const sectionIds = ['home', 'about', 'featuredProjects', 'certificates', 'stats', 'contact']
+    let rafId = 0
+
+    const updateActive = () => {
+      // Find the lowest visible section that has scrolled near or past header
+      for (let i = sectionIds.length - 1; i >= 0; i--) {
+        const el = document.getElementById(sectionIds[i])
+        if (el) {
+          const rect = el.getBoundingClientRect()
+          if (rect.top <= 200) {
+            setActiveSection(sectionIds[i])
+            return
+          }
+        }
+      }
+      setActiveSection('home')
+    }
+
+    const handleScroll = () => {
+      cancelAnimationFrame(rafId)
+      rafId = requestAnimationFrame(updateActive)
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    updateActive()
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      cancelAnimationFrame(rafId)
+    }
+  }, [location.pathname])
+
+  const handleClick = (e, item) => {
+    e.preventDefault()
+    onNavigate?.()
+
+    if (location.pathname !== '/') {
+      navigate('/', { state: { scrollTarget: item.targetId } })
     } else {
-      // Already on home page, scroll directly
-      scrollToElement(targetId)
+      if (item.targetId === 'home') {
+        smoothScrollTo(0)
+      } else {
+        smoothScrollTo(item.targetId)
+      }
     }
   }
 
-  const scrollToElement = (targetId) => {
-    const element = document.getElementById(targetId)
-    if (element) {
-      const headerOffset = document.querySelector('header')?.offsetHeight ?? 0
-
-      gsap.to(window, {
-        duration: 1,
-        scrollTo: {
-          y: element,
-          offsetY: headerOffset
-        },
-        ease: 'power2.inOut'
-      })
-    }
+  const isItemActive = (item) => {
+    if (location.pathname === item.path) return true
+    if (location.pathname === '/' && activeSection === item.targetId) return true
+    return false
   }
 
   return (
-    <div className={styles.NavBar}>
-      <a className={styles.NavLink} href="#home" onClick={(e) => handleClick(e, 'home')}>Home</a>
-      <a className={styles.NavLink} href="#about" onClick={(e) => handleClick(e, 'about')}>About</a>
-      <a className={styles.NavLink} href="#featuredProjects" onClick={(e) => handleClick(e, 'featuredProjects')}>Projects</a>
-      <a className={styles.NavLink} href="#certificates" onClick={(e) => handleClick(e, 'certificates')}>Certificates</a>
-      <a className={styles.NavLink} href="#stats" onClick={(e) => handleClick(e, 'stats')}>Stats</a>
-      <a className={styles.NavLink} href="#contact" onClick={(e) => handleClick(e, 'contact')}>Contact</a>
-    </div>
+    <ul className={`${styles.navBar} ${isMobile ? styles.mobileList : ''}`} role="list">
+      {items.map((item) => {
+        const active = isItemActive(item)
+        return (
+          <li key={item.id} className={styles.navItem}>
+            <a
+              href={`#${item.targetId}`}
+              className={`${styles.navLink} ${active ? styles.active : ''} ${item.id === 'projects' ? styles.projectsLink : ''}`}
+              onClick={(e) => handleClick(e, item)}
+              aria-current={active ? 'page' : undefined}
+            >
+              <span className={styles.linkText}>{item.label}</span>
+              {active && <span className={styles.activeIndicator} aria-hidden="true" />}
+            </a>
+          </li>
+        )
+      })}
+    </ul>
   )
 }
 

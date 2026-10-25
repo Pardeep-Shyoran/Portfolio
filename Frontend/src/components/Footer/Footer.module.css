@@ -1,311 +1,411 @@
+/* ==========================================================================
+   Footer Component Styles (Dark Editorial Design System)
+   ========================================================================== */
 
-/* Modern Footer Styles */
-.footerModern {
+.footer {
   width: 100%;
-  padding: 5rem 2rem 2.5rem;
-  background: linear-gradient(to bottom, var(--background-color), var(--background-color, #fafafa));
-  border-top: 2px solid var(--border-color, rgba(0, 0, 0, 0.08));
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2rem;
+  background-color: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  color: var(--color-text);
   position: relative;
   overflow: hidden;
 }
 
-.footerModern::before {
-  content: '';
-  position: absolute;
-  width: 500px;
-  height: 500px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(100, 100, 255, 0.15), transparent 70%);
-  top: -250px;
-  left: -150px;
-  animation: bulbGlow1 8s ease-in-out infinite;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.footerModern::after {
-  content: '';
-  position: absolute;
-  width: 600px;
-  height: 600px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(150, 100, 255, 0.12), transparent 70%);
-  bottom: -300px;
-  right: -200px;
-  animation: bulbGlow2 10s ease-in-out infinite;
-  pointer-events: none;
-  z-index: 0;
-}
-
-@keyframes bulbGlow1 {
-  0%, 100% {
-    transform: translate(0, 0) scale(1);
-    opacity: 0.6;
-  }
-  50% {
-    transform: translate(30px, 30px) scale(1.1);
-    opacity: 0.8;
-  }
-}
-
-@keyframes bulbGlow2 {
-  0%, 100% {
-    transform: translate(0, 0) scale(1);
-    opacity: 0.5;
-  }
-  50% {
-    transform: translate(-40px, -40px) scale(1.15);
-    opacity: 0.7;
-  }
-}
-
-.footerContentModern {
-  max-width: 900px;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 3rem;
+.container {
+  width: min(100% - 3rem, 80rem);
   margin: 0 auto;
+  padding-top: clamp(3rem, 5vw, 4.5rem);
+  padding-bottom: clamp(2.5rem, 4vw, 3.5rem);
   position: relative;
   z-index: 1;
 }
 
-.footerTextBlock {
-  text-align: center;
-  max-width: 650px;
-  margin: 0 auto;
+@media (max-width: 640px) {
+  .container {
+    width: min(100% - 2rem, 80rem);
+  }
 }
 
-.footerHeadingModern {
-  font-size: clamp(2rem, 5vw, 3.5rem);
-  font-weight: 700;
-  color: var(--text-color);
-  margin: 0 0 1.2rem 0;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-}
-
-.footerMessageModern {
-  font-size: clamp(1rem, 2.5vw, 1.15rem);
-  color: var(--text-color2, #666);
-  line-height: 1.7;
-  margin: 0 auto;
-  font-weight: 400;
-  max-width: 600px;
-  letter-spacing: 0.01em;
-}
-
-.footerIconsModern {
+/* Restrained Closing Invitation */
+.invitationSection {
   display: flex;
-  gap: 1.5rem;
-  justify-content: center;
-  align-items: center;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 2rem;
+  padding-bottom: clamp(2.5rem, 4vw, 3.5rem);
+  margin-bottom: clamp(2.5rem, 4vw, 3.5rem);
+  border-bottom: 1px solid var(--color-border-subtle);
   flex-wrap: wrap;
-  padding: 1rem 0;
 }
 
-.footerIconButton {
-  background: transparent;
-  border: 2px solid transparent;
-  padding: 0.75rem;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  border-radius: 0.75rem;
+.invitationContent {
+  max-width: 65ch;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: var(--radius-full);
+  background-color: var(--color-accent-subtle);
+  border: 1px solid var(--color-border);
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  width: fit-content;
+}
+
+.statusDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--color-accent);
+}
+
+.invitationHeading {
+  font-family: var(--font-heading);
+  font-size: clamp(1.6rem, 3vw, 2.25rem);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.025em;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.invitationText {
+  font-size: var(--font-size-body);
+  color: var(--color-text-muted);
+  line-height: var(--line-height-body);
+  margin: 0;
+}
+
+.actionRow {
   display: flex;
   align-items: center;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+}
+
+.emailCta {
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+
+.copyBtn {
+  gap: 0.5rem;
+  min-width: 156px;
   justify-content: center;
-  position: relative;
-  overflow: visible;
+  white-space: nowrap;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
 }
 
-.footerIconButton::before {
-  content: '';
-  position: absolute;
-  inset: -4px;
-  border-radius: 1rem;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.3), transparent 70%);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
+.copyBtnSuccess {
+  background-color: var(--color-accent-subtle) !important;
+  border-color: var(--color-accent) !important;
+  color: var(--color-accent) !important;
 }
 
-.footerIconButton:hover {
-  background: var(--hover-background, rgba(0, 0, 0, 0.04));
-  border-color: var(--border-color, rgba(0, 0, 0, 0.1));
-  transform: translateY(-4px) scale(1.05);
-  box-shadow: 
-    0 4px 12px rgba(0, 0, 0, 0.08),
-    0 0 20px rgba(100, 100, 255, 0.3),
-    0 0 40px rgba(100, 100, 255, 0.15);
-  animation: bulbPulse 2s ease-in-out infinite;
+.copyIconWrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
 }
 
-.footerIconButton:hover::before {
-  opacity: 1;
+.copyText {
+  white-space: nowrap;
 }
 
-.footerIconButton:active {
-  transform: translateY(-2px) scale(1.02);
+.btnIcon {
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
 }
 
-@keyframes bulbPulse {
-  0%, 100% {
-    box-shadow: 
-      0 4px 12px rgba(0, 0, 0, 0.08),
-      0 0 20px rgba(100, 100, 255, 0.3),
-      0 0 40px rgba(100, 100, 255, 0.15);
-  }
-  50% {
-    box-shadow: 
-      0 4px 12px rgba(0, 0, 0, 0.08),
-      0 0 30px rgba(100, 100, 255, 0.5),
-      0 0 60px rgba(100, 100, 255, 0.25);
-  }
+/* Directory Grid */
+.directoryGrid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: clamp(2rem, 4vw, 4.5rem);
+  padding-bottom: 2.5rem;
+  border-bottom: 1px solid var(--color-border-subtle);
 }
 
-.footerIconModern {
-  height: 3rem;
-  width: 3rem;
-  fill: var(--text-color2, #666);
-  transition: all 0.3s ease;
+.brandCol {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  max-width: 44ch;
 }
 
-.footerIconButton:hover .footerIconModern {
-  fill: var(--text-color, #000);
-  filter: drop-shadow(0 0 8px rgba(100, 100, 255, 0.4));
+.brandWordmark {
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--color-text);
 }
 
-.sectionCopyright {
-  font-size: 0.9rem;
-  color: var(--text-color5, #999);
-  text-align: center;
+.accentDot {
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-weight: 800;
+  margin-left: 1px;
+}
+
+.brandBio {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  line-height: var(--line-height-body);
+  margin: 0;
+}
+
+.locationTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  margin-top: 0.25rem;
+}
+
+.locationPin {
+  font-size: 0.85rem;
+}
+
+.colTitle {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-text-muted);
+  margin: 0 0 1.25rem 0;
+}
+
+.navList,
+.socialList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.navLink {
+  display: inline-flex;
+  align-items: center;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  text-decoration: none;
+  transition: color var(--transition-fast), transform var(--transition-fast);
+  width: fit-content;
+}
+
+.navLink:hover {
+  color: var(--color-accent);
+  transform: translateX(3px);
+}
+
+.navLink:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--radius-xs);
+}
+
+.socialItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  text-decoration: none;
+  transition: color var(--transition-fast), transform var(--transition-fast);
+  width: fit-content;
+}
+
+.socialItem:hover {
+  color: var(--color-text);
+  transform: translateX(3px);
+}
+
+.socialItem:hover .extIcon {
+  color: var(--color-accent);
+  transform: translate(2px, -2px);
+}
+
+.socialItem:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--radius-xs);
+}
+
+.socialIcon {
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
+}
+
+.socialLabel {
+  font-weight: 500;
+}
+
+.extIcon {
+  width: 13px;
+  height: 13px;
+  color: var(--color-text-muted);
+  opacity: 0.6;
+  transition: transform var(--transition-fast), color var(--transition-fast);
+}
+
+/* Colophon Bar */
+.colophonBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
   padding-top: 2rem;
-  margin-top: 1rem;
-  border-top: 1px solid var(--border-color, rgba(0, 0, 0, 0.08));
-  width: 100%;
-  max-width: 800px;
-  font-weight: 400;
-  letter-spacing: 0.02em;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  flex-wrap: wrap;
 }
 
-/* Tablet Styles */
-@media (max-width: 768px) {
-  .footerModern {
-    padding: 4rem 1.5rem 2rem;
+.copyright {
+  font-family: var(--font-body);
+}
+
+.techNote {
+  font-family: var(--font-mono);
+  opacity: 0.75;
+}
+
+.backToTop {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background-color: var(--color-surface-raised);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  padding: 0.45rem 0.95rem;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  color: var(--color-text);
+  cursor: pointer;
+  outline: none;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
+}
+
+.backToTop:hover {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  transform: translateY(-2px);
+}
+
+.backToTop:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.arrowIcon {
+  width: 14px;
+  height: 14px;
+  transition: transform var(--transition-fast);
+}
+
+.backToTop:hover .arrowIcon {
+  transform: translateY(-2px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+  .invitationSection {
+    flex-direction: column;
+    align-items: flex-start;
   }
 
-  .footerContentModern {
+  .directoryGrid {
+    grid-template-columns: 1fr 1fr;
     gap: 2.5rem;
   }
 
-  .footerHeadingModern {
-    font-size: clamp(1.6rem, 6vw, 2.4rem);
-    margin-bottom: 1rem;
-  }
-
-  .footerMessageModern {
-    font-size: clamp(0.95rem, 3vw, 1.05rem);
-  }
-
-  .footerIconsModern {
-    gap: 1.2rem;
-  }
-
-  .footerIconButton {
-    padding: 0.65rem;
-  }
-
-  .footerIconModern {
-    height: 2rem;
-    width: 2rem;
-  }
-
-  .sectionCopyright {
-    padding-top: 1.5rem;
+  .brandCol {
+    grid-column: 1 / -1;
+    max-width: 100%;
   }
 }
 
-/* Mobile Styles */
-@media (max-width: 480px) {
-  .footerModern {
-    padding: 3rem 1.2rem 1.5rem;
-    gap: 1.5rem;
-  }
-
-  .footerContentModern {
+@media (max-width: 600px) {
+  .directoryGrid {
+    grid-template-columns: 1fr;
     gap: 2rem;
   }
 
-  .footerHeadingModern {
-    font-size: clamp(1.4rem, 7vw, 1.9rem);
-    margin-bottom: 0.9rem;
+  .actionRow {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
   }
 
-  .footerMessageModern {
-    font-size: clamp(0.92rem, 4vw, 1rem);
-    line-height: 1.6;
+  .actionRow > * {
+    width: 100%;
+    justify-content: center;
   }
 
-  .footerIconsModern {
+  .colophonBar {
+    flex-direction: column;
+    align-items: flex-start;
     gap: 1rem;
-    padding: 0.5rem 0;
   }
 
-  .footerIconButton {
-    padding: 0.6rem;
-  }
-
-  .footerIconModern {
-    height: 1.9rem;
-    width: 1.9rem;
-  }
-
-  .sectionCopyright {
-    font-size: 0.85rem;
-    padding-top: 1.5rem;
+  .backToTop {
+    align-self: flex-start;
   }
 }
 
-/* Extra Small Mobile */
-@media (max-width: 360px) {
-  .footerModern {
-    padding: 2.5rem 1rem 1.2rem;
-  }
+/* Stylized Background Watermark */
+.watermark {
+  position: absolute;
+  bottom: 0.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: var(--content-max-width, 1280px);
+  padding: 0 var(--page-gutter);
+  box-sizing: border-box;
+  text-align: center;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
 
-  .footerContentModern {
-    gap: 1.8rem;
-  }
-
-  .footerHeadingModern {
-    font-size: 1.3rem;
-    margin-bottom: 0.8rem;
-  }
-
-  .footerMessageModern {
-    font-size: 0.88rem;
-    line-height: 1.55;
-  }
-
-  .footerIconsModern {
-    gap: 0.8rem;
-  }
-
-  .footerIconButton {
-    padding: 0.5rem;
-  }
-
-  .footerIconModern {
-    height: 1.75rem;
-    width: 1.75rem;
-  }
-
-  .sectionCopyright {
-    font-size: 0.8rem;
-    padding-top: 1.2rem;
-  }
+.watermarkText {
+  display: inline-block;
+  font-family: var(--font-heading);
+  font-size: clamp(3rem, 12vw, 10rem);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 0.95;
+  white-space: nowrap;
+  color: color-mix(in srgb, var(--color-text) 5.5%, transparent);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--color-text) 7%, transparent) 0%,
+    color-mix(in srgb, var(--color-text) 2.5%, transparent) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }

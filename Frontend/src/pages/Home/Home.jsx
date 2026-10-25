@@ -1,19 +1,17 @@
-import React, { lazy, Suspense } from "react";
+import React, { lazy, Suspense, useRef, useEffect } from "react";
 import styles from "./Home.module.css";
 import { Helmet } from "react-helmet";
 import FeaturedProjects from "../../components/FeaturedProjects/FeaturedProjects";
 import Button from "../../components/Button/Button";
-import Certificates from "../Certificates/Certificates";
 import gsap from "gsap";
-import { useEffect } from "react";
+import { useGSAP } from "@gsap/react";
 import { useLocation } from "react-router-dom";
-import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+import { smoothScrollTo, prefersReducedMotion } from "../../utils/scrollHelper";
 
 const About = lazy(() => import("../About/About"));
+const Certificates = lazy(() => import("../Certificates/Certificates"));
 const Contact = lazy(() => import("../Contact/Contact"));
 const Stats = lazy(() => import("../Stats/Stats"));
-
-gsap.registerPlugin(ScrollToPlugin);
 
 const ResumeIcon = () => (
   <svg className={styles.buttonIcon} viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -22,69 +20,81 @@ const ResumeIcon = () => (
     <path d="M12 8.25v6.2" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
     <path d="M9.8 12.7 12 14.9l2.2-2.2" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
-)
+);
 
 const TalkIcon = () => (
   <svg className={styles.buttonIcon} viewBox="0 0 24 24" aria-hidden="true" focusable="false">
     <path d="M5 4.75h14A2.25 2.25 0 0 1 21.25 7v6A2.25 2.25 0 0 1 19 15.25h-7.35L8 19v-3.75H5A2.25 2.25 0 0 1 2.75 13V7A2.25 2.25 0 0 1 5 4.75Z" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
     <path d="M7.5 8.25h9M7.5 11.25h6.5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
   </svg>
-)
+);
 
-const ArrowIcon = () => (
-  <svg className={styles.codolioArrowIcon} viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-    <path d="M5 12h14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-    <path d="m13 7 6 5-6 5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+const ArrowDownIcon = () => (
+  <svg className={styles.buttonIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M12 5v14" />
+    <path d="m19 12-7 7-7-7" />
   </svg>
-)
+);
 
+const ExternalLinkIcon = () => (
+  <svg className={styles.linkArrow} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M7 17 17 7" />
+    <path d="M7 7h10v10" />
+  </svg>
+);
 
 const Home = () => {
-  const location = useLocation()
-  const heroHighlights = ["React + Node", "API design", "Responsive UI"]
+  const location = useLocation();
+  const heroRef = useRef(null);
+  const heroHighlights = ["React + Node.js", "API Architecture", "Performance UI", "MongoDB"];
 
+  // Refined entrance sequence: subtle displacement, quick ease, full cleanup
+  useGSAP(() => {
+    if (prefersReducedMotion()) return;
+
+    const elements = heroRef.current?.querySelectorAll("[data-hero-anim]");
+    if (!elements || elements.length === 0) return;
+
+    gsap.fromTo(
+      elements,
+      { opacity: 0, y: 14 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.55,
+        stagger: 0.06,
+        ease: "power2.out",
+        clearProps: "transform,opacity",
+      }
+    );
+  }, { scope: heroRef });
+
+  // Handle route state scroll targets with support for lazy-loaded sections
   useEffect(() => {
-    const targetId = location.state?.scrollTarget
+    const targetId = location.state?.scrollTarget;
+    if (!targetId) return;
 
-    if (!targetId) return
+    // Small delay to allow Suspense fallbacks of lazy sections to settle
+    const timer = setTimeout(() => {
+      smoothScrollTo(targetId);
+      // Clear location.state so subsequent page refreshes do not re-scroll to this section
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }, 100);
 
-    const element = document.getElementById(targetId)
-    if (!element) return
+    return () => clearTimeout(timer);
+  }, [location.state]);
 
-      const headerOffset = document.querySelector("header")?.offsetHeight ?? 0;
-      const offsetY = headerOffset + 16;
+  const onProjectsClick = () => {
+    smoothScrollTo("featuredProjects");
+  };
 
-      gsap.to(window, {
-        duration: 1,
-        scrollTo: {
-          y: element,
-          offsetY,
-        },
-        ease: "power2.inOut",
-      });
-  }, [location.state])
-
-  const onLetsTalkClick = () => {
-    const contactSection = document.getElementById("contact");
-    if (contactSection) {
-      const stickyHeader = document.querySelector("header");
-      const offsetY = (stickyHeader?.offsetHeight ?? 0) + 16;
-
-      gsap.to(window, {
-        duration: 1,
-        scrollTo: {
-          y: contactSection,
-          offsetY,
-        },
-        ease: "power2.inOut",
-      });
-    }
+  const onContactClick = () => {
+    smoothScrollTo("contact");
   };
 
   const onResumeClick = () => {
-    const pdfUrl =
-      "https://drive.google.com/file/d/1MZEmMEvYlfCkLt4I3PyEYByxNI6X3QXw/view";
-    window.open(pdfUrl, "_blank");
+    const pdfUrl = "https://drive.google.com/file/d/1MZEmMEvYlfCkLt4I3PyEYByxNI6X3QXw/view";
+    window.open(pdfUrl, "_blank", "noopener,noreferrer");
   };
 
   const codolioProfileUrl = "https://codolio.com/profile/Pardeep_Shyoran/card";
@@ -102,76 +112,200 @@ const Home = () => {
           name="keywords"
           content="Pardeep Shyoran, Full Stack Developer, ReactJS, MongoDB, Portfolio, Backend Developer"
         />
+        <link rel="canonical" href="https://pardeep-shyoran.me/" />
       </Helmet>
 
-      <section id="home" className={styles.home}>
-        <div className={styles.titleWrap}>
-          <div className={styles.title1}>Full Stack</div>
-          <div className={styles.title2}>Developer</div>
-        </div>
-        <div className={styles.heroContent}>
-          <p className={styles.heroEyebrow}>MERN stack developer · Product-focused · Remote-ready</p>
-          <div className={styles.heroTitle}>Hello, I&apos;m Pardeep</div>
-          <p className={styles.heroDescription}>
-            I build polished web products with dependable backends, responsive interfaces, and a strong focus on
-            clarity, speed, and maintainability.
-          </p>
-          <div className={styles.heroHighlights}>
-            {heroHighlights.map((highlight) => (
-              <span className={styles.heroHighlight} key={highlight}>
-                {highlight}
-              </span>
-            ))}
+      {/* Hero Section */}
+      <section id="home" className={styles.heroSection} ref={heroRef}>
+        <div className={styles.heroInner}>
+          {/* Left Column: Personal Developer Intro & Actions */}
+          <div className={styles.heroContent}>
+            {/* 1. Availability & Identity Eyebrow */}
+            <div className={styles.roleBadge} data-hero-anim>
+              <span className={styles.statusDot} aria-hidden="true" />
+              <span className={styles.roleText}>Available for Hire</span>
+              <span className={styles.badgeSeparator} aria-hidden="true">•</span>
+              <span className={styles.roleSubtext}>Full-Stack Web Developer</span>
+            </div>
+
+            {/* 2. Personal, Direct Developer Headline */}
+            <h1 className={styles.headline} data-hero-anim>
+              Hi, I&apos;m Pardeep.<br />
+              I build <span className={styles.headlineHighlight}>fast, modern web apps</span> with clean code.
+            </h1>
+
+            {/* 3. Authentic Developer Bio */}
+            <p className={styles.description} data-hero-anim>
+              I&apos;m a software developer passionate about crafting things for the web. From responsive React frontends to robust Node.js and MongoDB backends, I turn ideas and complex logic into smooth, reliable digital experiences.
+            </p>
+
+            {/* Core Tech Stack / Skills */}
+            <div className={styles.highlights} data-hero-anim>
+              {heroHighlights.map((highlight) => (
+                <span className={styles.highlightPill} key={highlight}>
+                  <span className={styles.pillDot} aria-hidden="true" />
+                  {highlight}
+                </span>
+              ))}
+            </div>
+
+            {/* 4, 5, 6. Primary and Secondary Actions */}
+            <div className={styles.ctaRow} data-hero-anim>
+              <Button
+                onClick={onProjectsClick}
+                variant="primary"
+                size="lg"
+                className={styles.primaryCta}
+              >
+                <span>View Projects</span>
+                <ArrowDownIcon />
+              </Button>
+
+              <Button
+                onClick={onContactClick}
+                variant="secondary"
+                size="lg"
+                className={styles.secondaryCta}
+              >
+                <TalkIcon />
+                <span>Contact Me</span>
+              </Button>
+
+              <Button
+                onClick={onResumeClick}
+                variant="secondary"
+                size="lg"
+                className={styles.resumeCta}
+              >
+                <ResumeIcon />
+                <span>Resume</span>
+              </Button>
+            </div>
+
+            {/* 7. Compact Profile & Social Bar */}
+            <div className={styles.profileBar} data-hero-anim>
+              <a
+                href={codolioProfileUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.profileBadge}
+                title="View Codolio Profile (GFG + LeetCode achievements)"
+              >
+                <img className={styles.profileLogo} src={codolioLogoUrl} alt="" aria-hidden="true" />
+                <span className={styles.profileLabel}>Codolio</span>
+                <span className={styles.profileMeta}>Stats Card</span>
+                <ExternalLinkIcon />
+              </a>
+
+              <div className={styles.barDivider} aria-hidden="true" />
+
+              <a
+                href="https://github.com/Pardeep-Shyoran"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.profileLink}
+              >
+                <span>GitHub</span>
+                <ExternalLinkIcon />
+              </a>
+
+              <a
+                href="https://www.linkedin.com/in/pardeepshyoran/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.profileLink}
+              >
+                <span>LinkedIn</span>
+                <ExternalLinkIcon />
+              </a>
+            </div>
+          </div>
+
+          {/* Right Column: Personal Developer Profile & Workspace Card */}
+          <div className={styles.heroVisual} data-hero-anim>
+            <div className={styles.devCard}>
+              <div className={styles.devCardHeader}>
+                <div className={styles.devProfileGroup}>
+                  <img
+                    src="https://ik.imagekit.io/00zfvrear/Images/cropped_circle_image.png"
+                    alt="Pardeep Shyoran"
+                    className={styles.devAvatar}
+                  />
+                  <div className={styles.devMeta}>
+                    <div className={styles.devNameRow}>
+                      <span className={styles.devName}>Pardeep Shyoran</span>
+                      <span className={styles.devHandle}>@pardeep</span>
+                    </div>
+                    <span className={styles.devRole}>Full-Stack Web Developer</span>
+                  </div>
+                </div>
+                <div className={styles.devLiveStatus}>
+                  <span className={styles.livePulse} aria-hidden="true" />
+                  <span className={styles.liveText}>OPEN TO WORK</span>
+                </div>
+              </div>
+
+              <div className={styles.devCardBody}>
+                <div className={styles.devPromptLine}>
+                  <span className={styles.promptSymbol}>❯</span>
+                  <span className={styles.promptCmd}>cat developer.json</span>
+                </div>
+
+                <div className={styles.devJsonBox}>
+                  <div className={styles.codeLine}>
+                    <span className={styles.tokenKey}>"name"</span>: <span className={styles.tokenString}>"Pardeep Shyoran"</span>,
+                  </div>
+                  <div className={styles.codeLine}>
+                    <span className={styles.tokenKey}>"role"</span>: <span className={styles.tokenString}>"Full-Stack Web Developer"</span>,
+                  </div>
+                  <div className={styles.codeLine}>
+                    <span className={styles.tokenKey}>"stack"</span>: [<span className={styles.tokenString}>"React"</span>, <span className={styles.tokenString}>"Node.js"</span>, <span className={styles.tokenString}>"Express"</span>, <span className={styles.tokenString}>"MongoDB"</span>],
+                  </div>
+                  <div className={styles.codeLine}>
+                    <span className={styles.tokenKey}>"dsa"</span>: <span className={styles.tokenString}>"400+ problems solved"</span>,
+                  </div>
+                  <div className={styles.codeLine}>
+                    <span className={styles.tokenKey}>"location"</span>: <span className={styles.tokenString}>"Haryana, India (Remote-Ready)"</span>,
+                  </div>
+                  <div className={styles.codeLine}>
+                    <span className={styles.tokenKey}>"mission"</span>: <span className={styles.tokenAccent}>"Building fast, delightful web apps"</span>
+                  </div>
+                </div>
+
+                <div className={styles.telemetryGrid}>
+                  <div className={styles.telemetryItem}>
+                    <span className={styles.telemetryVal}>400+</span>
+                    <span className={styles.telemetryKey}>DSA Challenges</span>
+                  </div>
+                  <div className={styles.telemetryDivider} aria-hidden="true" />
+                  <div className={styles.telemetryItem}>
+                    <span className={styles.telemetryVal}>MERN</span>
+                    <span className={styles.telemetryKey}>Core Stack</span>
+                  </div>
+                  <div className={styles.telemetryDivider} aria-hidden="true" />
+                  <div className={styles.telemetryItem}>
+                    <span className={styles.telemetryVal}>100%</span>
+                    <span className={styles.telemetryKey}>Responsive UI</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-        <div className={styles.buttonContainer}>
-          <Button
-            onClick={onResumeClick}
-            variant="primary"
-            size="lg"
-            className={styles.resumeButton}
-          >
-            <ResumeIcon />
-            Resume
-          </Button>
-          <Button
-            onClick={onLetsTalkClick}
-            variant="primary"
-            size="lg"
-            className={styles.letsTalkButton}
-          >
-            <TalkIcon />
-            Let's Talk
-          </Button>
-          <Button
-            href={codolioProfileUrl}
-            variant="secondary"
-            size="lg"
-            className={styles.codolioButton}
-          >
-            <span className={styles.codolioLeft}>
-              <span className={styles.codolioIconWrap}>
-                <img className={styles.codolioIcon} src={codolioLogoUrl} alt="Codolio logo" />
-              </span>
-              <span className={styles.codolioTextBlock}>
-                <span className={styles.codolioTitle}>View Codolio profile</span>
-                <span className={styles.codolioSubtitle}>GFG + LeetCode achievements</span>
-              </span>
-            </span>
-            <ArrowIcon />
-          </Button>
-        </div>
       </section>
-      <Suspense fallback={<div style={{ minHeight: '300px' }} />}>
+
+      {/* Downstream Sections */}
+      <Suspense fallback={<div style={{ minHeight: "300px" }} />}>
         <About />
       </Suspense>
-      {/* <Projects /> */}
       <FeaturedProjects />
-      <Certificates />
-      <Suspense fallback={<div style={{ minHeight: '300px' }} />}>
+      <Suspense fallback={<div style={{ minHeight: "300px" }} />}>
+        <Certificates />
+      </Suspense>
+      <Suspense fallback={<div style={{ minHeight: "300px" }} />}>
         <Stats />
       </Suspense>
-      <Suspense fallback={<div style={{ minHeight: '300px' }} />}>
+      <Suspense fallback={<div style={{ minHeight: "300px" }} />}>
         <Contact />
       </Suspense>
     </>
@@ -179,3 +313,4 @@ const Home = () => {
 };
 
 export default Home;
+

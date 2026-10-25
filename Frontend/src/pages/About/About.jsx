@@ -1,150 +1,410 @@
-import Skills from "../Skills/Skills";
-import styles from "./About.module.css";
+import { useState, useMemo, useRef } from "react";
+import { useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet";
-import { useMemo } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+import Skills from "../Skills/Skills";
+import Button from "../../components/Button/Button";
+import { smoothScrollTo, prefersReducedMotion } from "../../utils/scrollHelper";
+import styles from "./About.module.css";
+
+gsap.registerPlugin(ScrollTrigger);
+
+const DARK_THEME_LOGO = 'https://ik.imagekit.io/00zfvrear/Images/Minimalist%20Cream%20Ribbon%20F%20Logo.png?updatedAt=1792666504824';
+const LIGHT_THEME_LOGO = 'https://ik.imagekit.io/00zfvrear/Images/Abstract%20S-P%20Monogram%20Emblem-Photoroom.png?updatedAt=1792666504838';
 
 const About = () => {
+  const location = useLocation();
+  const isStandalonePage = location.pathname === "/about";
+  const [activeTab, setActiveTab] = useState("workflow");
+  const sectionRef = useRef(null);
 
-  const focusAreas = useMemo(
+  // Smooth scroll helper for section CTA buttons
+  const handleNavigate = (targetId) => {
+    smoothScrollTo(targetId, { duration: 0.8, offsetY: 80 });
+  };
+
+  // Quick Specifications for Web Developer Identity
+  const quickSpecs = useMemo(
     () => [
       {
-        title: "Full-stack delivery",
-        copy: "API-first backends with Express/MongoDB, paired with responsive React fronts that stay quick.",
+        label: "Primary Role",
+        value: "Full-Stack Web Developer",
+        detail: "Interactive Frontends + Resilient APIs",
       },
       {
-        title: "Product-minded execution",
-        copy: "Iterate in thin slices, ship small improvements, measure, and adjust fast.",
+        label: "Core Stack",
+        value: "React · Node.js · Express · MongoDB",
+        detail: "Modern JavaScript (ES6+) & MERN",
       },
       {
-        title: "Quality & reliability",
-        copy: "Readable code, predictable deploys, and smooth DX so teams extend features confidently.",
+        label: "Web Standards",
+        value: "Semantic HTML5 · Responsive UI",
+        detail: "WCAG Accessibility & Clean CSS",
+      },
+      {
+        label: "Location & Status",
+        value: "Haryana, India · Remote Ready",
+        detail: "Available for Worldwide Roles",
       },
     ],
     [],
   );
 
-  const quickFacts = useMemo(
-    () => [
-      { label: "Primary stack", value: "MongoDB · Express.js · React · Node.js" },
-      { label: "Strengths", value: "API-first design, component systems, performance-aware UI" },
-      { label: "Collaboration", value: "Pair, async updates, clear handoffs, crisp notes" },
-      { label: "Mindset", value: "Curious, delivery-first, motivated by user impact" },
-    ],
-    [],
+  // GSAP entrance animation on scroll
+  useGSAP(
+    () => {
+      if (prefersReducedMotion() || !sectionRef.current) return;
+
+      const animElements = sectionRef.current.querySelectorAll("[data-about-anim]");
+      if (!animElements || animElements.length === 0) return;
+
+      gsap.fromTo(
+        animElements,
+        {
+          opacity: 0,
+          y: 24,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.7,
+          ease: "power2.out",
+          stagger: 0.08,
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 82%",
+            once: true,
+          },
+        },
+      );
+    },
+    { scope: sectionRef },
   );
 
-  const principles = useMemo(
-    () => [
-      "Keep feedback loops short—ship, measure, refine.",
-      "Build resilient services first, then polish the experience layer.",
-      "Document decisions so the team moves faster than memory.",
-      "Design for readability—future teammates are the main users of the codebase.",
-    ],
-    [],
-  );
+  // Dynamic heading tag
+  const HeadingTag = isStandalonePage ? "h1" : "h2";
 
   return (
     <>
-      <Helmet>
-        <title>About Pardeep Shyoran | Developer & Creator</title>
-        <meta
-          name="description"
-          content="Learn how Pardeep Shyoran approaches full-stack development—pairing MERN fundamentals with product thinking and reliable delivery."
-        />
-        <meta
-          name="keywords"
-          content="About Pardeep Shyoran, MERN developer, full stack, product thinking, backend, frontend"
-        />
-      </Helmet>
+      {isStandalonePage && (
+        <Helmet>
+          <title>About | Pardeep Shyoran · Web Developer</title>
+          <meta
+            name="description"
+            content="Learn about Pardeep Shyoran's background, web engineering philosophy, and modern web development experience with React, Node.js, and MongoDB."
+          />
+          <meta
+            name="keywords"
+            content="Pardeep Shyoran, Web Developer, Full Stack Developer, Frontend Developer, React, Node.js, MongoDB, JavaScript"
+          />
+          <link rel="canonical" href="https://pardeep-shyoran.me/about" />
+        </Helmet>
+      )}
 
-      <section id="about" className={styles.aboutSection}>
-        <div className={styles.header}>
-          <p className={styles.eyebrow}>About</p>
-          <h1 className={styles.title}>Pardeep Shyoran</h1>
+      <section
+        id="about"
+        ref={sectionRef}
+        className={styles.aboutSection}
+        aria-label="About Pardeep Shyoran - Web Developer"
+      >
+        {/* Section Header */}
+        <header className={styles.header} data-about-anim>
+          <span className={styles.kicker}>Web Developer · About Me</span>
+          <HeadingTag className={styles.title}>
+            Crafting fast, modern, and resilient web experiences.
+          </HeadingTag>
           <p className={styles.subtitle}>
-            MERN stack developer pairing stable backends with refined, user-first interfaces. I like API-driven
-            products, close collaboration, and turning complex ideas into reliable experiences.
+            I bridge user-centric frontend interfaces with robust backend engineering to build web applications that look sharp, feel natural, and scale effortlessly.
           </p>
-        </div>
+        </header>
 
-        <div className={styles.heroGrid}>
-          <article className={styles.introCard}>
-            <div className={styles.introCopy}>
-              <p className={styles.overline}>MERN Stack Developer</p>
-              <h2 className={styles.heroHeading}>Building thoughtful, production-ready web experiences.</h2>
-              <p className={styles.body}>
-                I design data models, craft APIs, and shape React interfaces that feel polished and intuitive. The
-                focus: clarity, performance, and impact—software that reads well and works reliably.
-              </p>
-              <p className={styles.body}>
-                From faster queries to tidy components and clear handoffs, I keep codebases calm and maintainable
-                so teams can ship without friction.
-              </p>
-            </div>
-
-            <div className={styles.tagRow}>
-              {["API-first", "Component-driven", "Performance-aware", "Accessible UI"].map((tag) => (
-                <span className={styles.tag} key={tag}>
-                  {tag}
-                </span>
-              ))}
-            </div>
-
-            <div className={styles.calloutRow}>
-              <div className={styles.calloutBox}>
-                <p className={styles.calloutLabel}>How I work</p>
-                <p className={styles.calloutValue}>Ship in slices, measure impact, iterate with intention.</p>
+        {/* Bento Grid: Compact Developer Dossier */}
+        <div className={styles.bentoGrid}>
+          {/* Bento Card 1: Narrative Profile & Web Developer Bio */}
+          <article className={`${styles.bentoCard} ${styles.profileCard}`} data-about-anim>
+            {/* Card Header with Identity & Availability */}
+            <div className={styles.profileHeader}>
+              <div className={styles.identityWrapper}>
+                <div className={styles.avatarPill} aria-hidden="true">
+                  <img
+                    src={DARK_THEME_LOGO}
+                    alt=""
+                    className={`${styles.logoImg} ${styles.darkThemeLogo}`}
+                    loading="eager"
+                    decoding="async"
+                  />
+                  <img
+                    src={LIGHT_THEME_LOGO}
+                    alt=""
+                    className={`${styles.logoImg} ${styles.lightThemeLogo}`}
+                    loading="eager"
+                    decoding="async"
+                  />
+                </div>
+                <div className={styles.nameMeta}>
+                  <h3 className={styles.devName}>Pardeep Shyoran</h3>
+                  <span className={styles.devRole}>Full-Stack Web Developer</span>
+                </div>
               </div>
-              <div className={styles.calloutBox}>
-                <p className={styles.calloutLabel}>Focus right now</p>
-                <p className={styles.calloutValue}>Backend robustness, UI polish, and seamless developer experience.</p>
+
+              <div className={styles.statusBadge} title="Currently seeking web development roles and collaborations">
+                <span className={styles.pulseDot} aria-hidden="true" />
+                <span className={styles.statusText}>Open to Opportunities</span>
               </div>
             </div>
-          </article>
-        </div>
 
-        <div className={styles.cardsGrid}>
-          <article className={styles.card}>
-            <p className={styles.cardLabel}>Focus areas</p>
-            <h3 className={styles.cardTitle}>Where I add the most value</h3>
-            <div className={styles.listStack}>
-              {focusAreas.map((area) => (
-                <div className={styles.listItem} key={area.title}>
-                  <h4 className={styles.listHeading}>{area.title}</h4>
-                  <p className={styles.listCopy}>{area.copy}</p>
+            {/* Concise, punchy personal developer bio */}
+            <div className={styles.narrativeBody}>
+              <p className={styles.leadText}>
+                I&apos;m a Web Developer specializing in building modern web applications that bridge intuitive, responsive UI with scalable backend architecture.
+              </p>
+              <p className={styles.bodyText}>
+                Across projects like <strong className={styles.highlightText}>KodraX</strong> (real-time collaborative workspace) and <strong className={styles.highlightText}>Rivo</strong> (scalable streaming platform), I focus on clean component architectures, resilient APIs, and seamless user experiences.
+              </p>
+            </div>
+
+            {/* Quick Specs Matrix */}
+            <div className={styles.specsGrid}>
+              {quickSpecs.map((spec) => (
+                <div key={spec.label} className={styles.specItem}>
+                  <span className={styles.specLabel}>{spec.label}</span>
+                  <span className={styles.specValue}>{spec.value}</span>
+                  <span className={styles.specDetail}>{spec.detail}</span>
                 </div>
               ))}
             </div>
           </article>
 
-          <article className={styles.card}>
-            <p className={styles.cardLabel}>Quick facts</p>
-            <h3 className={styles.cardTitle}>How I approach delivery</h3>
-            <dl className={styles.statsList}>
-              {quickFacts.map((item) => (
-                <div className={styles.statRow} key={item.label}>
-                  <dt>{item.label}</dt>
-                  <dd>{item.value}</dd>
-                </div>
-              ))}
-            </dl>
-          </article>
+          {/* Bento Card 2: Interactive Web Developer Console / Dossier */}
+          <aside className={`${styles.bentoCard} ${styles.consoleCard}`} data-about-anim aria-label="Web Developer Interactive Console">
+            <div className={styles.consoleHeader}>
+              <div className={styles.windowDots} aria-hidden="true">
+                <span className={`${styles.windowDot} ${styles.dotRed}`} />
+                <span className={`${styles.windowDot} ${styles.dotYellow}`} />
+                <span className={`${styles.windowDot} ${styles.dotGreen}`} />
+              </div>
 
-          <article className={styles.card}>
-            <p className={styles.cardLabel}>Principles</p>
-            <h3 className={styles.cardTitle}>How I like to work with teams</h3>
-            <ul className={styles.principlesList}>
-              {principles.map((line) => (
-                <li key={line} className={styles.principle}>
-                  {line}
-                </li>
-              ))}
-            </ul>
-          </article>
+              {/* Console Tabs */}
+              <div className={styles.tabList} role="tablist" aria-label="Developer Information Tabs">
+                <button
+                  type="button"
+                  role="tab"
+                  id="tab-workflow"
+                  aria-selected={activeTab === "workflow"}
+                  aria-controls="panel-workflow"
+                  className={`${styles.tabBtn} ${activeTab === "workflow" ? styles.activeTab : ""}`}
+                  onClick={() => setActiveTab("workflow")}
+                >
+                  <svg className={styles.tabIcon} width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                  </svg>
+                  <span>workflow.js</span>
+                </button>
+                <button
+                  type="button"
+                  role="tab"
+                  id="tab-architecture"
+                  aria-selected={activeTab === "architecture"}
+                  aria-controls="panel-architecture"
+                  className={`${styles.tabBtn} ${activeTab === "architecture" ? styles.activeTab : ""}`}
+                  onClick={() => setActiveTab("architecture")}
+                >
+                  <svg className={styles.tabIcon} width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <polygon points="12 2 2 7 12 12 22 7 12 2" />
+                    <polyline points="2 17 12 22 22 17" />
+                    <polyline points="2 12 12 17 22 12" />
+                  </svg>
+                  <span>architecture.js</span>
+                </button>
+                <button
+                  type="button"
+                  role="tab"
+                  id="tab-mindset"
+                  aria-selected={activeTab === "mindset"}
+                  aria-controls="panel-mindset"
+                  className={`${styles.tabBtn} ${activeTab === "mindset" ? styles.activeTab : ""}`}
+                  onClick={() => setActiveTab("mindset")}
+                >
+                  <svg className={styles.tabIcon} width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <circle cx="12" cy="12" r="10" />
+                    <circle cx="12" cy="12" r="6" />
+                    <circle cx="12" cy="12" r="2" />
+                  </svg>
+                  <span>mindset.md</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Tab Panels */}
+            <div className={styles.consoleBody}>
+              {activeTab === "workflow" && (
+                <div
+                  id="panel-workflow"
+                  role="tabpanel"
+                  aria-labelledby="tab-workflow"
+                  className={styles.tabContent}
+                >
+                  <div className={styles.terminalPrompt}>
+                    <span className={styles.promptArrow}>❯</span>
+                    <span className={styles.promptCmd}>pardeep.getDevelopmentCycle()</span>
+                  </div>
+
+                  <div className={styles.steppedList}>
+                    <div className={styles.stepRow}>
+                      <span className={styles.stepNum}>01</span>
+                      <div className={styles.stepInfo}>
+                        <strong className={styles.stepTitle}>UI Architecture & Mobile-First Design</strong>
+                        <p className={styles.stepDesc}>Crafting semantic layouts, responsive grids, and accessible components before writing state.</p>
+                      </div>
+                    </div>
+                    <div className={styles.stepRow}>
+                      <span className={styles.stepNum}>02</span>
+                      <div className={styles.stepInfo}>
+                        <strong className={styles.stepTitle}>Full-Stack API & Schema Integration</strong>
+                        <p className={styles.stepDesc}>Connecting React frontends to robust Node.js/Express endpoints with strict validation and JWT auth.</p>
+                      </div>
+                    </div>
+                    <div className={styles.stepRow}>
+                      <span className={styles.stepNum}>03</span>
+                      <div className={styles.stepInfo}>
+                        <strong className={styles.stepTitle}>Performance Tuning & Interaction Polish</strong>
+                        <p className={styles.stepDesc}>Optimizing Core Web Vitals, eliminating layout shifts, and adding purposeful GSAP animations.</p>
+                      </div>
+                    </div>
+                    <div className={styles.stepRow}>
+                      <span className={styles.stepNum}>04</span>
+                      <div className={styles.stepInfo}>
+                        <strong className={styles.stepTitle}>Testing, Audit & Production Shipping</strong>
+                        <p className={styles.stepDesc}>Validating endpoints in Postman, managing branch merges in Git, and deploying containerized apps.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeTab === "architecture" && (
+                <div
+                  id="panel-architecture"
+                  role="tabpanel"
+                  aria-labelledby="tab-architecture"
+                  className={styles.tabContent}
+                >
+                  <div className={styles.terminalPrompt}>
+                    <span className={styles.promptArrow}>❯</span>
+                    <span className={styles.promptCmd}>cat system_architecture.js</span>
+                  </div>
+
+                  <div className={styles.codeSnippet}>
+                    <p><span className={styles.codeComment}>// High-Performance Full-Stack Web Architecture</span></p>
+                    <p><span className={styles.codeKeyword}>export const</span> <span className={styles.codeFunc}>webStackArchitecture</span> = &#123;</p>
+                    <p>&nbsp;&nbsp;<span className={styles.jsonKey}>clientSide</span>: &#123;</p>
+                    <p>&nbsp;&nbsp;&nbsp;&nbsp;uiPattern: <span className={styles.jsonVal}>&quot;Modular React &middot; CSS Modules &middot; GSAP&quot;</span>,</p>
+                    <p>&nbsp;&nbsp;&nbsp;&nbsp;principles: <span className={styles.jsonVal}>&quot;Mobile-first &middot; Zero layout shifts &middot; WCAG AA&quot;</span></p>
+                    <p>&nbsp;&nbsp;&#125;,</p>
+                    <p>&nbsp;&nbsp;<span className={styles.jsonKey}>apiLayer</span>: &#123;</p>
+                    <p>&nbsp;&nbsp;&nbsp;&nbsp;server: <span className={styles.jsonVal}>&quot;Node.js &middot; Express REST Controllers&quot;</span>,</p>
+                    <p>&nbsp;&nbsp;&nbsp;&nbsp;security: <span className={styles.jsonVal}>&quot;JWT &middot; HTTP-only cookies &middot; Rate limiting&quot;</span></p>
+                    <p>&nbsp;&nbsp;&#125;,</p>
+                    <p>&nbsp;&nbsp;<span className={styles.jsonKey}>dataStorage</span>: &#123;</p>
+                    <p>&nbsp;&nbsp;&nbsp;&nbsp;documents: <span className={styles.jsonVal}>&quot;MongoDB &middot; Mongoose Indexed Schemas&quot;</span>,</p>
+                    <p>&nbsp;&nbsp;&nbsp;&nbsp;caching: <span className={styles.jsonVal}>&quot;Redis Cache &middot; AWS S3 Asset Cloud&quot;</span></p>
+                    <p>&nbsp;&nbsp;&#125;</p>
+                    <p>&#125;;</p>
+                  </div>
+                </div>
+              )}
+
+              {activeTab === "mindset" && (
+                <div
+                  id="panel-mindset"
+                  role="tabpanel"
+                  aria-labelledby="tab-mindset"
+                  className={styles.tabContent}
+                >
+                  <div className={styles.terminalPrompt}>
+                    <span className={styles.promptArrow}>❯</span>
+                    <span className={styles.promptCmd}>cat engineering_mindset.md</span>
+                  </div>
+
+                  <ul className={styles.mindsetList}>
+                    <li className={styles.mindsetItem}>
+                      <span className={styles.mindsetCheck} aria-hidden="true">✓</span>
+                      <span className={styles.mindsetText}>
+                        <strong>Modular UI Components:</strong> Reusable, self-contained components with clean props rather than monolithic views.
+                      </span>
+                    </li>
+                    <li className={styles.mindsetItem}>
+                      <span className={styles.mindsetCheck} aria-hidden="true">✓</span>
+                      <span className={styles.mindsetText}>
+                        <strong>Speed Is a Feature:</strong> Respect device constraints with lightweight bundles, responsive imagery, and snappy feedback.
+                      </span>
+                    </li>
+                    <li className={styles.mindsetItem}>
+                      <span className={styles.mindsetCheck} aria-hidden="true">✓</span>
+                      <span className={styles.mindsetText}>
+                        <strong>Predictable API Contracts:</strong> Thoughtful data models and consistent JSON schemas between client and server.
+                      </span>
+                    </li>
+                    <li className={styles.mindsetItem}>
+                      <span className={styles.mindsetCheck} aria-hidden="true">✓</span>
+                      <span className={styles.mindsetText}>
+                        <strong>Universal Accessibility:</strong> Semantic HTML, keyboard navigability, and clear contrast ratios.
+                      </span>
+                    </li>
+                  </ul>
+                </div>
+              )}
+            </div>
+
+            <div className={styles.consoleFooter}>
+              <span className={styles.consoleHint}>● Terminal active · Interactive developer dossier</span>
+            </div>
+          </aside>
         </div>
       </section>
 
+      {/* Embedded Categorized Skills Grid - The Single Source of Truth for Tech & Tools */}
       <Skills />
+
+      {/* Unified Contextual CTA Bridge - Positioned Seamlessly After Full Technical Dossier */}
+      <div className={styles.ctaBridgeWrapper}>
+        <div className={styles.ctaBridge} data-about-anim>
+          <div className={styles.bridgeContent}>
+            <h3 className={styles.bridgeHeading}>Looking for a passionate Web Developer?</h3>
+            <p className={styles.bridgeSub}>
+              I&apos;m ready to turn your product vision into clean, performant code. Let&apos;s build something exceptional together.
+            </p>
+          </div>
+          <div className={styles.bridgeActions}>
+            <Button
+              variant="primary"
+              size="md"
+              onClick={() => handleNavigate("featuredProjects")}
+              className={styles.bridgeBtn}
+            >
+              <span>Explore Web Projects</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <line x1="7" y1="17" x2="17" y2="7" />
+                <polyline points="7 7 17 7 17 17" />
+              </svg>
+            </Button>
+            <Button
+              variant="secondary"
+              size="md"
+              onClick={() => handleNavigate("contact")}
+              className={styles.bridgeBtnSecondary}
+            >
+              <span>Get in Touch</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                <polyline points="22,6 12,13 2,6" />
+              </svg>
+            </Button>
+          </div>
+        </div>
+      </div>
     </>
   );
 };

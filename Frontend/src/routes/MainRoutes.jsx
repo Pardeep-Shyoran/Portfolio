@@ -7,6 +7,9 @@ const About = lazy(() => import('../pages/About/About'))
 const Contact = lazy(() => import('../pages/Contact/Contact'))
 const Projects = lazy(() => import('../pages/Projects/Projects'))
 const Stats = lazy(() => import('../pages/Stats/Stats'))
+const Certificates = lazy(() => import('../pages/Certificates/Certificates'))
+const ProjectCaseStudy = lazy(() => import('../pages/ProjectCaseStudy/ProjectCaseStudy'))
+const PageNotFound = lazy(() => import('../pages/PageNotFound/PageNotFound'))
 
 const PageLoader = () => (
   <div style={{
@@ -31,7 +34,10 @@ const MainRoutes = () => {
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/projects" element={<Projects />} />
+        <Route path="/projects/:slug" element={<ProjectCaseStudy />} />
+        <Route path="/certificates" element={<Certificates />} />
         <Route path="/stats" element={<Stats />} />
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
     </Suspense>
   )

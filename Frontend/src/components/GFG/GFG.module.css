@@ -1,832 +1,304 @@
-.gfgContainer {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 1.5rem;
+/* ==========================================================================
+   GeeksforGeeks Stats Card - Clean, Concise Luxury Redesign
+   ========================================================================== */
+
+.platformCard {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 1.35rem 1.45rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  box-shadow: var(--shadow-sm);
+  transition: border-color var(--transition-normal), box-shadow var(--transition-normal), transform var(--transition-normal);
 }
 
-/* Glassmorphism base cards */
-.profileCard,
-.circleCard,
-.progressBarsCard,
-.streaksCard,
-.skeletonCard {
-    border-radius: 20px;
-    border: 1px solid var(--border-color);
-    background: rgba(255, 255, 255, 0.02);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
-    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+.platformCard:hover {
+  border-color: var(--color-border-hover);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
 }
 
-[data-theme="light"] .profileCard,
-[data-theme="light"] .circleCard,
-[data-theme="light"] .progressBarsCard,
-[data-theme="light"] .streaksCard,
-[data-theme="light"] .skeletonCard {
-    background: rgba(0, 0, 0, 0.02);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.05);
+/* Card Header */
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  border-bottom: 1px solid var(--color-border-subtle);
+  padding-bottom: 0.85rem;
 }
 
-/* Profile Card Styling */
-.profileCard {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 3rem;
-    padding: 3rem;
-    position: relative;
-    overflow: hidden;
+.platformMeta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
 }
 
-.profileCard:hover {
-    transform: translateY(-2px);
-    border-color: rgba(47, 141, 70, 0.3);
-    box-shadow: 0 12px 40px 0 rgba(47, 141, 70, 0.15);
+.platformIconWrapper {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text);
+  flex-shrink: 0;
 }
 
-.logoWrapper {
-    position: relative;
-    width: 120px;
-    height: 120px;
-    flex-shrink: 0;
+.platformIcon {
+  width: 20px;
+  height: 20px;
 }
 
-.gfgLogoBg {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    border: 3px solid var(--border-color);
-    background-color: rgba(0, 0, 0, 0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+.titleLine {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-[data-theme="light"] .gfgLogoBg {
-    background-color: rgba(255, 255, 255, 0.8);
+.platformTitle {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0;
 }
 
-.gfgLogo {
-    font-size: 3.8rem;
-    color: #0f9d58;
-    transition: all 0.4s ease;
-}
-
-.profileCard:hover .gfgLogoBg {
-    transform: scale(1.05) rotate(8deg);
-    border-color: #0f9d58;
-}
-
-.logoGlow {
-    position: absolute;
-    top: -4px;
-    left: -4px;
-    right: -4px;
-    bottom: -4px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #0f9d58, #2f8d46);
-    z-index: -1;
-    opacity: 0.2;
-    filter: blur(12px);
-    transition: opacity 0.4s ease, filter 0.4s ease;
-}
-
-.profileCard:hover .logoGlow {
-    opacity: 0.5;
-    filter: blur(16px);
-}
-
-.profileInfo {
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-    flex-grow: 1;
-}
-
-.profileMeta {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 1rem;
-}
-
-.metaLeft {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-}
-
-.name {
-    font-family: var(--font-family6);
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--text-color);
-    letter-spacing: -0.5px;
-}
-
-.username {
-    font-family: var(--font-family4);
-    font-size: 1.1rem;
-    font-weight: 500;
-    color: #0f9d58;
-}
-
-/* Offline/Cached badge */
 .statusBadge {
-    font-size: 0.75rem;
-    font-weight: 600;
-    padding: 0.3rem 0.75rem;
-    border-radius: 30px;
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-full);
 }
 
 .statusLive {
-    background: rgba(15, 157, 88, 0.1);
-    color: #0f9d58;
-    border: 1px solid rgba(15, 157, 88, 0.2);
+  background: var(--color-accent-subtle);
+  color: var(--color-accent);
+  border: 1px solid var(--color-border);
 }
 
-.statusOffline {
-    background: rgba(239, 71, 67, 0.1);
-    color: #ef4743;
-    border: 1px solid rgba(239, 71, 67, 0.2);
+.statusCached {
+  background: var(--color-surface-raised);
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border-subtle);
 }
 
-.statusIndicator {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-.statusLive .statusIndicator {
-    background-color: #0f9d58;
-    box-shadow: 0 0 8px #0f9d58;
-    animation: pulseGlow 2s infinite;
+.syncBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-border-subtle);
+  color: var(--color-text-muted);
+  padding: 0.35rem 0.65rem;
+  border-radius: var(--radius-md);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
 }
 
-.statusOffline .statusIndicator {
-    background-color: #ef4743;
+.syncBtn:hover:not(:disabled) {
+  border-color: var(--color-border);
+  color: var(--color-text);
+  background: var(--color-surface-hover);
 }
 
-@keyframes pulseGlow {
-    0% {
-        transform: scale(0.95);
-        box-shadow: 0 0 0 0 rgba(15, 157, 88, 0.7);
-    }
-    70% {
-        transform: scale(1);
-        box-shadow: 0 0 0 6px rgba(15, 157, 88, 0);
-    }
-    100% {
-        transform: scale(0.95);
-        box-shadow: 0 0 0 0 rgba(15, 157, 88, 0);
-    }
+.syncIcon {
+  width: 11px;
+  height: 11px;
 }
 
-.statsBadges {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 2rem;
+.spinning {
+  animation: spin 1s linear infinite;
 }
 
-.badgeItem {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid var(--border-color);
-    padding: 0.6rem 1.2rem;
-    border-radius: 12px;
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
-[data-theme="light"] .badgeItem {
-    background: rgba(0, 0, 0, 0.01);
+.profileLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: var(--color-accent-subtle);
+  border: 1px solid var(--color-border);
+  color: var(--color-accent);
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-md);
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all var(--transition-fast);
 }
 
-.badgeIcon {
-    font-size: 1.2rem;
-    color: #0f9d58;
+.profileLink:hover {
+  background: var(--color-accent);
+  color: var(--color-accent-contrast);
 }
 
-.badgeText {
-    display: flex;
-    flex-direction: column;
+.linkIcon {
+  width: 10px;
+  height: 10px;
 }
 
-.badgeLabel {
-    font-size: 0.75rem;
-    opacity: 0.6;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+/* Primary Metrics */
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
 }
 
-.badgeVal {
-    font-family: var(--font-family1);
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: var(--text-color);
+.metricItem {
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  padding: 0.85rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
 }
 
-.gfgLink {
-    background: linear-gradient(135deg, #0f9d58 0%, #2f8d46 100%);
-    color: #ffffff !important;
-    border-radius: 30px;
-    font-weight: 600;
-    font-size: 0.95rem;
-    padding: 0.8rem 1.8rem;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
-    width: fit-content;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(15, 157, 88, 0.2);
+.metricTop {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--color-text-muted);
 }
 
-.gfgLink:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(15, 157, 88, 0.35);
+.metricIcon {
+  width: 12px;
+  height: 12px;
+  color: var(--color-accent);
 }
 
-.btnIcon {
-    font-size: 0.9rem;
+.metricLabel {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
 }
 
-/* Main Layout Grid */
-.statsLayout {
-    display: grid;
-    grid-template-columns: 350px 1fr;
-    gap: 1.5rem;
+.metricValue {
+  font-family: var(--font-stat);
+  font-size: 1.85rem;
+  font-weight: 700;
+  color: var(--color-text);
+  line-height: 1.1;
 }
 
-/* Overall Solved Circular Card */
-.circleCard {
-    padding: 2.5rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 1.5rem;
-    text-align: center;
+/* Breakdown Card & Segmented Track */
+.breakdownCard {
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
 }
 
-.circleCard:hover {
-    transform: translateY(-3px);
-    border-color: rgba(15, 157, 88, 0.2);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+.breakdownHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-[data-theme="light"] .circleCard:hover {
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+.breakdownTitle {
+  font-size: 0.825rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
 }
 
-.circleWrapper {
-    position: relative;
-    width: 160px;
-    height: 160px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.segmentedTrack {
+  display: flex;
+  width: 100%;
+  height: 8px;
+  background: var(--color-surface);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  border: 1px solid var(--color-border-subtle);
+  gap: 2px;
 }
 
-.progressSvg {
-    position: absolute;
-    top: 0;
-    left: 0;
+.segment {
+  height: 100%;
+  transition: width 0.6s ease;
 }
 
-.circleTrack {
-    fill: none;
-    stroke: rgba(255, 255, 255, 0.05);
+.segmentEasy {
+  background: var(--color-text-muted);
 }
 
-[data-theme="light"] .circleTrack {
-    stroke: rgba(0, 0, 0, 0.05);
+.segmentMedium {
+  background: var(--color-text);
 }
 
-.circleProgress {
-    fill: none;
-    stroke: #0f9d58;
-    stroke-linecap: round;
-    transition: stroke-dashoffset 1s ease-in-out;
-    filter: drop-shadow(0 0 6px rgba(15, 157, 88, 0.5));
+.segmentBasic {
+  background: var(--color-text-subtle);
 }
 
-.circleContent {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+/* Legend Row */
+.legendRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding-top: 0.25rem;
 }
 
-.solvedCount {
-    font-family: var(--font-family1);
-    font-size: 3.2rem;
-    font-weight: 700;
-    color: var(--text-color);
-    line-height: 1.1;
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
 }
 
-.solvedLabel {
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    opacity: 0.6;
-    font-weight: 600;
+.legendDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
 }
 
-.totalCount {
-    font-size: 0.9rem;
-    opacity: 0.5;
-    margin-top: 0.1rem;
+.dotEasy {
+  background: var(--color-text-muted);
 }
 
-.solvedPercentageText {
-    font-size: 0.9rem;
-    opacity: 0.8;
-    line-height: 1.5;
+.dotMedium {
+  background: var(--color-text);
 }
 
-.solvedPercentageText strong {
-    color: #0f9d58;
+.dotBasic {
+  background: var(--color-text-subtle);
 }
 
-/* Difficulties Breakdown Card */
-.progressBarsCard {
-    padding: 2.5rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 1.5rem;
+.legendLabel {
+  color: var(--color-text-muted);
+  font-weight: 500;
 }
 
-.progressBarsCard:hover {
-    transform: translateY(-3px);
-    border-color: rgba(15, 157, 88, 0.2);
-}
-
-.cardTitle {
-    font-family: var(--font-family6);
-    font-size: 1.4rem;
-    font-weight: 700;
-    color: var(--text-color);
-}
-
-.difficultyList {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-}
-
-.difficultyRow {
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-}
-
-.rowHeader {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.diffName {
-    font-weight: 600;
-    font-size: 1.05rem;
-    color: var(--diff-color);
-}
-
-.rowStats {
-    font-size: 0.95rem;
-    opacity: 0.85;
-}
-
-.rowStats strong {
-    color: var(--text-color);
-    font-size: 1.1rem;
-}
-
-.divider {
-    opacity: 0.3;
-    margin: 0 0.2rem;
-}
-
-.barTrack {
-    height: 10px;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 6px;
-    overflow: hidden;
-    position: relative;
-}
-
-[data-theme="light"] .barTrack {
-    background: rgba(0, 0, 0, 0.05);
-}
-
-.barFill {
-    height: 100%;
-    background-color: var(--diff-color);
-    border-radius: 6px;
-    transition: width 1.2s cubic-bezier(0.1, 0.8, 0.2, 1);
-    box-shadow: 0 0 10px var(--diff-color);
-}
-
-/* Streaks & Consistency metrics card */
-.streaksCard {
-    padding: 2.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1.8rem;
-}
-
-.streaksCard:hover {
-    border-color: rgba(15, 157, 88, 0.2);
-    box-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.3);
-}
-
-[data-theme="light"] .streaksCard:hover {
-    box-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.06);
-}
-
-.streaksGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 1.5rem;
-}
-
-.streakItem {
-    background: rgba(255, 255, 255, 0.015);
-    border: 1px solid var(--border-color);
-    border-radius: 16px;
-    padding: 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 1.25rem;
-    transition: all 0.3s ease;
-}
-
-.streakItem:hover {
-    background: rgba(255, 255, 255, 0.03);
-    transform: translateY(-2px);
-    border-color: rgba(15, 157, 88, 0.15);
-}
-
-[data-theme="light"] .streakItem {
-    background: rgba(0, 0, 0, 0.008);
-}
-
-[data-theme="light"] .streakItem:hover {
-    background: rgba(0, 0, 0, 0.015);
-}
-
-.streakIconWrapper {
-    width: 50px;
-    height: 50px;
-    border-radius: 12px;
-    background: rgba(15, 157, 88, 0.08);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #0f9d58;
-    font-size: 1.5rem;
-    flex-shrink: 0;
-}
-
-.streakInfo {
-    display: flex;
-    flex-direction: column;
-    gap: 0.15rem;
-}
-
-.streakVal {
-    font-family: var(--font-family1);
-    font-size: 1.6rem;
-    font-weight: 700;
-    color: var(--text-color);
-}
-
-.streakLabel {
-    font-size: 0.8rem;
-    opacity: 0.6;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-/* Loading Skeletons */
-.loadingContainer {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    width: 100%;
-}
-
-.skeletonCard {
-    animation: pulse 1.6s ease-in-out infinite;
-    background: linear-gradient(90deg,
-            rgba(255, 255, 255, 0.02) 25%,
-            rgba(255, 255, 255, 0.05) 37%,
-            rgba(255, 255, 255, 0.02) 63%);
-    background-size: 400% 100%;
-}
-
-[data-theme="light"] .skeletonCard {
-    background: linear-gradient(90deg,
-            rgba(0, 0, 0, 0.02) 25%,
-            rgba(0, 0, 0, 0.05) 37%,
-            rgba(0, 0, 0, 0.02) 63%);
-    background-size: 400% 100%;
-}
-
-.profileSkeleton {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 3rem;
-    padding: 3rem;
-    min-height: 210px;
-}
-
-.skeletonLogo {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.04);
-}
-
-[data-theme="light"] .skeletonLogo {
-    background: rgba(0, 0, 0, 0.04);
-}
-
-.skeletonInfo {
-    display: flex;
-    flex-direction: column;
-    gap: 0.8rem;
-    flex-grow: 1;
-}
-
-.skeletonLineShort {
-    width: 30%;
-    height: 20px;
-    border-radius: 4px;
-    background: rgba(255, 255, 255, 0.04);
-}
-
-.skeletonLineMedium {
-    width: 50%;
-    height: 20px;
-    border-radius: 4px;
-    background: rgba(255, 255, 255, 0.04);
-}
-
-.skeletonLineLong {
-    width: 80%;
-    height: 16px;
-    border-radius: 4px;
-    background: rgba(255, 255, 255, 0.03);
-}
-
-[data-theme="light"] .skeletonLineShort {
-    background: rgba(0, 0, 0, 0.04);
-}
-
-[data-theme="light"] .skeletonLineMedium {
-    background: rgba(0, 0, 0, 0.04);
-}
-
-[data-theme="light"] .skeletonLineLong {
-    background: rgba(0, 0, 0, 0.03);
-}
-
-.statsLayoutSkeleton {
-    display: grid;
-    grid-template-columns: 350px 1fr;
-    gap: 1.5rem;
-}
-
-.circleSkeletonCard {
-    padding: 2.5rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 270px;
-}
-
-.skeletonCircle {
-    width: 130px;
-    height: 130px;
-    border-radius: 50%;
-    border: 8px solid rgba(255, 255, 255, 0.03);
-}
-
-[data-theme="light"] .skeletonCircle {
-    border-color: rgba(0, 0, 0, 0.03);
-}
-
-.progressBarsSkeleton {
-    padding: 2.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1.8rem;
-    justify-content: center;
-    border: 1px solid var(--border-color);
-    background: rgba(255, 255, 255, 0.02);
-    border-radius: 20px;
-}
-
-[data-theme="light"] .progressBarsSkeleton {
-    background: rgba(0, 0, 0, 0.02);
-}
-
-.progressBarSkeletonItem {
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-}
-
-.skeletonBar {
-    height: 10px;
-    background: rgba(255, 255, 255, 0.03);
-    border-radius: 6px;
-    width: 100%;
-}
-
-[data-theme="light"] .skeletonBar {
-    background: rgba(0, 0, 0, 0.03);
-}
-
-/* Error Container */
-.errorContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 4rem 2rem;
-    border-radius: 20px;
-    border: 1px dashed var(--border-color);
-    background: rgba(255, 255, 255, 0.01);
-    gap: 1.25rem;
-}
-
-.errorIcon {
-    font-size: 3.5rem;
-    color: #ef4743;
-    animation: float 3s ease-in-out infinite;
-}
-
-.errorContainer h3 {
-    font-family: var(--font-family6);
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--text-color);
-}
-
-.errorMsg {
-    font-size: 1rem;
-    color: #ef4743;
-    font-weight: 600;
-    margin: 0;
-}
-
-.errorHint {
-    font-size: 0.9rem;
-    color: var(--text-color);
-    opacity: 0.6;
-    max-width: 450px;
-    margin: 0;
-}
-
-.retryButton {
-    background: transparent;
-    color: #0f9d58;
-    border: 1px solid #0f9d58;
-    border-radius: 30px;
-    padding: 0.7rem 1.8rem;
-    font-weight: 600;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
-    transition: all 0.3s ease;
-}
-
-.retryButton:hover {
-    background: #0f9d58;
-    color: #ffffff;
-    box-shadow: 0 4px 15px rgba(15, 157, 88, 0.3);
-}
-
-.retryIcon {
-    font-size: 0.95rem;
-}
-
-/* Animations */
-@keyframes pulse {
-    0% {
-        background-position: 100% 50%;
-    }
-
-    100% {
-        background-position: 0% 50%;
-    }
-}
-
-@keyframes float {
-    0%,
-    100% {
-        transform: translateY(0);
-    }
-
-    50% {
-        transform: translateY(-8px);
-    }
-}
-
-/* Responsiveness Media Queries */
-@media (max-width: 900px) {
-    .profileSkeleton,
-    .profileCard {
-        flex-direction: column;
-        text-align: center;
-        align-items: center;
-        gap: 1.5rem;
-        padding: 2rem;
-    }
-
-    .profileInfo {
-        align-items: center;
-    }
-
-    .statsBadges {
-        justify-content: center;
-    }
-
-    .gfgLink {
-        margin-top: 0.5rem;
-    }
-
-    .statsLayout,
-    .statsLayoutSkeleton {
-        grid-template-columns: 1fr;
-    }
-}
-
-@media (max-width: 768px) {
-    .gfgContainer {
-        padding: 1rem;
-    }
-
-    .name {
-        font-size: 1.7rem;
-    }
-
-    .streaksCard {
-        padding: 1.5rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .name {
-        font-size: 1.4rem;
-    }
-
-    .username {
-        font-size: 0.95rem;
-    }
-
-    .statsBadges {
-        flex-direction: column;
-        align-items: stretch;
-        width: 100%;
-        gap: 0.75rem;
-    }
-
-    .badgeItem {
-        justify-content: center;
-    }
-
-    .solvedCount {
-        font-size: 2.8rem;
-    }
-
-    .circleWrapper {
-        transform: scale(0.9);
-    }
-    
-    .streaksGrid {
-        grid-template-columns: 1fr;
-    }
+.legendCount {
+  font-weight: 700;
+  color: var(--color-text);
+  font-family: var(--font-mono);
 }

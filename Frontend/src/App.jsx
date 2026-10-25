@@ -15,44 +15,62 @@ gsap.registerPlugin(ScrollTrigger, ScrollSmoother, ScrollToPlugin);
 const App = () => {
 
   useGSAP(() => {
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
-
-    if (prefersReducedMotion) {
-      return undefined;
-    }
-
     gsap.ticker.lagSmoothing(1000, 16);
 
-    const smoother = ScrollSmoother.create({
-      wrapper: "#smooth-wrapper",
-      content: "#smooth-content",
-      smooth: isTouchDevice ? 0.35 : 1.2,
-      effects: !isTouchDevice,
-      smoothTouch: isTouchDevice ? 0.05 : 0.1,
-      normalizeScroll: true,
-      ignoreMobileResize: true,
-    });
+    const mm = gsap.matchMedia();
+
+    // Enable ScrollSmoother only on desktop devices with fine pointers
+    // when reduced motion is NOT requested. Mobile & touch devices use native
+    // momentum scrolling to avoid scroll-locking and touch latency.
+    mm.add(
+      {
+        isDesktop: "(min-width: 1024px) and (pointer: fine)",
+        reduceMotion: "(prefers-reduced-motion: reduce)",
+      },
+      (context) => {
+        const { isDesktop, reduceMotion } = context.conditions;
+
+        if (!isDesktop || reduceMotion) {
+          return undefined;
+        }
+
+        const smoother = ScrollSmoother.create({
+          wrapper: "#smooth-wrapper",
+          content: "#smooth-content",
+          smooth: 0.9, // Subtle, responsive, luxurious feel without sluggish float
+          effects: true,
+          smoothTouch: false, // Do not hijack touch devices
+          normalizeScroll: false, // Do not hijack native wheel/trackpad scrolling
+          ignoreMobileResize: true,
+        });
+
+        return () => {
+          smoother.kill();
+        };
+      }
+    );
 
     return () => {
-      smoother.kill();
+      mm.revert();
     };
   }, []);
 
   return (
     <>
-        <ScrollToTop />
-        <CanvasBackground cellSize={49} opacity={0.4} lineWidth={1} />
-        <ShuttleLight />
-        <Header />
-        <div id="smooth-wrapper">
-          <div id="smooth-content">
+      <ScrollToTop />
+      <CanvasBackground cellSize={49} opacity={0.35} lineWidth={1} />
+      <ShuttleLight />
+      <Header />
+      <div id="smooth-wrapper">
+        <div id="smooth-content">
+          <main id="main-content">
             <MainRoutes />
-            <Footer />
-          </div>
+          </main>
+          <Footer />
         </div>
+      </div>
     </>
-  )
-}
+  );
+};
 
 export default App

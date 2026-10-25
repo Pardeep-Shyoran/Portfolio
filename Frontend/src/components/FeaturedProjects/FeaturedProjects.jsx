@@ -1,86 +1,87 @@
-import { useNavigate } from 'react-router-dom'
-import { useMemo, useRef, useEffect } from 'react'
-import styles from './FeaturedProjects.module.css'
-import ProjectCard from '../ProjectCard/ProjectCard'
-import projectsData from '../../data/project'
-import Button from '../Button/Button'
-import gsap from 'gsap'
-import ScrollTrigger from 'gsap/ScrollTrigger'
+import { useNavigate } from 'react-router-dom';
+import { useMemo, useRef, useEffect } from 'react';
+import styles from './FeaturedProjects.module.css';
+import ProjectCard from '../ProjectCard/ProjectCard';
+import projectsData from '../../data/project';
+import Button from '../Button/Button';
+import gsap from 'gsap';
+import ScrollTrigger from 'gsap/ScrollTrigger';
 
-gsap.registerPlugin(ScrollTrigger)
+gsap.registerPlugin(ScrollTrigger);
 
 const FeaturedProjects = () => {
-  const navigate = useNavigate()
-  const containerRef = useRef(null)
-  const topProjects = useMemo(() => projectsData.slice(0, 2), [])
+  const navigate = useNavigate();
+  const sectionRef = useRef(null);
 
-  // Stack effect animation
+  // Curate top featured projects
+  const featuredProjects = useMemo(() => {
+    const featured = projectsData.filter((p) => p.featured);
+    return featured.length > 0 ? featured : projectsData.slice(0, 3);
+  }, []);
+
   useEffect(() => {
-    const cards = containerRef.current?.querySelectorAll(`.${styles["project-card-stack"]}`)
-    
-    if (!cards || cards.length === 0) return
+    // Respect user reduced-motion preference
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReduced || !sectionRef.current) return;
 
-    gsap.killTweensOf(cards)
-    const localTriggers = []
+    const ctx = gsap.context(() => {
+      const cards = sectionRef.current.querySelectorAll(`.${styles.cardItem}`);
+      if (!cards || cards.length === 0) return;
 
-    cards.forEach((card, index) => {
-      // Initial state - stack the cards
-      gsap.set(card, {
-        y: index * 25,
-        opacity: 1 - index * 0.1,
-        rotationX: index * 1.5,
-        scale: 1 - index * 0.015,
-        zIndex: cards.length - index,
-      })
+      cards.forEach((card) => {
+        gsap.fromTo(
+          card,
+          { opacity: 0, y: 16 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.5,
+            ease: 'power2.out',
+            clearProps: 'transform,opacity',
+            scrollTrigger: {
+              trigger: card,
+              start: 'top 90%',
+              toggleActions: 'play none none none',
+              once: true,
+            },
+          }
+        );
+      });
+    }, sectionRef);
 
-      // Animate when scrolling
-      const tween = gsap.to(card, {
-        scrollTrigger: {
-          trigger: card,
-          start: "top 80%",
-          end: "top 30%",
-          scrub: 1,
-          markers: false,
-        },
-        y: 0,
-        opacity: 1,
-        rotationX: 0,
-        scale: 1,
-        duration: 0.8,
-        ease: "power2.out",
-      })
-
-      if (tween?.scrollTrigger) {
-        localTriggers.push(tween.scrollTrigger)
-      }
-    })
-
-    return () => {
-      localTriggers.forEach((trigger) => trigger.kill())
-      gsap.killTweensOf(cards)
-    }
-  }, [topProjects])
+    return () => ctx.revert();
+  }, [featuredProjects]);
 
   return (
-    <section id="featuredProjects" className={styles.projects}>
-      <h1 className={styles.title}>Featured Projects</h1>
-      <div className={styles.projectsGrid} ref={containerRef}>
-        {topProjects.map((project) => (
-          <div key={project.id} className={styles["project-card-stack"]}>
+    <section id="featuredProjects" className={styles.section} ref={sectionRef}>
+      <div className={styles.header}>
+        <span className={styles.kicker}>SELECTED WORK</span>
+        <h2 className={styles.title}>Projects built with purpose.</h2>
+        <p className={styles.subtitle}>
+          A selection of web applications, interfaces, and engineering projects.
+        </p>
+      </div>
+
+      <div className={styles.grid}>
+        {featuredProjects.map((project) => (
+          <div key={project.id} className={styles.cardItem}>
             <ProjectCard project={project} />
           </div>
         ))}
       </div>
-      <Button
-        onClick={() => navigate('/projects')}
-        variant="secondary"
-        size="lg"
-        className={styles.seeMoreBtn}
-      >
-        See More Projects
-      </Button>
-    </section>
-  )
-}
 
-export default FeaturedProjects
+      <div className={styles.actionRow}>
+        <Button
+          onClick={() => navigate('/projects')}
+          variant="secondary"
+          size="lg"
+          className={styles.seeMoreBtn}
+        >
+          Explore All Projects
+        </Button>
+      </div>
+    </section>
+  );
+};
+
+export default FeaturedProjects;

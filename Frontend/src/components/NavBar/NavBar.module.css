@@ -1,39 +1,99 @@
-.NavBar {
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 4rem;
+.navBar {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
 }
 
-.NavLink {
-    font-size: 1.2rem;
-    display: block;
-    text-align: center;
-    text-decoration: none;
-    color: var(--text-color);
-    padding: 0.4rem 0;
-    transition: color 0.2s;
+.navItem {
+  display: flex;
+  align-items: center;
 }
 
-.NavLink:hover {
-    color: var(--text-color2); /* Example hover effect */
+.navLink {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.45rem 0.85rem;
+  font-family: var(--font-body);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  border-radius: var(--radius-full);
+  transition: color var(--transition-fast), background-color var(--transition-fast);
+  outline: none;
+  user-select: none;
+  white-space: nowrap;
 }
 
-.NavLink[aria-current="page"]{
-    color: var(--text-color2);
+.navLink:hover {
+  color: var(--color-text);
+  background-color: var(--color-surface-hover);
 }
 
-/* --- Responsive Styles for Mobile --- */
-@media (max-width: 960px) {
-    .NavBar {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 1rem;
-    }
+.navLink:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: 2px;
+}
 
-    .NavLink {
-        font-size: 1.15rem;
-        padding: 0.6rem 0.2rem;
-    }
+.navLink.active {
+  color: var(--color-accent);
+  background-color: var(--color-accent-subtle);
+  font-weight: 600;
+}
+
+/* Subtle accent highlight on projects */
+.projectsLink:hover {
+  color: var(--color-accent);
+}
+
+.activeIndicator {
+  display: none;
+}
+
+/* --- Mobile Navigation Styles --- */
+.mobileList {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.mobileList .navItem {
+  width: 100%;
+}
+
+.mobileList .navLink {
+  width: 100%;
+  padding: 0.85rem 1.15rem;
+  font-size: var(--font-size-body);
+  font-weight: 500;
+  border-radius: var(--radius-md);
+  justify-content: space-between;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border-subtle);
+}
+
+.mobileList .navLink:hover,
+.mobileList .navLink:active {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border);
+}
+
+.mobileList .navLink.active {
+  background-color: var(--color-accent-subtle);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.mobileList .navLink.active .activeIndicator {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--color-accent);
 }

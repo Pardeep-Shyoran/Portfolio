@@ -5,7 +5,7 @@
     <link
       rel="icon"
       type="image/svg+xml"
-      href="https://ik.imagekit.io/00zfvrear/Images/man-in-long-shirt-white-pointing-side-with-both-index-fingers-3d-illustration-of-a-smart-businessman-pointing-png.webp?updatedAt=1760714540976"
+      href="https://ik.imagekit.io/00zfvrear/Images/cropped_circle_image.png"
     />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
@@ -20,22 +20,34 @@
       property="og:description"
       content="Backend architecture, milestone visuals, and emotionally resonant branding."
     />
+    <link rel="canonical" href="https://pardeep-shyoran.me/" />
+    <meta property="og:type" content="website" />
     <meta property="og:url" content="https://pardeep-shyoran.me" />
     <meta
       property="og:image"
       content="https://ik.imagekit.io/00zfvrear/Images/man-in-long-shirt-white-pointing-side-with-both-index-fingers-3d-illustration-of-a-smart-businessman-pointing-png.webp?updatedAt=1760714540976"
     />
-    <meta name="linkedin:card" content="summary_large_image" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta
-      name="linkedin:creator"
-      content="https://www.linkedin.com/in/pardeepshyoran/"
+      name="twitter:title"
+      content="Pardeep Shyoran | Full Stack Developer Portfolio"
     />
+    <meta
+      name="twitter:description"
+      content="Explore Pardeep Shyoran's full stack development journey—backend architecture, milestone visuals, and impactful branding."
+    />
+    <meta
+      name="twitter:image"
+      content="https://ik.imagekit.io/00zfvrear/Images/man-in-long-shirt-white-pointing-side-with-both-index-fingers-3d-illustration-of-a-smart-businessman-pointing-png.webp?updatedAt=1760714540976"
+    />
+    <meta name="twitter:creator" content="@PardeepShyoran" />
 
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "Person",
         "name": "Pardeep Shyoran",
+        "jobTitle": "Full Stack Developer",
         "alternateName": [
           "Pardeep Sheoran",
           "Pradeep Shyoran",
@@ -59,12 +71,23 @@
         ],
         "url": "https://pardeep-shyoran.me",
         "sameAs": [
-          "https://github.com/pardeep-shyoran",
-          "https://www.linkedin.com/in/pardeepshyoran/"
+          "https://github.com/Pardeep-Shyoran",
+          "https://www.linkedin.com/in/pardeepshyoran/",
+          "https://x.com/PardeepShyoran",
+          "https://codolio.com/profile/Pardeep_Shyoran"
+        ],
+        "knowsAbout": [
+          "React",
+          "Node.js",
+          "Express.js",
+          "MongoDB",
+          "JavaScript",
+          "REST APIs",
+          "Full Stack Web Development"
         ]
       }
     </script>
-    <title>Pardeep Shyoran || Portfolio</title>
+    <title>Pardeep Shyoran | Full Stack Developer Portfolio</title>
   </head>
   <body>
     <div id="root"></div>
@@ -88,6 +111,12 @@
           prefersDark ? "dark" : "light"
         );
       })();
+
+      // Prevent browser from restoring scroll position to middle sections on refresh
+      if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'manual';
+      }
+      window.scrollTo(0, 0);
     </script>
     <script type="module" src="/src/main.jsx"></script>
   </body>

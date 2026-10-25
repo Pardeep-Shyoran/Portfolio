@@ -1,111 +1,326 @@
+/* ==========================================================================
+   Projects Page Styling (Curated Editorial Collection)
+   ========================================================================== */
 
+.page,
 .projects-section {
   position: relative;
-  /* top: 12vh; */
-  padding: 6rem 0rem 4rem 0rem;
+  width: 100%;
+  min-height: 100vh;
+  padding: 7.5rem 0 5rem 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ==========================================================================
+   Editorial Intro Header
+   ========================================================================== */
+
+.introSection {
+  width: min(100% - 3rem, 80rem);
+  margin: 0 auto 3.5rem auto;
   text-align: center;
-  width: 95%;
+}
+
+@media (max-width: 640px) {
+  .introSection {
+    width: min(100% - 2rem, 80rem);
+  }
+}
+
+.introContainer {
+  max-width: 760px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.kicker {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-eyebrow);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-eyebrow);
+  color: var(--color-accent);
+  background: var(--color-accent-subtle);
+  padding: 0.35rem 0.85rem;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-border);
+  display: inline-block;
+}
+
+.heading,
+.projects-heading {
+  font-family: var(--font-heading);
+  font-size: var(--font-size-h1);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  letter-spacing: var(--letter-spacing-h1);
+  line-height: var(--line-height-heading);
+  margin: 0;
+}
+
+.lead {
+  font-family: var(--font-body);
+  font-size: var(--font-size-body-lg);
+  color: var(--color-text-muted);
+  line-height: var(--line-height-body);
+  max-width: var(--prose-max-width);
+  margin: 0.25rem auto 1.5rem auto;
+}
+
+/* ==========================================================================
+   Technology Filters
+   ========================================================================== */
+
+.filters,
+.projects-filters {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  width: 100%;
+}
+
+.filterChip,
+.project-filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1.15rem;
+  border-radius: var(--radius-full);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  background-color: var(--color-surface);
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border);
+  transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
+  font-family: inherit;
+}
+
+.filterChip:hover,
+.project-filter-chip:hover {
+  border-color: var(--color-accent);
+  color: var(--color-text);
+  transform: translateY(-1px);
+}
+
+.activeChip,
+.project-filter-chip.active {
+  background-color: var(--color-accent) !important;
+  color: var(--color-accent-contrast) !important;
+  border-color: var(--color-accent) !important;
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
+}
+
+.chipCount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.1rem 0.45rem;
+  border-radius: var(--radius-full);
+  background: var(--color-border-subtle);
+  color: inherit;
+}
+
+.activeChip .chipCount {
+  background: rgba(0, 0, 0, 0.15);
+  color: var(--color-accent-contrast);
+}
+
+.filterChip:focus-visible,
+.project-filter-chip:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: 3px;
+}
+
+/* ==========================================================================
+   Gallery Section
+   ========================================================================== */
+
+.gallerySection {
+  width: min(100% - 3rem, 80rem);
   margin: 0 auto;
 }
 
-.projects-heading {
-  font-size: clamp(2rem, 6vw + 0.5rem, 4rem);
-  font-weight: 700;
-  color: var(--text-color2);
-  margin-bottom: 2.25rem;
-  position: relative;
-  text-align: center;
-  text-transform: uppercase;
+@media (max-width: 640px) {
+  .gallerySection {
+    width: min(100% - 2rem, 80rem);
+  }
 }
 
-.projects-filters {
-  display: flex;
-  gap: 0.75rem;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-bottom: 2rem;
-}
-
-.project-filter-chip {
-  padding: 0.6rem 1.2rem;
-  border-radius: 999px;
-  cursor: pointer;
-  border: 2px solid var(--text-color2);
-  background: transparent;
-  color: var(--text-color2);
-  font-size: 0.9rem;
-  font-weight: 600;
-  text-transform: capitalize;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  font-family: var(--font-family4);
-  letter-spacing: 0.02em;
-}
-
-.project-filter-chip:hover {
-  background: var(--text-color2);
-  color: var(--background-color);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 134, 21, 0.2);
-}
-
-.project-filter-chip.active {
-  background: linear-gradient(135deg, var(--text-color2) 0%, #ff6b35 100%);
-  color: #fff;
-  border-color: transparent;
-  box-shadow: 0 4px 15px rgba(255, 134, 21, 0.3);
-}
-
-.project-filter-chip.active:hover {
-  box-shadow: 0 6px 20px rgba(255, 134, 21, 0.4);
-}
-
-
+.galleryContainer,
 .projects-grid {
   display: flex;
   flex-direction: column;
-  gap: 0;
+  gap: 2.75rem;
+  width: 100%;
   align-items: stretch;
-  perspective: 1200px;
-  position: relative;
-  padding: 2rem 0;
 }
 
+.cardItem,
 .project-card-stack {
-  transform-style: preserve-3d;
-  transform-origin: center center;
-  will-change: transform, opacity;
+  width: 100%;
   position: relative;
-  margin-bottom: 2rem;
 }
 
-@media (min-width: 480px) {
+/* ==========================================================================
+   Empty State
+   ========================================================================== */
+
+.emptyState {
+  padding: 4.5rem 2rem;
+  border-radius: 20px;
+  background-color: var(--color-surface);
+  border: 1px dashed var(--color-border);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.emptyIconWrapper {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-accent-subtle);
+  color: var(--color-accent);
+  margin-bottom: 0.5rem;
+}
+
+.emptyIcon {
+  font-size: 1.5rem;
+}
+
+.emptyTitle {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.emptyDescription {
+  font-size: 1rem;
+  color: var(--color-text-muted);
+  margin: 0;
+  max-width: 440px;
+}
+
+.resetButton {
+  margin-top: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.75rem 1.6rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  font-weight: 600;
+  background-color: var(--color-accent);
+  color: var(--color-accent-contrast);
+  border: 1px solid var(--color-accent);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.resetButton:hover {
+  background-color: var(--color-accent-hover);
+  transform: translateY(-1px);
+}
+
+.resetButton:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: 3px;
+}
+
+.resetIcon {
+  font-size: 0.85rem;
+}
+
+/* ==========================================================================
+   Responsive Adaptations
+   ========================================================================== */
+
+@media (max-width: 900px) {
+  .page,
   .projects-section {
-    width: 95%;
-    padding: 3.5rem 1rem;
-    top: 3vh;
+    padding: 6rem 0 3.5rem 0;
   }
+
+  .introSection {
+    margin-bottom: 2.5rem;
+  }
+
+  .galleryContainer,
   .projects-grid {
-    gap: 1.5rem;
+    gap: 1.75rem;
   }
 }
 
-@media (min-width: 768px) {
+@media (max-width: 540px) {
+  .page,
   .projects-section {
-    width: 90%;
-    padding: 4rem 1rem;
+    padding: 5rem 0 2.5rem 0;
   }
+
+  .introSection {
+    width: 94%;
+    margin-bottom: 2rem;
+  }
+
+  .lead {
+    font-size: 0.95rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .filters,
+  .projects-filters {
+    gap: 0.5rem;
+  }
+
+  .filterChip,
+  .project-filter-chip {
+    padding: 0.45rem 0.9rem;
+    font-size: 0.825rem;
+  }
+
+  .galleryContainer,
   .projects-grid {
-    gap: 2rem;
+    gap: 1.25rem;
+  }
+
+  .emptyState {
+    padding: 3rem 1.25rem;
   }
 }
 
-@media (min-width: 1200px) {
-  .projects-section {
-    padding: 4rem 2rem;
-    width: 90%;
-    top: 12vh;
+/* ==========================================================================
+   Reduced Motion
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .cardItem,
+  .project-card-stack {
+    opacity: 1 !important;
+    transform: none !important;
   }
-  .projects-grid {
-    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+
+  .filterChip,
+  .project-filter-chip,
+  .resetButton {
+    transition: none !important;
+    transform: none !important;
   }
 }

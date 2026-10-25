@@ -1,78 +1,311 @@
+import { useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
+import styles from './Footer.module.css'
+import Button from '../Button/Button'
+import { smoothScrollTo } from '../../utils/scrollHelper'
 
-import styles from "./Footer.module.css";
+const MailIcon = () => (
+  <svg className={styles.btnIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <rect width="20" height="16" x="2" y="4" rx="2" />
+    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+  </svg>
+)
 
+const CopyIcon = () => (
+  <svg className={styles.btnIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+  </svg>
+)
+
+const CheckIcon = () => (
+  <svg className={styles.btnIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="20 6 9 17 4 12" />
+  </svg>
+)
+
+const ArrowUpIcon = () => (
+  <svg className={styles.arrowIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="m18 15-6-6-6 6" />
+  </svg>
+)
+
+const ExternalIcon = () => (
+  <svg className={styles.extIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M7 17 17 7" />
+    <path d="M7 7h10v10" />
+  </svg>
+)
+
+const GitHubIcon = () => (
+  <svg className={styles.socialIcon} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+  </svg>
+)
+
+const LinkedInIcon = () => (
+  <svg className={styles.socialIcon} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 8.76a1.64 1.64 0 1 0 0-3.28 1.64 1.64 0 0 0 0 3.28M7.86 18.5v-8.37H5.07v8.37h2.79z" />
+  </svg>
+)
+
+const XIcon = () => (
+  <svg className={styles.socialIcon} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+  </svg>
+)
+
+const CodolioIcon = () => (
+  <svg className={styles.socialIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="16 18 22 12 16 6" />
+    <polyline points="8 6 2 12 8 18" />
+  </svg>
+)
 
 const Footer = () => {
-  const handleEmailClick = () => {
-    const email = "pardeepshyoran@outlook.com";
-    const subject = "Let's Connect - Portfolio Inquiry from [Your Name]";
-    const body = `Hi Pardeep Shyoran,\n\nI just visited your portfolio and was impressed by your work. I'd love to connect and explore potential opportunities or collaborations.\n\nLooking forward to hearing from you!\n\nBest regards,\n[Your Name]\n[Your Role or Company]`;
-    window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  };
+  const [copied, setCopied] = useState(false)
+  const location = useLocation()
+  const navigate = useNavigate()
+
+  const handleCopyEmail = async () => {
+    const email = 'pardeepshyoran@outlook.com'
+    let success = false
+
+    try {
+      if (navigator?.clipboard?.writeText) {
+        await navigator.clipboard.writeText(email)
+        success = true
+      }
+    } catch {
+      // Browser permissions or context restriction: fallback to execCommand below
+    }
+
+    if (!success) {
+      try {
+        const textarea = document.createElement('textarea')
+        textarea.value = email
+        textarea.setAttribute('readonly', '')
+        textarea.style.position = 'fixed'
+        textarea.style.left = '-9999px'
+        textarea.style.top = '-9999px'
+        textarea.style.opacity = '0'
+        document.body.appendChild(textarea)
+        textarea.select()
+        success = document.execCommand('copy')
+        document.body.removeChild(textarea)
+      } catch (err) {
+        console.warn('Clipboard fallback failed:', err)
+      }
+    }
+
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+
+  const handleScrollToTop = () => {
+    smoothScrollTo(0)
+  }
+
+  const handleNavClick = (e, targetId) => {
+    e.preventDefault()
+    if (location.pathname !== '/') {
+      navigate('/', { state: { scrollTarget: targetId } })
+    } else {
+      if (targetId === 'home') {
+        smoothScrollTo(0)
+      } else {
+        smoothScrollTo(targetId)
+      }
+    }
+  }
 
   return (
-    <footer className={styles.footerModern}>
-      <div className={styles.footerContentModern}>
-        <div className={styles.footerTextBlock}>
-          <h2 className={styles.footerHeadingModern}>Thank You For Visiting!</h2>
-          <p className={styles.footerMessageModern}>
-            I appreciate your time and interest. Feel free to connect with me for collaborations, opportunities, or just to say hello!
-          </p>
+    <footer className={styles.footer} role="contentinfo">
+      <div className={styles.container}>
+        {/* Restrained Closing Invitation */}
+        <div className={styles.invitationSection}>
+          <div className={styles.invitationContent}>
+            <div className={styles.statusBadge}>
+              <span className={styles.statusDot} aria-hidden="true" />
+              <span>Available for select opportunities & technical consulting</span>
+            </div>
+            <h2 className={styles.invitationHeading}>
+              Let&apos;s build something exceptional together.
+            </h2>
+            <p className={styles.invitationText}>
+              Whether discussing full-stack systems, frontend polish, or new engineering opportunities, my inbox is always open.
+            </p>
+          </div>
+
+          <div className={styles.actionRow}>
+            <Button
+              href="mailto:pardeepshyoran@outlook.com?subject=Let's%20Connect%20-%20Portfolio%20Inquiry"
+              variant="primary"
+              size="md"
+              className={styles.emailCta}
+              target="_self"
+            >
+              <MailIcon />
+              <span>pardeepshyoran@outlook.com</span>
+            </Button>
+
+            <Button
+              variant="secondary"
+              size="md"
+              onClick={handleCopyEmail}
+              className={`${styles.copyBtn} ${copied ? styles.copyBtnSuccess : ''}`}
+              aria-label={copied ? 'Email address copied' : 'Copy email address to clipboard'}
+            >
+              <span className={styles.copyIconWrap}>
+                {copied ? <CheckIcon /> : <CopyIcon />}
+              </span>
+              <span className={styles.copyText}>{copied ? 'Email Copied!' : 'Copy Email'}</span>
+            </Button>
+          </div>
         </div>
-        <div className={styles.footerIconsModern}>
+
+        {/* Directory Grid */}
+        <div className={styles.directoryGrid}>
+          {/* Brand Info */}
+          <div className={styles.brandCol}>
+            <div className={styles.brandWordmark}>
+              <span>Pardeep Shyoran</span>
+              <span className={styles.accentDot} aria-hidden="true">.</span>
+            </div>
+            <p className={styles.brandBio}>
+              Full-stack software engineer engineering resilient web applications, performant user interfaces, and dependable backend APIs.
+            </p>
+            <div className={styles.locationTag}>
+              <span className={styles.locationPin} aria-hidden="true">📍</span>
+              <span>Chandigarh, India • IST (UTC+5:30)</span>
+            </div>
+          </div>
+
+          {/* Quick Navigation */}
+          <div className={styles.navCol}>
+            <h3 className={styles.colTitle}>Navigation</h3>
+            <ul className={styles.navList} role="list">
+              <li>
+                <a href="#home" onClick={(e) => handleNavClick(e, 'home')} className={styles.navLink}>
+                  Home
+                </a>
+              </li>
+              <li>
+                <a href="#about" onClick={(e) => handleNavClick(e, 'about')} className={styles.navLink}>
+                  About
+                </a>
+              </li>
+              <li>
+                <a href="#featuredProjects" onClick={(e) => handleNavClick(e, 'featuredProjects')} className={styles.navLink}>
+                  Projects
+                </a>
+              </li>
+              <li>
+                <a href="#certificates" onClick={(e) => handleNavClick(e, 'certificates')} className={styles.navLink}>
+                  Certificates
+                </a>
+              </li>
+              <li>
+                <a href="#stats" onClick={(e) => handleNavClick(e, 'stats')} className={styles.navLink}>
+                  Stats
+                </a>
+              </li>
+              <li>
+                <a href="#contact" onClick={(e) => handleNavClick(e, 'contact')} className={styles.navLink}>
+                  Contact
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Connect & Verified Profiles */}
+          <div className={styles.connectCol}>
+            <h3 className={styles.colTitle}>Connect</h3>
+            <ul className={styles.socialList} role="list">
+              <li>
+                <a
+                  href="https://github.com/Pardeep-Shyoran"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.socialItem}
+                  aria-label="GitHub profile (opens in new tab)"
+                >
+                  <GitHubIcon />
+                  <span className={styles.socialLabel}>GitHub</span>
+                  <ExternalIcon />
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://www.linkedin.com/in/pardeepshyoran/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.socialItem}
+                  aria-label="LinkedIn profile (opens in new tab)"
+                >
+                  <LinkedInIcon />
+                  <span className={styles.socialLabel}>LinkedIn</span>
+                  <ExternalIcon />
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://codolio.com/profile/Pardeep_Shyoran"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.socialItem}
+                  aria-label="Codolio competitive programming profile (opens in new tab)"
+                >
+                  <CodolioIcon />
+                  <span className={styles.socialLabel}>Codolio</span>
+                  <ExternalIcon />
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://x.com/PardeepShyoran"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.socialItem}
+                  aria-label="X Twitter profile (opens in new tab)"
+                >
+                  <XIcon />
+                  <span className={styles.socialLabel}>X (Twitter)</span>
+                  <ExternalIcon />
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Bottom Colophon Bar */}
+        <div className={styles.colophonBar}>
+          <div className={styles.copyright}>
+            &copy; {new Date().getFullYear()} Pardeep Shyoran. All rights reserved.
+          </div>
+
+          <div className={styles.techNote}>
+            Designed & engineered with precision.
+          </div>
+
           <button
-            className={styles.footerIconButton}
-            onClick={handleEmailClick}
-            aria-label="Email"
-            title="Email"
+            type="button"
+            onClick={handleScrollToTop}
+            className={styles.backToTop}
+            aria-label="Scroll back to top of page"
           >
-            <svg className={styles.footerIconModern} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-              <path d="M48 64c-26.5 0-48 21.5-48 48 0 15.1 7.1 29.3 19.2 38.4l208 156c17.1 12.8 40.5 12.8 57.6 0l208-156c12.1-9.1 19.2-23.3 19.2-38.4 0-26.5-21.5-48-48-48L48 64zM0 196L0 384c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-188-198.4 148.8c-34.1 25.6-81.1 25.6-115.2 0L0 196z" />
-            </svg>
+            <span>Back to top</span>
+            <ArrowUpIcon />
           </button>
-          <a
-            className={styles.footerIconButton}
-            href="https://www.linkedin.com/in/pardeepshyoran"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="LinkedIn"
-            title="LinkedIn"
-          >
-            <svg className={styles.footerIconModern} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-              <path d="M64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-320c0-35.3-28.7-64-64-64L64 32zm5 170.2l66.5 0 0 213.8-66.5 0 0-213.8zm71.7-67.7a38.5 38.5 0 1 1 -77 0 38.5 38.5 0 1 1 77 0zM317.9 416l0-104c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9l0 105.8-66.4 0 0-213.8 63.7 0 0 29.2 .9 0c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9l0 117.2-66.4 0z" />
-            </svg>
-          </a>
-          <a
-            className={styles.footerIconButton}
-            href="https://github.com/Pardeep-Shyoran"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="GitHub"
-            title="GitHub"
-          >
-            <svg className={styles.footerIconModern} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-              <path d="M448 96c0-35.3-28.7-64-64-64L64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-320zM265.8 407.7c0-1.8 0-6 .1-11.6 .1-11.4 .1-28.8 .1-43.7 0-15.6-5.2-25.5-11.3-30.7 37-4.1 76-9.2 76-73.1 0-18.2-6.5-27.3-17.1-39 1.7-4.3 7.4-22-1.7-45-13.9-4.3-45.7 17.9-45.7 17.9-26.6-7.5-56.6-7.5-83.2 0 0 0-31.8-22.2-45.7-17.9-9.1 22.9-3.5 40.6-1.7 45-10.6 11.7-15.6 20.8-15.6 39 0 63.6 37.3 69 74.3 73.1-4.8 4.3-9.1 11.7-10.6 22.3-9.5 4.3-33.8 11.7-48.3-13.9-9.1-15.8-25.5-17.1-25.5-17.1-16.2-.2-1.1 10.2-1.1 10.2 10.8 5 18.4 24.2 18.4 24.2 9.7 29.7 56.1 19.7 56.1 19.7 0 9 .1 21.7 .1 30.6 0 4.8 .1 8.6 .1 10 0 4.3-3 9.5-11.5 8-66-22.1-112.2-84.9-112.2-158.3 0-91.8 70.2-161.5 162-161.5S388 165.6 388 257.4c.1 73.4-44.7 136.3-110.7 158.3-8.4 1.5-11.5-3.7-11.5-8zm-90.5-54.8c-.2-1.5 1.1-2.8 3-3.2 1.9-.2 3.7 .6 3.9 1.9 .3 1.3-1 2.6-3 3-1.9 .4-3.7-.4-3.9-1.7zm-9.1 3.2c-2.2 .2-3.7-.9-3.7-2.4 0-1.3 1.5-2.4 3.5-2.4 1.9-.2 3.7 .9 3.7 2.4 0 1.3-1.5 2.4-3.5 2.4zm-14.3-2.2c-1.9-.4-3.2-1.9-2.8-3.2s2.4-1.9 4.1-1.5c2 .6 3.3 2.1 2.8 3.4-.4 1.3-2.4 1.9-4.1 1.3zm-12.5-7.3c-1.5-1.3-1.9-3.2-.9-4.1 .9-1.1 2.8-.9 4.3 .6 1.3 1.3 1.8 3.3 .9 4.1-.9 1.1-2.8 .9-4.3-.6zm-8.5-10c-1.1-1.5-1.1-3.2 0-3.9 1.1-.9 2.8-.2 3.7 1.3 1.1 1.5 1.1 3.3 0 4.1-.9 .6-2.6 0-3.7-1.5zm-6.3-8.8c-1.1-1.3-1.3-2.8-.4-3.5 .9-.9 2.4-.4 3.5 .6 1.1 1.3 1.3 2.8 .4 3.5-.9 .9-2.4 .4-3.5-.6zm-6-6.4c-1.3-.6-1.9-1.7-1.5-2.6 .4-.6 1.5-.9 2.8-.4 1.3 .7 1.9 1.8 1.5 2.6-.4 .9-1.7 1.1-2.8 .4z" />
-            </svg>
-          </a>
-          <a
-            className={styles.footerIconButton}
-            href="https://x.com/PardeepShyoran"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="X (Twitter)"
-            title="X (Twitter)"
-          >
-            <svg className={styles.footerIconModern} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-              <path d="M64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-320c0-35.3-28.7-64-64-64L64 32zm297.1 84l-103.8 118.6 122.1 161.4-95.6 0-74.8-97.9-85.7 97.9-47.5 0 111-126.9-117.1-153.1 98 0 67.7 89.5 78.2-89.5 47.5 0zM323.3 367.6l-169.9-224.7-28.3 0 171.8 224.7 26.4 0z" />
-            </svg>
-          </a>
-        </div>
-        <div className={styles.sectionCopyright}>
-          &copy; {new Date().getFullYear()} Pardeep Shyoran. All rights reserved.
         </div>
       </div>
-    </footer>
-  );
-};
 
-export default Footer;
+      {/* Stylized Background Watermark */}
+      <div className={styles.watermark} aria-hidden="true">
+        <span className={styles.watermarkText}>pardeep</span>
+      </div>
+    </footer>
+  )
+}
+
+export default Footer

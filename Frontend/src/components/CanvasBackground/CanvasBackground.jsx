@@ -84,7 +84,8 @@ const CanvasBackground = ({
 		const ctx = canvas.getContext('2d')
 		if (!ctx) return
 
-		const dpr = Math.max(1, Math.floor(window.devicePixelRatio || 1))
+		// Cap DPR at 2 for performance & memory efficiency on Retina screens
+		const dpr = Math.min(2, Math.max(1, Math.floor(window.devicePixelRatio || 1)))
 		const cssWidth = window.innerWidth
 		const cssHeight = window.innerHeight
 		canvas.width = cssWidth * dpr
@@ -133,19 +134,36 @@ const CanvasBackground = ({
 
 	useEffect(() => {
 		let raf = 0
-		const handleResize = () => {
+		let lastW = 0
+		let lastH = 0
+
+		const handleResize = (force = false) => {
 			cancelAnimationFrame(raf)
-			raf = requestAnimationFrame(draw)
+			raf = requestAnimationFrame(() => {
+				const curW = window.innerWidth
+				const curH = window.innerHeight
+				// Ignore mobile address bar scroll expansions where width is unchanged
+				if (!force && curW === lastW && Math.abs(curH - lastH) < 120) {
+					return
+				}
+				lastW = curW
+				lastH = curH
+				draw()
+			})
 		}
-		handleResize()
-		window.addEventListener('resize', handleResize)
-		window.addEventListener('orientationchange', handleResize)
+
+		handleResize(true)
+		const onResize = () => handleResize(false)
+		const onOrientation = () => handleResize(true)
+
+		window.addEventListener('resize', onResize, { passive: true })
+		window.addEventListener('orientationchange', onOrientation, { passive: true })
 
 		// Redraw when theme changes (data-theme attribute changes on <html>)
 		const mo = new MutationObserver((mut) => {
 			for (const m of mut) {
 				if (m.type === 'attributes' && m.attributeName === 'data-theme') {
-					handleResize()
+					handleResize(true)
 					break
 				}
 			}
@@ -153,13 +171,13 @@ const CanvasBackground = ({
 		mo.observe(document.documentElement, { attributes: true })
 
 		return () => {
-			window.removeEventListener('resize', handleResize)
-			window.removeEventListener('orientationchange', handleResize)
+			window.removeEventListener('resize', onResize)
+			window.removeEventListener('orientationchange', onOrientation)
 			mo.disconnect()
 			cancelAnimationFrame(raf)
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-		}, [cellSize, lineWidth, opacity])
+	}, [cellSize, lineWidth, opacity])
 
 	return (
 		<canvas
