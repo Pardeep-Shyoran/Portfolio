@@ -425,7 +425,7 @@
 
 .featuresGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
   gap: 1.5rem;
 }
 
@@ -437,6 +437,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+  min-width: 0;
   transition: border-color var(--transition-fast), transform var(--transition-fast);
 }
 
@@ -644,7 +645,7 @@
 
 .galleryGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
   gap: 1.75rem;
 }
 
@@ -656,6 +657,7 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 
 .galleryImageContainer {
@@ -938,6 +940,27 @@
   }
 
   .ctaActions {
+    flex-direction: column;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .cardBox,
+  .featureCard,
+  .techDetailRow,
+  .challengeItem,
+  .learningsContainer {
+    padding: 1.25rem;
+  }
+
+  .challengeQuestion,
+  .challengeAnswer {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .notFoundActions {
     flex-direction: column;
     width: 100%;
   }

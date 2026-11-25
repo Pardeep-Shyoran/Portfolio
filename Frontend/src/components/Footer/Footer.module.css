@@ -95,6 +95,16 @@
 .emailCta {
   gap: 0.5rem;
   white-space: nowrap;
+  max-width: 100%;
+}
+
+@media (max-width: 380px) {
+  .emailCta {
+    font-size: 0.8rem;
+    white-space: normal;
+    word-break: break-all;
+    text-align: center;
+  }
 }
 
 .copyBtn {
@@ -395,7 +405,7 @@
 .watermarkText {
   display: inline-block;
   font-family: var(--font-heading);
-  font-size: clamp(3rem, 12vw, 10rem);
+  font-size: clamp(2.25rem, 11vw, 10rem);
   font-weight: 800;
   letter-spacing: -0.025em;
   line-height: 0.95;

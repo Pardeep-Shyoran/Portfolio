@@ -276,7 +276,7 @@
   }
 
   .introSection {
-    width: 94%;
+    width: min(100% - 2rem, 80rem);
     margin-bottom: 2rem;
   }
 

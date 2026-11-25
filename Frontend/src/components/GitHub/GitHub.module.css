@@ -10,6 +10,10 @@
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
   box-shadow: var(--shadow-sm);
   transition: border-color var(--transition-normal), box-shadow var(--transition-normal), transform var(--transition-normal);
 }
@@ -34,6 +38,7 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  min-width: 0;
 }
 
 .platformIconWrapper {
@@ -58,6 +63,8 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  flex-wrap: wrap;
+  min-width: 0;
 }
 
 .platformTitle {
@@ -94,6 +101,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .syncBtn {
@@ -222,6 +230,9 @@
   display: flex;
   flex-direction: column;
   gap: 0.85rem;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
 }
 
 .calendarHeader {
@@ -244,6 +255,9 @@
 }
 
 .calendarWrapper {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
   overflow-x: auto;
   padding-bottom: 0.5rem;
   -webkit-overflow-scrolling: touch;
@@ -265,7 +279,7 @@
   .cardHeader {
     flex-direction: column;
     align-items: stretch;
-    gap: 1rem;
+    gap: 0.85rem;
   }
 
   .headerActions {
@@ -273,10 +287,32 @@
   }
 
   .metricsGrid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.75rem;
   }
 
   .mobileTip {
     display: block;
+  }
+}
+
+@media (max-width: 560px) {
+  .metricsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .platformCard {
+    padding: 1.05rem;
+    gap: 1rem;
+  }
+
+  .calendarContainer {
+    padding: 0.95rem;
+  }
+
+  .metricValue {
+    font-size: clamp(1.45rem, 6vw, 1.85rem);
   }
 }

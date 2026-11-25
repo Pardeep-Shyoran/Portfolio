@@ -39,6 +39,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .fieldLabel {
@@ -378,6 +380,8 @@
 .receiptRow {
   display: flex;
   justify-content: space-between;
+  gap: 0.35rem 1rem;
+  flex-wrap: wrap;
   font-size: 0.85rem;
 }
 
@@ -388,12 +392,16 @@
 .receiptValue {
   color: var(--color-text);
   font-weight: 600;
+  overflow-wrap: anywhere;
 }
 
 .statusActions {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 0.75rem;
   margin-top: 0.5rem;
+  width: 100%;
 }
 
 .btnSecondary {

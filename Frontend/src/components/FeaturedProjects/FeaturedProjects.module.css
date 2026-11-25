@@ -114,9 +114,14 @@
   }
 }
 
+@media (max-width: 640px) {
+  .section {
+    width: min(100% - 2rem, 80rem);
+  }
+}
+
 @media (max-width: 480px) {
   .section {
-    width: 94%;
     padding: 3.5rem 0 2rem 0;
   }
 
