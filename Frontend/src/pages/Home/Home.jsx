@@ -3,6 +3,9 @@ import styles from "./Home.module.css";
 import { Helmet } from "react-helmet";
 import FeaturedProjects from "../../components/FeaturedProjects/FeaturedProjects";
 import Button from "../../components/Button/Button";
+import StructuredData from "../../components/StructuredData/StructuredData";
+import profileData from "../../data/profile";
+import projectsData from "../../data/project";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { useLocation } from "react-router-dom";
@@ -84,21 +87,59 @@ const Home = () => {
     return () => clearTimeout(timer);
   }, [location.state]);
 
-  const onProjectsClick = () => {
+  const onProjectsClick = (e) => {
+    e?.preventDefault?.();
     smoothScrollTo("featuredProjects");
   };
 
-  const onContactClick = () => {
+  const onContactClick = (e) => {
+    e?.preventDefault?.();
     smoothScrollTo("contact");
   };
 
-  const onResumeClick = () => {
-    const pdfUrl = "https://drive.google.com/file/d/1MZEmMEvYlfCkLt4I3PyEYByxNI6X3QXw/view";
-    window.open(pdfUrl, "_blank", "noopener,noreferrer");
-  };
-
-  const codolioProfileUrl = "https://codolio.com/profile/Pardeep_Shyoran/card";
+  const codolioProfileUrl = profileData.profiles.codolio.cardUrl;
   const codolioLogoUrl = "https://codolio.com/codolio_assets/codolio.svg";
+
+  const homeStructuredData = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        name: `${profileData.name} Portfolio`,
+        url: profileData.siteUrl,
+        description: profileData.summary,
+      },
+      {
+        "@type": "ProfilePage",
+        url: `${profileData.siteUrl}/`,
+        mainEntity: {
+          "@type": "Person",
+          name: profileData.name,
+          jobTitle: profileData.role,
+          url: profileData.siteUrl,
+          email: `mailto:${profileData.contact.email}`,
+          sameAs: [
+            profileData.profiles.github.url,
+            profileData.profiles.linkedin.url,
+            profileData.profiles.x.url,
+            profileData.profiles.codolio.url,
+          ],
+        },
+      },
+      {
+        "@type": "ItemList",
+        name: "Featured Projects",
+        itemListElement: projectsData
+          .filter((p) => p.featured)
+          .map((p, index) => ({
+            "@type": "ListItem",
+            position: index + 1,
+            name: p.title,
+            url: `${profileData.siteUrl}/projects/${p.slug}`,
+          })),
+      },
+    ],
+  };
 
   return (
     <>
@@ -113,7 +154,9 @@ const Home = () => {
           content="Pardeep Shyoran, Full Stack Developer, ReactJS, MongoDB, Portfolio, Backend Developer"
         />
         <link rel="canonical" href="https://pardeep-shyoran.me/" />
+        <link rel="alternate" type="text/markdown" href="/index.md" title="Markdown version" />
       </Helmet>
+      <StructuredData data={homeStructuredData} />
 
       {/* Hero Section */}
       <section id="home" className={styles.heroSection} ref={heroRef}>
@@ -152,6 +195,8 @@ const Home = () => {
             {/* 4, 5, 6. Primary and Secondary Actions */}
             <div className={styles.ctaRow} data-hero-anim>
               <Button
+                href="/#featuredProjects"
+                target="_self"
                 onClick={onProjectsClick}
                 variant="primary"
                 size="lg"
@@ -162,6 +207,8 @@ const Home = () => {
               </Button>
 
               <Button
+                href="/#contact"
+                target="_self"
                 onClick={onContactClick}
                 variant="secondary"
                 size="lg"
@@ -172,10 +219,13 @@ const Home = () => {
               </Button>
 
               <Button
-                onClick={onResumeClick}
+                href={profileData.resumeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
                 variant="secondary"
                 size="lg"
                 className={styles.resumeCta}
+                aria-label="Open Pardeep Shyoran Resume PDF in a new tab"
               >
                 <ResumeIcon />
                 <span>Resume</span>

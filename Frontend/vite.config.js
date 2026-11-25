@@ -1,5 +1,28 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+import { generatePublicAgentAssets, prerenderDistRoutes } from './scripts/agent-assets.mjs'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+
+function agentAssetsPlugin() {
+  const publicDir = path.join(__dirname, 'public')
+  const distDir = path.join(__dirname, 'dist')
+
+  return {
+    name: 'agent-assets-plugin',
+    configureServer() {
+      generatePublicAgentAssets(publicDir)
+    },
+    buildStart() {
+      generatePublicAgentAssets(publicDir)
+    },
+    closeBundle() {
+      prerenderDistRoutes(distDir)
+    },
+  }
+}
 
 function contactApiPlugin() {
   return {
@@ -70,7 +93,7 @@ function contactApiPlugin() {
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), contactApiPlugin()],
+  plugins: [react(), contactApiPlugin(), agentAssetsPlugin()],
   server: {
     proxy: {
       '/api/gfg-summary': {

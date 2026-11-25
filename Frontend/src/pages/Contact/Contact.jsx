@@ -2,6 +2,8 @@ import { useState, useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
 import ContactForm from './ContactForm'
+import StructuredData from '../../components/StructuredData/StructuredData'
+import profileData from '../../data/profile'
 import styles from './Contact.module.css'
 
 const MailIcon = () => (
@@ -200,18 +202,40 @@ const Contact = () => {
   return (
     <>
       {isStandalonePage && (
-        <Helmet>
-          <title>Contact | Pardeep Shyoran · Full-Stack Software Engineer</title>
-          <meta
-            name="description"
-            content="Get in touch with Pardeep Shyoran for full-stack engineering opportunities, freelance projects, and tech collaboration."
+        <>
+          <Helmet>
+            <title>Contact | Pardeep Shyoran · Full-Stack Software Engineer</title>
+            <meta
+              name="description"
+              content="Get in touch with Pardeep Shyoran for full-stack engineering opportunities, freelance projects, and tech collaboration."
+            />
+            <meta
+              name="keywords"
+              content="Contact Pardeep Shyoran, Hire Full Stack Developer, Freelance React Engineer, Web Development Collaboration"
+            />
+            <link rel="canonical" href="https://pardeep-shyoran.me/contact" />
+            <link rel="alternate" type="text/markdown" href="/contact.md" title="Markdown version" />
+          </Helmet>
+          <StructuredData
+            data={{
+              '@context': 'https://schema.org',
+              '@type': 'ContactPage',
+              url: `${profileData.siteUrl}/contact`,
+              mainEntity: {
+                '@type': 'Person',
+                name: profileData.name,
+                url: profileData.siteUrl,
+                contactPoint: {
+                  '@type': 'ContactPoint',
+                  contactType: 'professional inquiries',
+                  email: profileData.contact.email,
+                  telephone: profileData.contact.phone,
+                  availableLanguage: ['English', 'Hindi'],
+                },
+              },
+            }}
           />
-          <meta
-            name="keywords"
-            content="Contact Pardeep Shyoran, Hire Full Stack Developer, Freelance React Engineer, Web Development Collaboration"
-          />
-          <link rel="canonical" href="https://pardeep-shyoran.me/contact" />
-        </Helmet>
+        </>
       )}
 
       <section id="contact" className={styles.contactSection} aria-label="Contact Section">
@@ -237,9 +261,11 @@ const Contact = () => {
             ].map((tab) => (
               <button
                 key={tab.id}
+                id={`contact-tab-${tab.id}`}
                 role="tab"
                 type="button"
                 aria-selected={activeTab === tab.id}
+                aria-controls="contact-opportunity-banner"
                 className={`${styles.tabBtn} ${
                   activeTab === tab.id ? styles.tabBtnActive : ''
                 }`}
@@ -252,7 +278,12 @@ const Contact = () => {
         </header>
 
         {/* Opportunity Context Banner */}
-        <div className={styles.opportunityBanner}>
+        <div
+          id="contact-opportunity-banner"
+          role="tabpanel"
+          aria-labelledby={`contact-tab-${activeTab}`}
+          className={styles.opportunityBanner}
+        >
           <div className={styles.opportunityBadge}>
             <span className={styles.livePulse} aria-hidden="true" />
             <span>{opportunityMessaging[activeTab].tag}</span>
@@ -330,20 +361,20 @@ const Contact = () => {
               </div>
 
               {/* Working Parameters */}
-              <div className={styles.metaBox}>
+              <dl className={styles.metaBox}>
                 <div className={styles.metaRow}>
-                  <span className={styles.metaLabel}>Location:</span>
-                  <span className={styles.metaValue}>Chandigarh, India (Remote-friendly)</span>
+                  <dt className={styles.metaLabel}>Location:</dt>
+                  <dd className={styles.metaValue}>Chandigarh, India (Remote-friendly)</dd>
                 </div>
                 <div className={styles.metaRow}>
-                  <span className={styles.metaLabel}>Response time:</span>
-                  <span className={styles.metaValue}>Under 24 hours</span>
+                  <dt className={styles.metaLabel}>Response time:</dt>
+                  <dd className={styles.metaValue}>Under 24 hours</dd>
                 </div>
                 <div className={styles.metaRow}>
-                  <span className={styles.metaLabel}>Working style:</span>
-                  <span className={styles.metaValue}>Async updates, Git PRs, milestone slices</span>
+                  <dt className={styles.metaLabel}>Working style:</dt>
+                  <dd className={styles.metaValue}>Async updates, Git PRs, milestone slices</dd>
                 </div>
-              </div>
+              </dl>
             </article>
 
             {/* Verified Professional Profiles Card */}

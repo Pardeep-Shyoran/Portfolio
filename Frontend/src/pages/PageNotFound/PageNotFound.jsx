@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import Button from '../../components/Button/Button';
 import styles from './PageNotFound.module.css';
@@ -35,8 +35,6 @@ const FolderIcon = () => (
 );
 
 const PageNotFound = () => {
-  const navigate = useNavigate();
-
   return (
     <>
       <Helmet>
@@ -65,7 +63,7 @@ const PageNotFound = () => {
 
           <div className={styles.actions}>
             <Button
-              onClick={() => navigate('/')}
+              to="/"
               variant="primary"
               size="lg"
               className={styles.primaryBtn}
@@ -75,7 +73,7 @@ const PageNotFound = () => {
             </Button>
 
             <Button
-              onClick={() => navigate('/projects')}
+              to="/projects"
               variant="secondary"
               size="lg"
               className={styles.secondaryBtn}
@@ -88,37 +86,21 @@ const PageNotFound = () => {
           <div className={styles.quickLinksBox}>
             <span className={styles.quickLinksLabel}>Or jump directly to:</span>
             <div className={styles.quickLinksRow}>
-              <button
-                type="button"
-                onClick={() => navigate('/about')}
-                className={styles.quickLink}
-              >
+              <Link to="/about" className={styles.quickLink}>
                 About Me
-              </button>
+              </Link>
               <span className={styles.divider} aria-hidden="true">·</span>
-              <button
-                type="button"
-                onClick={() => navigate('/certificates')}
-                className={styles.quickLink}
-              >
+              <Link to="/certificates" className={styles.quickLink}>
                 Certificates
-              </button>
+              </Link>
               <span className={styles.divider} aria-hidden="true">·</span>
-              <button
-                type="button"
-                onClick={() => navigate('/stats')}
-                className={styles.quickLink}
-              >
+              <Link to="/stats" className={styles.quickLink}>
                 Coding Stats
-              </button>
+              </Link>
               <span className={styles.divider} aria-hidden="true">·</span>
-              <button
-                type="button"
-                onClick={() => navigate('/contact')}
-                className={styles.quickLink}
-              >
+              <Link to="/contact" className={styles.quickLink}>
                 Get in Touch
-              </button>
+              </Link>
             </div>
           </div>
         </div>

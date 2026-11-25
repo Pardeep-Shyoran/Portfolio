@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styles from './Button.module.css';
 
 const Button = ({
@@ -9,6 +10,7 @@ const Button = ({
   className = '',
   disabled = false,
   href = null,
+  to = null,
   target = '_blank',
   type = 'button',
   ...rest
@@ -16,6 +18,21 @@ const Button = ({
   const variantClass = styles[variant] || styles.primary;
   const sizeClass = styles[size] || styles.md;
   const buttonClasses = `${styles.button} ${variantClass} ${sizeClass} ${className}`.trim();
+
+  if (to) {
+    return (
+      <Link
+        to={to}
+        onClick={onClick}
+        className={buttonClasses}
+        aria-disabled={disabled || undefined}
+        tabIndex={disabled ? -1 : undefined}
+        {...rest}
+      >
+        {children}
+      </Link>
+    );
+  }
 
   if (href) {
     return (

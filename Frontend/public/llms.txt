@@ -1,0 +1,47 @@
+# Pardeep Shyoran — Full-Stack Web Developer
+
+> Full-stack software developer specializing in React frontends and Node.js, Express, and MongoDB backends. Experienced in real-time collaboration (Socket.IO), microservice architectures (RabbitMQ, AWS S3), and AI integrations (Google Gemini).
+
+- **Canonical URL**: https://pardeep-shyoran.me
+- **Status**: Available for Hire (Full-Time Roles, Contract, Freelance & Sprints, Tech Advisory)
+- **Location**: Haryana, India (Remote-Ready) · IST (UTC+5:30)
+- **Email**: pardeepshyoran@outlook.com
+- **Phone**: +91 97297 75889
+- **Resume**: https://drive.google.com/file/d/1MZEmMEvYlfCkLt4I3PyEYByxNI6X3QXw/view
+
+## Machine-Readable Endpoints
+
+- [Full LLM Dossier (https://pardeep-shyoran.me/llms-full.txt)](https://pardeep-shyoran.me/llms-full.txt): Complete single-file Markdown profile, skills, all project case studies, credentials, and stats.
+- [Structured Portfolio JSON (https://pardeep-shyoran.me/portfolio.json)](https://pardeep-shyoran.me/portfolio.json): Complete JSON representation of identity, projects, skills, certificates, stats, and routes.
+- [Sitemap (https://pardeep-shyoran.me/sitemap.xml)](https://pardeep-shyoran.me/sitemap.xml): Canonical route and case-study index.
+
+## Pages (HTML & Markdown)
+
+- [Home](https://pardeep-shyoran.me/) ([Markdown](https://pardeep-shyoran.me/index.md)): Hero summary, featured projects, skills, credentials, stats, and contact form.
+- [About & Skills](https://pardeep-shyoran.me/about) ([Markdown](https://pardeep-shyoran.me/about.md)): Engineering philosophy, workflow, architecture stack, and categorized technical skills.
+- [Projects Archive](https://pardeep-shyoran.me/projects) ([Markdown](https://pardeep-shyoran.me/projects.md)): Filterable catalog of 7 full-stack and frontend projects.
+- [Certificates](https://pardeep-shyoran.me/certificates) ([Markdown](https://pardeep-shyoran.me/certificates.md)): Verified credentials and specializations.
+- [Coding Stats](https://pardeep-shyoran.me/stats) ([Markdown](https://pardeep-shyoran.me/stats.md)): GitHub, LeetCode, and GeeksforGeeks metrics.
+- [Contact](https://pardeep-shyoran.me/contact) ([Markdown](https://pardeep-shyoran.me/contact.md)): Direct communication channels and inquiry form.
+
+## Featured Projects
+
+- [KodraX](https://pardeep-shyoran.me/projects/kodrax) ([Markdown](https://pardeep-shyoran.me/projects/kodrax.md)): A real-time collaborative code editor featuring room-based synchronization, secure JWT authentication, and Judge0 code execution. Stack: React, Node.js, Express, MongoDB, Socket.IO, Judge0 CE, Monaco Editor, JWT.
+- [Rivo](https://pardeep-shyoran.me/projects/rivo) ([Markdown](https://pardeep-shyoran.me/projects/rivo.md)): A microservices-based music streaming platform featuring role-based access, AWS S3 track storage, and RabbitMQ event messaging. Stack: React, Node.js, Express, MongoDB, RabbitMQ, AWS S3, ImageKit, JWT.
+- [Lite-Insta](https://pardeep-shyoran.me/projects/lite-insta) ([Markdown](https://pardeep-shyoran.me/projects/lite-insta.md)): A MERN social platform featuring photo feeds, JWT session security, and Google Gemini AI caption generation. Stack: React, Node.js, Express, MongoDB, Google Gemini API, ImageKit, JWT, Redux Toolkit.
+
+## Other Projects
+
+- [MoodSwinger](https://pardeep-shyoran.me/projects/moodswinger) ([Markdown](https://pardeep-shyoran.me/projects/moodswinger.md)): An interactive music player utilizing client-side facial expression analysis via face-api.js to play mood-matching audio.
+- [FOKUS](https://pardeep-shyoran.me/projects/fokus) ([Markdown](https://pardeep-shyoran.me/projects/fokus.md)): A responsive energy drink product showcase built with React, modular CSS, and dynamic JSON Server catalog feeds.
+- [Windows 11 Web Clone](https://pardeep-shyoran.me/projects/windows-11) ([Markdown](https://pardeep-shyoran.me/projects/windows-11.md)): A functional browser-based Windows 11 desktop experience built purely with Vanilla JavaScript, HTML5, and CSS3.
+- [GitHub Profile Search](https://pardeep-shyoran.me/projects/github-profile-search) ([Markdown](https://pardeep-shyoran.me/projects/github-profile-search.md)): A responsive developer lookup tool interfacing with the GitHub REST API to render user metrics, repositories, and activity.
+
+## Profiles
+
+- [GitHub](https://github.com/Pardeep-Shyoran)
+- [LinkedIn](https://www.linkedin.com/in/pardeepshyoran/)
+- [Codolio](https://codolio.com/profile/Pardeep_Shyoran)
+- [LeetCode](https://leetcode.com/u/Pardeep_Shyoran/)
+- [GeeksforGeeks](https://www.geeksforgeeks.org/profile/pardeepsheqqo4/?tab=activity)
+- [X (Twitter)](https://x.com/PardeepShyoran)

@@ -4,8 +4,9 @@ import { Helmet } from "react-helmet";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
-import { useIntersectionObserver } from "../../hooks/useIntersectionObserver";
 import { prefersReducedMotion } from "../../utils/scrollHelper";
+import StructuredData from "../../components/StructuredData/StructuredData";
+import profileData from "../../data/profile";
 import GitHubCalendar from "../../components/GitHub/GitHub.jsx";
 import LeetCode from "../../components/LeetCode/LeetCode.jsx";
 import GFG from "../../components/GFG/GFG.jsx";
@@ -13,14 +14,8 @@ import styles from "./Stats.module.css";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const CODOLIO_URL = "https://codolio.com/profile/Pardeep_Shyoran/card";
-
-const SUMMARY_METRICS = [
-  { label: "DSA Solved", value: "400+", hint: "LeetCode & GFG" },
-  { label: "Repositories", value: "41", hint: "GitHub" },
-  { label: "Medium DSA", value: "200+", hint: "LeetCode & GFG" },
-  { label: "Yearly Commits", value: "380+", hint: "Open Source" },
-];
+const CODOLIO_URL = profileData.profiles.codolio.cardUrl;
+const SUMMARY_METRICS = profileData.statsSnapshot.summary;
 
 const PLATFORM_TABS = [
   { id: "all", label: "All" },
@@ -33,9 +28,7 @@ const Stats = () => {
   const location = useLocation();
   const isStandalonePage = location.pathname === "/stats";
   const [activePlatform, setActivePlatform] = useState("all");
-  const [sectionRef, isVisible] = useIntersectionObserver({ rootMargin: "300px" });
-
-  const shouldRender = isStandalonePage || isVisible;
+  const sectionRef = useRef(null);
 
   useGSAP(
     () => {
@@ -74,18 +67,34 @@ const Stats = () => {
   return (
     <>
       {isStandalonePage && (
-        <Helmet>
-          <title>Coding Stats | Pardeep Shyoran</title>
-          <meta
-            name="description"
-            content="Explore Pardeep Shyoran's coding metrics and problem-solving records across GitHub, LeetCode, and GeeksforGeeks."
+        <>
+          <Helmet>
+            <title>Coding Stats | Pardeep Shyoran</title>
+            <meta
+              name="description"
+              content="Explore Pardeep Shyoran's coding metrics and problem-solving records across GitHub, LeetCode, and GeeksforGeeks."
+            />
+            <meta
+              name="keywords"
+              content="Pardeep Shyoran stats, LeetCode, GitHub, GeeksforGeeks, coding metrics, problem solving"
+            />
+            <link rel="canonical" href="https://pardeep-shyoran.me/stats" />
+            <link rel="alternate" type="text/markdown" href="/stats.md" title="Markdown version" />
+          </Helmet>
+          <StructuredData
+            data={{
+              "@context": "https://schema.org",
+              "@type": "WebPage",
+              name: "Coding Stats — Pardeep Shyoran",
+              url: `${profileData.siteUrl}/stats`,
+              about: {
+                "@type": "Person",
+                name: profileData.name,
+                url: profileData.siteUrl,
+              },
+            }}
           />
-          <meta
-            name="keywords"
-            content="Pardeep Shyoran stats, LeetCode, GitHub, GeeksforGeeks, coding metrics, problem solving"
-          />
-          <link rel="canonical" href="https://pardeep-shyoran.me/stats" />
-        </Helmet>
+        </>
       )}
 
       <section
@@ -106,8 +115,11 @@ const Stats = () => {
             {PLATFORM_TABS.map((tab) => (
               <button
                 key={tab.id}
+                type="button"
+                id={`stats-tab-${tab.id}`}
                 role="tab"
                 aria-selected={activePlatform === tab.id}
+                aria-controls="stats-tabpanel"
                 className={`${styles.filterBtn} ${activePlatform === tab.id ? styles.filterBtnActive : ""}`}
                 onClick={() => setActivePlatform(tab.id)}
               >
@@ -118,68 +130,67 @@ const Stats = () => {
         </header>
 
         {/* High-Level Overview Metrics */}
-        <div className={styles.summaryBar}>
+        <dl className={styles.summaryBar} aria-label="Coding summary metrics">
           {SUMMARY_METRICS.map((metric) => (
             <div className={styles.summaryCard} key={metric.label}>
-              <span className={styles.summaryValue}>{metric.value}</span>
-              <span className={styles.summaryLabel}>{metric.label}</span>
-              <span className={styles.summaryHint}>{metric.hint}</span>
+              <dd className={styles.summaryValue}>{metric.value}</dd>
+              <dt className={styles.summaryLabel}>{metric.label}</dt>
+              <dd className={styles.summaryHint}>{metric.hint}</dd>
             </div>
           ))}
-        </div>
+        </dl>
 
-        {/* Dynamic Platforms Content */}
-        {shouldRender ? (
-          <div className={styles.platformArea}>
-            {activePlatform === "all" && (
-              <div className={styles.allLayout}>
-                <div className={styles.fullWidthCard}>
-                  <GitHubCalendar />
-                </div>
-                <div className={styles.twoColumnGrid}>
-                  <LeetCode />
-                  <GFG />
-                </div>
-              </div>
-            )}
-
-            {activePlatform === "github" && (
-              <div className={styles.singlePlatform}>
+        {/* Dynamic Platforms Content (always mounted for immediate accessibility/agent inspection) */}
+        <div
+          id="stats-tabpanel"
+          role="tabpanel"
+          aria-labelledby={`stats-tab-${activePlatform}`}
+          className={styles.platformArea}
+        >
+          {activePlatform === "all" && (
+            <div className={styles.allLayout}>
+              <div className={styles.fullWidthCard}>
                 <GitHubCalendar />
               </div>
-            )}
-
-            {activePlatform === "leetcode" && (
-              <div className={styles.singlePlatform}>
+              <div className={styles.twoColumnGrid}>
                 <LeetCode />
-              </div>
-            )}
-
-            {activePlatform === "gfg" && (
-              <div className={styles.singlePlatform}>
                 <GFG />
               </div>
-            )}
-
-            {/* Codolio Profile Card Banner */}
-            <div className={styles.codolioFooter}>
-              <span className={styles.codolioText}>Aggregated profile on Codolio:</span>
-              <a
-                href={CODOLIO_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.codolioLink}
-              >
-                <span>View Codolio Stats Card</span>
-                <span aria-hidden="true">↗</span>
-              </a>
             </div>
+          )}
+
+          {activePlatform === "github" && (
+            <div className={styles.singlePlatform}>
+              <GitHubCalendar />
+            </div>
+          )}
+
+          {activePlatform === "leetcode" && (
+            <div className={styles.singlePlatform}>
+              <LeetCode />
+            </div>
+          )}
+
+          {activePlatform === "gfg" && (
+            <div className={styles.singlePlatform}>
+              <GFG />
+            </div>
+          )}
+
+          {/* Codolio Profile Card Banner */}
+          <div className={styles.codolioFooter}>
+            <span className={styles.codolioText}>Aggregated profile on Codolio:</span>
+            <a
+              href={CODOLIO_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.codolioLink}
+            >
+              <span>View Codolio Stats Card</span>
+              <span aria-hidden="true">↗</span>
+            </a>
           </div>
-        ) : (
-          <div className={styles.placeholder} aria-hidden="true">
-            <div className={styles.placeholderText}>LOADING CODING STATS...</div>
-          </div>
-        )}
+        </div>
       </section>
     </>
   );

@@ -284,8 +284,11 @@ const Skills = () => {
           {filterTabs.map((tab) => (
             <button
               key={tab.id}
+              type="button"
+              id={`skill-tab-${tab.id}`}
               role="tab"
               aria-selected={activeCategory === tab.id}
+              aria-controls="skills-tabpanel"
               className={`${styles.filterBtn} ${activeCategory === tab.id ? styles.filterBtnActive : ""}`}
               onClick={() => setActiveCategory(tab.id)}
             >
@@ -298,6 +301,9 @@ const Skills = () => {
       {/* Symmetrical, High-End Category Grid */}
       <div
         ref={gridRef}
+        id="skills-tabpanel"
+        role="tabpanel"
+        aria-labelledby={`skill-tab-${activeCategory}`}
         className={`${styles.categoriesGrid} ${
           displayedCategories.length === 1 ? styles.singleCategoryGrid : ""
         }`}

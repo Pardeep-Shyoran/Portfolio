@@ -1,16 +1,15 @@
-import { useNavigate } from 'react-router-dom';
 import { useMemo, useRef, useEffect } from 'react';
 import styles from './FeaturedProjects.module.css';
 import ProjectCard from '../ProjectCard/ProjectCard';
 import projectsData from '../../data/project';
 import Button from '../Button/Button';
+import { prefersReducedMotion } from '../../utils/scrollHelper';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const FeaturedProjects = () => {
-  const navigate = useNavigate();
   const sectionRef = useRef(null);
 
   // Curate top featured projects
@@ -20,9 +19,8 @@ const FeaturedProjects = () => {
   }, []);
 
   useEffect(() => {
-    // Respect user reduced-motion preference
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReduced || !sectionRef.current) return;
+    // Respect user reduced-motion preference & automated browsers
+    if (prefersReducedMotion() || !sectionRef.current) return;
 
     const ctx = gsap.context(() => {
       const cards = sectionRef.current.querySelectorAll(`.${styles.cardItem}`);
@@ -72,7 +70,7 @@ const FeaturedProjects = () => {
 
       <div className={styles.actionRow}>
         <Button
-          onClick={() => navigate('/projects')}
+          to="/projects"
           variant="secondary"
           size="lg"
           className={styles.seeMoreBtn}

@@ -9,6 +9,7 @@ import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import CanvasBackground from "./components/CanvasBackground/CanvasBackground";
 import ShuttleLight from "./components/CanvasBackground/ShuttleLight";
 import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
+import { AgentBridge } from "./agent/webmcp";
 
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother, ScrollToPlugin);
 
@@ -29,8 +30,9 @@ const App = () => {
       },
       (context) => {
         const { isDesktop, reduceMotion } = context.conditions;
+        const isAutomatedBrowser = typeof navigator !== "undefined" && Boolean(navigator.webdriver);
 
-        if (!isDesktop || reduceMotion) {
+        if (!isDesktop || reduceMotion || isAutomatedBrowser) {
           return undefined;
         }
 
@@ -57,6 +59,7 @@ const App = () => {
 
   return (
     <>
+      <AgentBridge />
       <ScrollToTop />
       <CanvasBackground cellSize={49} opacity={0.35} lineWidth={1} />
       <ShuttleLight />

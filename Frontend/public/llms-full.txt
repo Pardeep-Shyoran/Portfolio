@@ -1,0 +1,618 @@
+# Pardeep Shyoran — Full-Stack Web Developer
+
+I build fast, modern web apps with clean code.
+
+Full-stack software developer specializing in React frontends and Node.js, Express, and MongoDB backends. Experienced in real-time collaboration (Socket.IO), microservice architectures (RabbitMQ, AWS S3), and AI integrations (Google Gemini).
+
+- **Availability**: Available for Hire
+- **Location**: Haryana, India (Remote-Ready)
+- **Resume**: https://drive.google.com/file/d/1MZEmMEvYlfCkLt4I3PyEYByxNI6X3QXw/view
+- **Email**: pardeepshyoran@outlook.com
+
+## Featured Projects
+
+### [KodraX](https://pardeep-shyoran.me/projects/kodrax)
+Real-Time Collaborative Code Editor & Execution Engine
+
+A real-time collaborative code editor featuring room-based synchronization, secure JWT authentication, and Judge0 code execution.
+
+- Stack: React, Node.js, Express, MongoDB, Socket.IO, Judge0 CE, Monaco Editor, JWT
+- Live Demo: https://kodraxlive.vercel.app/
+- Repo: https://github.com/Pardeep-Shyoran/KodraX
+
+### [Rivo](https://pardeep-shyoran.me/projects/rivo)
+Scalable Music Streaming & Artist Management Platform
+
+A microservices-based music streaming platform featuring role-based access, AWS S3 track storage, and RabbitMQ event messaging.
+
+- Stack: React, Node.js, Express, MongoDB, RabbitMQ, AWS S3, ImageKit, JWT
+- Live Demo: https://rivo-music.vercel.app/
+- Repo: https://github.com/Pardeep-Shyoran/Rivo
+
+### [Lite-Insta](https://pardeep-shyoran.me/projects/lite-insta)
+Full-Stack Social Media Application with AI Caption Generation
+
+A MERN social platform featuring photo feeds, JWT session security, and Google Gemini AI caption generation.
+
+- Stack: React, Node.js, Express, MongoDB, Google Gemini API, ImageKit, JWT, Redux Toolkit
+- Live Demo: https://lite-insta.vercel.app/
+- Repo: https://github.com/Pardeep-Shyoran/Lite-Insta
+
+## Core Tech Stack
+
+- **Frontend**: React, JavaScript (ES6+), HTML5 & CSS3, Tailwind CSS, GSAP Animations
+- **Backend**: Node.js, Express.js, RESTful APIs, WebSockets, JWT Auth
+- **Databases & Cloud**: MongoDB, MySQL, Redis Cache, AWS S3
+- **DevOps & Tools**: Git & GitHub, Docker, Postman, Vercel, VS Code
+
+## Coding Activity Snapshot
+
+- **DSA Solved**: 400+ (LeetCode & GFG)
+- **Repositories**: 41 (GitHub)
+- **Medium DSA**: 200+ (LeetCode & GFG)
+- **Yearly Commits**: 380+ (Open Source)
+
+
+---
+
+# About Pardeep Shyoran
+
+**Role**: Full-Stack Web Developer
+**Location**: Haryana, India (Remote-Ready)
+**Status**: Available for Hire
+
+Full-stack software developer specializing in React frontends and Node.js, Express, and MongoDB backends. Experienced in real-time collaboration (Socket.IO), microservice architectures (RabbitMQ, AWS S3), and AI integrations (Google Gemini).
+
+## Development Workflow
+
+1. **UI Architecture & Mobile-First Design**: Semantic layouts, responsive grids, and accessible components before writing state.
+2. **Full-Stack API & Schema Integration**: Connecting React frontends to Node.js/Express endpoints with strict validation and JWT auth.
+3. **Performance Tuning & Interaction Polish**: Optimizing Core Web Vitals, eliminating layout shifts, and purposeful GSAP animations.
+4. **Testing, Audit & Production Shipping**: Validating endpoints in Postman, Git workflows, and containerized deployments.
+
+## Skills & Technologies
+
+### Frontend (Client-Side)
+- React
+- JavaScript (ES6+)
+- HTML5 & CSS3
+- Tailwind CSS
+- GSAP Animations
+
+### Backend (Server-Side)
+- Node.js
+- Express.js
+- RESTful APIs
+- WebSockets
+- JWT Auth
+
+### Databases & Cloud (Data & Storage)
+- MongoDB
+- MySQL
+- Redis Cache
+- AWS S3
+
+### DevOps & Tools (Tooling & Workflow)
+- Git & GitHub
+- Docker
+- Postman
+- Vercel
+- VS Code
+
+
+---
+
+# Selected Works — Pardeep Shyoran
+
+A curated catalog of 7 full-stack platforms, real-time collaboration engines, and frontend experiments.
+
+## KodraX — Real-Time Collaborative Code Editor & Execution Engine
+
+- **Category**: Collaborative Web Application
+- **Role**: Full-Stack Developer
+- **Featured**: Yes
+- **Technologies**: React, Node.js, Express, MongoDB, Socket.IO, Judge0 CE, Monaco Editor, JWT
+- **Case Study**: https://pardeep-shyoran.me/projects/kodrax
+- **Markdown**: https://pardeep-shyoran.me/projects/kodrax.md
+- **Live Demo**: https://kodraxlive.vercel.app/
+- **Repository**: https://github.com/Pardeep-Shyoran/KodraX
+
+KodraX is a collaborative development environment that allows developers to create or join private rooms, write and edit code together in real time via Socket.IO, switch between multiple programming languages, and execute programs through Judge0 CE with synchronized output broadcast.
+
+## Rivo — Scalable Music Streaming & Artist Management Platform
+
+- **Category**: Distributed Audio Platform
+- **Role**: Full-Stack Developer
+- **Featured**: Yes
+- **Technologies**: React, Node.js, Express, MongoDB, RabbitMQ, AWS S3, ImageKit, JWT
+- **Case Study**: https://pardeep-shyoran.me/projects/rivo
+- **Markdown**: https://pardeep-shyoran.me/projects/rivo.md
+- **Live Demo**: https://rivo-music.vercel.app/
+- **Repository**: https://github.com/Pardeep-Shyoran/Rivo
+
+Rivo is a full-stack audio streaming platform engineered with decoupled microservices. It delivers role-based experiences for artists and listeners, secure audio uploads via AWS S3, asynchronous email notifications using RabbitMQ message queues, and playback history tracking.
+
+## Lite-Insta — Full-Stack Social Media Application with AI Caption Generation
+
+- **Category**: Social Web Application
+- **Role**: Full-Stack Developer
+- **Featured**: Yes
+- **Technologies**: React, Node.js, Express, MongoDB, Google Gemini API, ImageKit, JWT, Redux Toolkit
+- **Case Study**: https://pardeep-shyoran.me/projects/lite-insta
+- **Markdown**: https://pardeep-shyoran.me/projects/lite-insta.md
+- **Live Demo**: https://lite-insta.vercel.app/
+- **Repository**: https://github.com/Pardeep-Shyoran/Lite-Insta
+
+Lite-Insta is a modern social media application that allows users to publish photo posts, curate their profiles, and browse community feeds. The application integrates Google GenAI (Gemini) to provide automated, context-aware caption recommendations for uploaded imagery.
+
+## MoodSwinger — Facial Expression Detection & Emotion-Based Audio Player
+
+- **Category**: Computer Vision & Audio Experiment
+- **Role**: Full-Stack Developer
+- **Featured**: No
+- **Technologies**: React, Node.js, Express, MongoDB, face-api.js, WebRTC
+- **Case Study**: https://pardeep-shyoran.me/projects/moodswinger
+- **Markdown**: https://pardeep-shyoran.me/projects/moodswinger.md
+- **Live Demo**: https://moodswinger.vercel.app
+- **Repository**: https://github.com/Pardeep-Shyoran/Moody-Player
+
+MoodSwinger is an experimental web application that pairs computer vision with audio streaming. By analyzing facial landmarks via webcam in the browser, the application classifies emotional states—such as happy, neutral, or angry—and automatically queues corresponding playlists.
+
+## FOKUS — Commercial Product Landing Page & Interactive Catalog
+
+- **Category**: E-Commerce Showcase
+- **Role**: Frontend Developer
+- **Featured**: No
+- **Technologies**: React, Modular CSS, JSON Server, JavaScript, REST API
+- **Case Study**: https://pardeep-shyoran.me/projects/fokus
+- **Markdown**: https://pardeep-shyoran.me/projects/fokus.md
+- **Live Demo**: https://fokus-shop.vercel.app/
+- **Repository**: https://github.com/Pardeep-Shyoran/Hackathon-Project
+
+FOKUS is an editorial e-commerce product landing page developed for an energy drink brand. Built with a component-driven React architecture and scoped CSS Modules, it showcases product variants, dynamic nutrition specifications, and promotional brand content.
+
+## Windows 11 Web Clone — Framework-Free Browser OS Desktop Simulation
+
+- **Category**: Frontend Engineering Simulation
+- **Role**: Frontend Developer
+- **Featured**: No
+- **Technologies**: HTML5, CSS3, Vanilla JavaScript, DOM Manipulation, Event Architecture
+- **Case Study**: https://pardeep-shyoran.me/projects/windows-11
+- **Markdown**: https://pardeep-shyoran.me/projects/windows-11.md
+- **Live Demo**: https://os-windows-11.vercel.app/
+- **Repository**: https://github.com/Pardeep-Shyoran/Windows-11
+
+An architectural exploration of the Windows 11 operating system interface built entirely in the browser using vanilla web standards. It replicates desktop window management, an interactive taskbar, start menu, functional Notepad, file explorer simulation, and theme toggling without any external libraries.
+
+## GitHub Profile Search — Developer Analytics & Public Profile Explorer
+
+- **Category**: Developer Tools & API Integration
+- **Role**: Frontend Developer
+- **Featured**: No
+- **Technologies**: HTML5, CSS3, JavaScript, GitHub REST API, Async/Await
+- **Case Study**: https://pardeep-shyoran.me/projects/github-profile-search
+- **Markdown**: https://pardeep-shyoran.me/projects/github-profile-search.md
+- **Live Demo**: https://pardeep-shyoran.github.io/Github-Profile-Search/
+- **Repository**: https://github.com/Pardeep-Shyoran/Github-Profile-Search
+
+A developer search application that interacts with the GitHub REST API to query and present developer profiles, public repositories, follower counts, and organizational metadata in a focused, high-contrast interface.
+
+
+---
+
+# KodraX — Real-Time Collaborative Code Editor & Execution Engine
+
+- **Role**: Full-Stack Developer
+- **Category**: Collaborative Web Application
+- **Featured**: Yes
+- **Tech Stack**: React, Node.js, Express, MongoDB, Socket.IO, Judge0 CE, Monaco Editor, JWT
+- **Case Study URL**: https://pardeep-shyoran.me/projects/kodrax
+- **Live Demo**: https://kodraxlive.vercel.app/
+- **Source Code**: https://github.com/Pardeep-Shyoran/KodraX
+
+## Overview
+
+KodraX is a collaborative development environment that allows developers to create or join private rooms, write and edit code together in real time via Socket.IO, switch between multiple programming languages, and execute programs through Judge0 CE with synchronized output broadcast.
+
+## Problem
+
+Developers pairing remotely often struggle with bulky screen-sharing latency or complex local development setups when running technical reviews, interviews, or quick code audits.
+
+## Engineering Approach
+
+Engineered an event-driven client-server model pairing Monaco Editor on a React client with Node.js and Socket.IO on the server. Broadcasted real-time editor deltas and execution outputs while checkpointing code buffers to MongoDB for session resilience.
+
+## Key Features
+
+- **Room-Based Collaboration**: Create isolated rooms with custom identifiers or join instantaneously via shareable invite links.
+- **Real-Time Code Synchronization**: Live bidirectional buffer synchronization using Socket.IO events for low-latency editing among multiple participants.
+- **Multi-Language Code Compilation**: Integrated Judge0 CE compilation API supporting 14+ languages (JavaScript, Python, C++, Java, Rust, Go) with starter templates.
+- **Synchronized Execution Results**: Execution status and compiled console output are broadcast in real time to all connected room members.
+- **Persistent Session State**: Automatic MongoDB persistence on code modifications, user departures, and socket disconnect events to safeguard ongoing work.
+- **Secure Authentication & Dashboard**: JWT-based authentication with access token refresh flow and a user dashboard managing active and past rooms.
+
+## Technical Implementation
+
+- **Frontend Architecture**: Built with React, Vite, and Monaco Editor. Handles language switching, editor state management, clipboard link sharing, and toast notifications.
+- **Real-Time Networking**: Socket.IO event protocol orchestrating room connection handshakes, delta broadcasts, client rosters, and execution status.
+- **Code Compilation API**: Asynchronous submission pipeline connecting to Judge0 CE to execute source code in sandboxed containers and return stdout/stderr.
+- **Data Layer & Persistence**: MongoDB schemas using Mongoose to persist Room models with creator metadata, active code buffers, and language selections.
+
+## Engineering Challenges & Solutions
+
+- **Challenge**: Preventing state loss on abrupt socket disconnections
+  - **Solution**: Implemented immediate database debounced writes on change, paired with fallback state save hooks triggered on socket disconnect and leave events.
+- **Challenge**: Synchronizing execution states without duplicate compiler requests
+  - **Solution**: Designated the executing participant as the initiator while broadcasting loading and completion states to all room peers to prevent redundant API calls.
+
+## Key Takeaways
+
+- Architecting real-time collaboration requires defensive fallback persistence to mitigate unexpected socket drops.
+- Decoupling heavy compiler dependencies to an isolated execution sandbox keeps the web application server lightweight and responsive.
+
+
+# Rivo — Scalable Music Streaming & Artist Management Platform
+
+- **Role**: Full-Stack Developer
+- **Category**: Distributed Audio Platform
+- **Featured**: Yes
+- **Tech Stack**: React, Node.js, Express, MongoDB, RabbitMQ, AWS S3, ImageKit, JWT
+- **Case Study URL**: https://pardeep-shyoran.me/projects/rivo
+- **Live Demo**: https://rivo-music.vercel.app/
+- **Source Code**: https://github.com/Pardeep-Shyoran/Rivo
+
+## Overview
+
+Rivo is a full-stack audio streaming platform engineered with decoupled microservices. It delivers role-based experiences for artists and listeners, secure audio uploads via AWS S3, asynchronous email notifications using RabbitMQ message queues, and playback history tracking.
+
+## Problem
+
+Audio streaming systems require scalable storage for heavy media, fast catalog indexing for listeners, and decoupled background workers so media uploads and notifications do not block core API responsiveness.
+
+## Engineering Approach
+
+Structured the platform into decoupled services (Auth, Music, Notification) connected through a RabbitMQ message broker and AWS S3 object storage, paired with an accessible, high-performance React audio interface.
+
+## Key Features
+
+- **Role-Based Access Control**: Distinct permission scopes for Artists (track uploads, catalog management) and Listeners (browsing, playback, history).
+- **Cloud Audio Storage Pipeline**: Secure track storage utilizing AWS S3 with presigned streaming URLs and cover image processing via ImageKit.
+- **Event-Driven Notification Broker**: RabbitMQ message queue handling asynchronous, non-blocking email notifications for user registration and key account events.
+- **Play History & Analytics Tracking**: Timestamped playback history tracking with compound MongoDB indexes optimized for recent listening queries.
+- **Persistent Audio Player**: Continuous audio playback interface with volume controls, seek bar, queue progression, and track metadata.
+- **User Preferences & Settings**: Profile personalization including avatar uploads, notification preferences, audio quality options, and data export.
+
+## Technical Implementation
+
+- **Microservice Decomposition**: Separated Auth, Music, and Notification services into independent Node.js/Express applications communicating via REST and message broker.
+- **Message Queue Integration**: Configured RabbitMQ with connection pooling, automatic reconnection, and max retry limits to ensure resilient message delivery.
+- **Object Storage & Media**: Integrated AWS S3 SDK for audio file storage and Multer/ImageKit for optimized profile and cover image CDN delivery.
+- **Authentication & Session Handling**: Token-based authentication supporting httpOnly cookies and Authorization header fallbacks for cross-domain microservice requests.
+
+## Engineering Challenges & Solutions
+
+- **Challenge**: Cross-domain cookie sharing across decoupled microservices on separate subdomains
+  - **Solution**: Implemented a dual-authentication model using secure httpOnly cookies for primary service requests and Bearer token headers for cross-domain microservice calls.
+- **Challenge**: Stale broker connections exhausting CloudAMQP connection quotas
+  - **Solution**: Engineered a singleton connection manager with proactive heartbeat monitoring, max 3-attempt retries, and graceful process shutdown handlers.
+
+## Key Takeaways
+
+- Microservice architectures necessitate resilient connection pooling and graceful degradation when auxiliary brokers are unavailable.
+- Decoupling notification and media pipelines to background queues dramatically improves frontend API response times.
+
+
+# Lite-Insta — Full-Stack Social Media Application with AI Caption Generation
+
+- **Role**: Full-Stack Developer
+- **Category**: Social Web Application
+- **Featured**: Yes
+- **Tech Stack**: React, Node.js, Express, MongoDB, Google Gemini API, ImageKit, JWT, Redux Toolkit
+- **Case Study URL**: https://pardeep-shyoran.me/projects/lite-insta
+- **Live Demo**: https://lite-insta.vercel.app/
+- **Source Code**: https://github.com/Pardeep-Shyoran/Lite-Insta
+
+## Overview
+
+Lite-Insta is a modern social media application that allows users to publish photo posts, curate their profiles, and browse community feeds. The application integrates Google GenAI (Gemini) to provide automated, context-aware caption recommendations for uploaded imagery.
+
+## Problem
+
+Building an engaging photo-sharing experience requires reliable cloud media handling, fast client state management, and creative content authoring tools that reduce friction for users.
+
+## Engineering Approach
+
+Engineered a full-stack MERN architecture using React 18 and Redux Toolkit for responsive UI state, Express for RESTful CRUD endpoints, ImageKit for CDN asset delivery, and the Google Gemini API for automated caption suggestions.
+
+## Key Features
+
+- **User Authentication & Profiles**: Secure registration and login with bcrypt password hashing, JWT token issuance, and editable user profiles.
+- **Complete Post Lifecycle**: Full CRUD operations for media posts with image file uploads and cloud asset persistence via ImageKit.
+- **AI-Powered Caption Generator**: Integrated Google Gemini API to assist creators with contextually relevant, creative caption suggestions for their photos.
+- **Responsive Feed & Profile Views**: Clean feed display adapting fluidly across smartphone, tablet, and desktop viewports.
+- **Global State Management**: Centralized Redux Toolkit store managing authentication state, active feeds, and post mutation actions.
+
+## Technical Implementation
+
+- **Frontend State & UI**: React 18 application with Redux Toolkit slices, React Router for protected navigation, and CSS Modules for scoped styling.
+- **AI Integration**: Google GenAI SDK integration executing prompt-driven caption generation with error boundaries and timeouts.
+- **Backend API & Storage**: Express.js server with Multer multipart middleware forwarding post assets to ImageKit CDN.
+- **Data Model**: Mongoose schemas defining User identities and Post records with relational references and timestamps.
+
+## Engineering Challenges & Solutions
+
+- **Challenge**: Handling file uploads smoothly without blocking user feedback
+  - **Solution**: Implemented client-side image previewing and optimistic UI feedback paired with toast notifications during cloud storage processing.
+- **Challenge**: Gracefully handling external AI API latency and rate limits
+  - **Solution**: Structured the caption generation flow as an optional assistant tool with request timeouts so standard post creation remains unblocked.
+
+## Key Takeaways
+
+- Integrating generative AI into consumer CRUD workflows works best as an augmentative tool that never blocks the core creation path.
+- Redux Toolkit significantly simplifies synchronized cache invalidation when posts are created, updated, or deleted.
+
+
+# MoodSwinger — Facial Expression Detection & Emotion-Based Audio Player
+
+- **Role**: Full-Stack Developer
+- **Category**: Computer Vision & Audio Experiment
+- **Featured**: No
+- **Tech Stack**: React, Node.js, Express, MongoDB, face-api.js, WebRTC
+- **Case Study URL**: https://pardeep-shyoran.me/projects/moodswinger
+- **Live Demo**: https://moodswinger.vercel.app
+- **Source Code**: https://github.com/Pardeep-Shyoran/Moody-Player
+
+## Overview
+
+MoodSwinger is an experimental web application that pairs computer vision with audio streaming. By analyzing facial landmarks via webcam in the browser, the application classifies emotional states—such as happy, neutral, or angry—and automatically queues corresponding playlists.
+
+## Problem
+
+Finding music that matches a listener’s immediate emotional state often requires tedious searching and manual playlist browsing.
+
+## Engineering Approach
+
+Leveraged client-side neural network models via face-api.js to process webcam video streams directly in the browser, ensuring user video frames remain private while automating mood-tailored music selection.
+
+## Key Features
+
+- **In-Browser Facial Analysis**: Analyzes user webcam feed using face-api.js neural network models to identify facial landmarks and emotion scores.
+- **Emotion-to-Music Mapping**: Automatically classifies emotional states (Happy, Neutral, Angry, Sad) and queues matching track selections.
+- **Privacy-First Architecture**: All computer vision inference executes entirely on the client; video streams are never transmitted to any external server.
+- **Interactive Audio Controls**: Full audio playback engine with play, pause, track skip, volume management, and duration tracking.
+
+## Technical Implementation
+
+- **Computer Vision Pipeline**: Utilizes face-api.js tiny-face-detector and emotion recognition models loaded into the client runtime.
+- **Media Capture**: WebRTC getUserMedia API capturing consenting webcam input rendered to canvas with landmark detection.
+- **Audio Engine**: React state manager coordinating playlist queues, audio buffering, and playhead position.
+- **Backend Catalog**: Express server delivering emotion-tagged music collections from MongoDB.
+
+## Engineering Challenges & Solutions
+
+- **Challenge**: Maintaining smooth frame rates during continuous neural network inference
+  - **Solution**: Throttled face detection intervals to discrete polling steps rather than every animation frame, significantly reducing CPU usage.
+- **Challenge**: Securing user privacy during camera access
+  - **Solution**: Strictly contained camera stream processing inside the browser canvas memory with zero server telemetry or frame caching.
+
+## Key Takeaways
+
+- In-browser computer vision models offer immense privacy benefits when video data never leaves the client boundary.
+- Inference throttling is essential for preventing thermal throttling and maintaining responsive UI interactions.
+
+
+# FOKUS — Commercial Product Landing Page & Interactive Catalog
+
+- **Role**: Frontend Developer
+- **Category**: E-Commerce Showcase
+- **Featured**: No
+- **Tech Stack**: React, Modular CSS, JSON Server, JavaScript, REST API
+- **Case Study URL**: https://pardeep-shyoran.me/projects/fokus
+- **Live Demo**: https://fokus-shop.vercel.app/
+- **Source Code**: https://github.com/Pardeep-Shyoran/Hackathon-Project
+
+## Overview
+
+FOKUS is an editorial e-commerce product landing page developed for an energy drink brand. Built with a component-driven React architecture and scoped CSS Modules, it showcases product variants, dynamic nutrition specifications, and promotional brand content.
+
+## Problem
+
+Product brand launches need high-converting, lightning-fast landing experiences that balance bold editorial design with dynamic data management without bloated dependencies.
+
+## Engineering Approach
+
+Constructed a modular React application styled with CSS Modules for zero style leakage, decoupling product data into a mock REST service via JSON Server for agile iteration.
+
+## Key Features
+
+- **Editorial Product Presentation**: High-impact typography and visual hierarchy tailored for commercial brand storytelling.
+- **Dynamic Product Catalog**: Asynchronous catalog retrieval fetching product variants, flavors, and nutritional specifications.
+- **Responsive Grid Layout**: Fluid layout structures adapting gracefully from mobile screens to desktop widescreen monitors.
+- **Interactive Flavor Navigation**: Dynamic flavor and spec selectors updating visual assets and ingredient details on user interaction.
+
+## Technical Implementation
+
+- **Component Styling**: Modular CSS architecture providing isolated styling rules and zero runtime CSS overhead.
+- **Data Ingestion**: RESTful fetching communicating with a JSON Server backend to populate catalog products and specifications.
+- **Responsive Mechanics**: Fluid viewport units and CSS grid patterns maintaining layout proportionality across resolutions.
+
+## Engineering Challenges & Solutions
+
+- **Challenge**: Maintaining sharp visual proportions across varied viewport sizes
+  - **Solution**: Implemented clamp-based fluid spacing and typography scales to ensure brand aesthetics remain balanced across mobile and desktop.
+
+## Key Takeaways
+
+- CSS Modules offer an ideal balance of performance, isolation, and predictability for branding-focused landing pages.
+- Decoupling data contracts from view components speeds up frontend iteration cycles during hackathons and fast builds.
+
+
+# Windows 11 Web Clone — Framework-Free Browser OS Desktop Simulation
+
+- **Role**: Frontend Developer
+- **Category**: Frontend Engineering Simulation
+- **Featured**: No
+- **Tech Stack**: HTML5, CSS3, Vanilla JavaScript, DOM Manipulation, Event Architecture
+- **Case Study URL**: https://pardeep-shyoran.me/projects/windows-11
+- **Live Demo**: https://os-windows-11.vercel.app/
+- **Source Code**: https://github.com/Pardeep-Shyoran/Windows-11
+
+## Overview
+
+An architectural exploration of the Windows 11 operating system interface built entirely in the browser using vanilla web standards. It replicates desktop window management, an interactive taskbar, start menu, functional Notepad, file explorer simulation, and theme toggling without any external libraries.
+
+## Problem
+
+Gaining a deep, ground-level understanding of how complex desktop UI frameworks manage z-indexing, window hierarchies, event bubbling, and coordinate math without relying on abstractions.
+
+## Engineering Approach
+
+Architected an event-driven vanilla JavaScript codebase with modular controllers managing DOM nodes, pointer coordinates for window drag-and-drop, and contextual event listeners.
+
+## Key Features
+
+- **Desktop Environment & Icons**: Interactive virtual desktop supporting file and folder creation, renaming, and removal.
+- **Window Management Engine**: Draggable, minimizable, maximizable, and closable application windows with coordinate boundaries.
+- **Windows 11 Taskbar & Launcher**: Faithfully centered taskbar icons, active app markers, and start menu search launcher.
+- **Functional Built-in Applications**: Working Notepad text editor, Calculator utility, and simulated File Explorer browser.
+- **Context Menus & Theming**: Custom right-click contextual menus and wallpaper customization options.
+
+## Technical Implementation
+
+- **DOM & Event Architecture**: Vanilla ES6+ JavaScript modules utilizing event delegation and coordinate tracking.
+- **Window Hierarchy**: Z-index coordinator elevating active windows on pointer interaction and syncing taskbar state.
+- **Persistence**: Browser localStorage integration preserving user desktop notes and active wallpaper preferences.
+
+## Engineering Challenges & Solutions
+
+- **Challenge**: Coordinating drag-and-drop window movement without visual jitter or overflow
+  - **Solution**: Calculated mouse movement delta offsets against viewport boundaries and bound drag handlers to document-level listeners.
+- **Challenge**: Managing contextual menu dismissal
+  - **Solution**: Implemented document-wide click listeners that cleanly dismiss open menus when clicking outside active boundary elements.
+
+## Key Takeaways
+
+- Building complex interfaces without frameworks offers invaluable insight into browser paint cycles, DOM mutations, and event delegation.
+- Math-driven coordinate tracking requires careful event listener cleanup to prevent memory leaks and cursor desynchronization.
+
+
+# GitHub Profile Search — Developer Analytics & Public Profile Explorer
+
+- **Role**: Frontend Developer
+- **Category**: Developer Tools & API Integration
+- **Featured**: No
+- **Tech Stack**: HTML5, CSS3, JavaScript, GitHub REST API, Async/Await
+- **Case Study URL**: https://pardeep-shyoran.me/projects/github-profile-search
+- **Live Demo**: https://pardeep-shyoran.github.io/Github-Profile-Search/
+- **Source Code**: https://github.com/Pardeep-Shyoran/Github-Profile-Search
+
+## Overview
+
+A developer search application that interacts with the GitHub REST API to query and present developer profiles, public repositories, follower counts, and organizational metadata in a focused, high-contrast interface.
+
+## Problem
+
+Quickly inspecting a developer’s public GitHub portfolio, star counts, and top repositories without navigating through multiple GitHub profile pages.
+
+## Engineering Approach
+
+Engineered a lightweight, zero-dependency search application using modern asynchronous JavaScript to interface with the GitHub REST API with graceful error and rate-limit handling.
+
+## Key Features
+
+- **Real-Time Developer Lookups**: Asynchronous username querying against the official GitHub REST API with instant data formatting.
+- **Repository Showcase**: Formatted cards displaying public repositories with star ratings, fork metrics, and direct links.
+- **Key Metrics Breakdown**: Clear statistical presentation of total public repos, followers, following, and biography details.
+- **Contextual Error Handling**: Helpful feedback states for non-existent usernames, network interruptions, and API rate limits.
+
+## Technical Implementation
+
+- **API Integration**: Native fetch with async/await handling status code parsing (200, 404, 403) and JSON extraction.
+- **DOM Rendering**: Modular JavaScript generating semantic HTML elements and injecting validated API values.
+- **Responsive Layout**: CSS Flexbox and Grid structure adapting to smartphone, tablet, and desktop display widths.
+
+## Engineering Challenges & Solutions
+
+- **Challenge**: Handling unauthenticated GitHub API rate limits (60 queries/hour)
+  - **Solution**: Detected 403 status codes and presented informative notification banners alerting users to rate limits.
+
+## Key Takeaways
+
+- Defensive error handling and status code checking are critical when interfacing with third-party public APIs.
+- Lean, framework-free web tools offer near-zero loading times and exceptional performance.
+
+
+---
+
+# Certificates & Credentials — Pardeep Shyoran
+
+## Job Ready AI Powered Cohort: Web Development
+- **Issuer**: Sheryians Coding School
+- **Year**: 2025
+- **Type**: Professional Cohort
+- **Credential ID**: `372cdb65`
+- **Skills**: React, Node.js, Express, MongoDB, REST APIs, Docker
+- **Verify**: https://drive.google.com/file/d/12fv85lA9E4HcW92joqKfJ8qcePuODm2O/view
+
+Full-stack web engineering curriculum focused on modern MERN architecture, RESTful API development, state management, Docker containers, and production deployment.
+
+## Full Stack Web Development - Skill Up
+- **Issuer**: GeeksforGeeks
+- **Year**: 2025
+- **Type**: Verified Course Credential
+- **Credential ID**: `2de82374c4db93090c536c46c3209463`
+- **Skills**: React, Node.js, Express, MongoDB, REST APIs
+- **Verify**: https://www.geeksforgeeks.org/certificate/2de82374c4db93090c536c46c3209463
+
+Structured full-stack specialization covering frontend component patterns, backend route architectures, database schemas, and API integration practices.
+
+
+---
+
+# Coding Stats — Pardeep Shyoran
+
+## Summary Metrics
+
+- **DSA Solved**: 400+ (LeetCode & GFG)
+- **Repositories**: 41 (GitHub)
+- **Medium DSA**: 200+ (LeetCode & GFG)
+- **Yearly Commits**: 380+ (Open Source)
+
+## GitHub (@Pardeep-Shyoran)
+- Profile: https://github.com/Pardeep-Shyoran
+- Public Repositories: 41
+- Followers / Following: 17 / 17
+
+## LeetCode (@Pardeep_Shyoran)
+- Profile: https://leetcode.com/u/Pardeep_Shyoran/
+- Total Solved: 196 (Easy: 83, Medium: 109, Hard: 4)
+- Global Rank: ~893k
+
+## GeeksforGeeks (@pardeepsheqqo4)
+- Profile: https://www.geeksforgeeks.org/profile/pardeepsheqqo4/?tab=activity
+- Total Solved: 204 (Easy: 83, Medium: 99, Basic/School: 22)
+- Active Days: 165
+
+## Codolio
+- Card: https://codolio.com/profile/Pardeep_Shyoran/card
+
+
+---
+
+# Contact Pardeep Shyoran
+
+Available for: Full-Time Roles, Contract, Freelance & Sprints, Tech Advisory. Typical response time: Under 24 hours.
+
+## Direct Channels
+
+- **Email**: pardeepshyoran@outlook.com
+- **Phone / WhatsApp**: +91 97297 75889 (IST (UTC+5:30))
+- **Location**: Haryana, India (Remote-Ready)
+- **Resume**: https://drive.google.com/file/d/1MZEmMEvYlfCkLt4I3PyEYByxNI6X3QXw/view
+
+## Verified Profiles
+
+- **GitHub**: https://github.com/Pardeep-Shyoran
+- **LinkedIn**: https://www.linkedin.com/in/pardeepshyoran/
+- **X (Twitter)**: https://x.com/PardeepShyoran
+- **Codolio**: https://codolio.com/profile/Pardeep_Shyoran

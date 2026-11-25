@@ -1,5 +1,5 @@
 import React, { useMemo, useEffect, useRef } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import gsap from 'gsap';
 import {
@@ -15,12 +15,14 @@ import {
   FaImages,
 } from 'react-icons/fa';
 import projectsData from '../../data/project';
+import profileData from '../../data/profile';
 import Button from '../../components/Button/Button';
+import StructuredData from '../../components/StructuredData/StructuredData';
+import { prefersReducedMotion } from '../../utils/scrollHelper';
 import styles from './ProjectCaseStudy.module.css';
 
 const ProjectCaseStudy = () => {
   const { slug } = useParams();
-  const navigate = useNavigate();
   const containerRef = useRef(null);
 
   // Locate project by unique slug
@@ -46,9 +48,7 @@ const ProjectCaseStudy = () => {
 
   // GSAP subtle entrance animation
   useEffect(() => {
-    if (!project || !containerRef.current) return;
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReducedMotion) return;
+    if (!project || !containerRef.current || prefersReducedMotion()) return;
 
     const ctx = gsap.context(() => {
       const animatedElements = containerRef.current.querySelectorAll(`.${styles.animateIn}`);
@@ -92,14 +92,14 @@ const ProjectCaseStudy = () => {
             </p>
             <div className={styles.notFoundActions}>
               <Button
-                onClick={() => navigate('/projects')}
+                to="/projects"
                 variant="primary"
                 size="md"
               >
                 Explore All Projects
               </Button>
               <Button
-                onClick={() => navigate('/')}
+                to="/"
                 variant="secondary"
                 size="md"
               >
@@ -145,7 +145,36 @@ const ProjectCaseStudy = () => {
           content={`${title}, ${tags.join(', ')}, Web Development, Software Engineering, Case Study, Pardeep Shyoran`}
         />
         <link rel="canonical" href={`https://pardeep-shyoran.me/projects/${slug}`} />
+        <link rel="alternate" type="text/markdown" href={`/projects/${slug}.md`} title="Markdown version" />
       </Helmet>
+      <StructuredData
+        data={{
+          '@context': 'https://schema.org',
+          '@graph': [
+            {
+              '@type': 'SoftwareSourceCode',
+              name: title,
+              description: description || shortDescription,
+              url: demoUrl || `${profileData.siteUrl}/projects/${slug}`,
+              codeRepository: repoUrl,
+              programmingLanguage: tags,
+              author: {
+                '@type': 'Person',
+                name: profileData.name,
+                url: profileData.siteUrl,
+              },
+            },
+            {
+              '@type': 'BreadcrumbList',
+              itemListElement: [
+                { '@type': 'ListItem', position: 1, name: 'Home', item: `${profileData.siteUrl}/` },
+                { '@type': 'ListItem', position: 2, name: 'Projects', item: `${profileData.siteUrl}/projects` },
+                { '@type': 'ListItem', position: 3, name: title, item: `${profileData.siteUrl}/projects/${slug}` },
+              ],
+            },
+          ],
+        }}
+      />
 
       <div className={styles.caseStudyPage} ref={containerRef}>
         {/* Navigation Breadcrumb */}
@@ -176,32 +205,32 @@ const ProjectCaseStudy = () => {
               </p>
 
               {/* Metadata strip */}
-              <div className={styles.metaStrip} role="region" aria-label="Project metadata">
+              <dl className={styles.metaStrip} aria-label="Project metadata">
                 {role && (
                   <div className={styles.metaCell}>
-                    <span className={styles.metaLabel}>Role</span>
-                    <span className={styles.metaValue}>{role}</span>
+                    <dt className={styles.metaLabel}>Role</dt>
+                    <dd className={styles.metaValue}>{role}</dd>
                   </div>
                 )}
                 {category && (
                   <div className={styles.metaCell}>
-                    <span className={styles.metaLabel}>Focus</span>
-                    <span className={styles.metaValue}>{category}</span>
+                    <dt className={styles.metaLabel}>Focus</dt>
+                    <dd className={styles.metaValue}>{category}</dd>
                   </div>
                 )}
                 {tags.length > 0 && (
                   <div className={styles.metaCellWide}>
-                    <span className={styles.metaLabel}>Core Technologies</span>
-                    <div className={styles.metaTagsList}>
+                    <dt className={styles.metaLabel}>Core Technologies</dt>
+                    <dd className={styles.metaTagsList}>
                       {tags.map((t) => (
                         <span key={t} className={styles.tagBadge}>
                           {t}
                         </span>
                       ))}
-                    </div>
+                    </dd>
                   </div>
                 )}
-              </div>
+              </dl>
 
               {/* Action Buttons */}
               <div className={styles.heroActions}>
@@ -255,7 +284,7 @@ const ProjectCaseStudy = () => {
         </header>
 
         {/* MAIN CASE STUDY CONTENT */}
-        <main className={styles.mainContent}>
+        <div className={styles.mainContent}>
           <div className={styles.pageContainer}>
             {/* OVERVIEW SECTION */}
             <section className={`${styles.contentSection} ${styles.animateIn}`} aria-labelledby="overview-heading">
@@ -512,14 +541,14 @@ const ProjectCaseStudy = () => {
                   </div>
                   <div className={styles.ctaActions}>
                     <Button
-                      onClick={() => navigate('/contact')}
+                      to="/contact"
                       variant="primary"
                       size="md"
                     >
                       Get in Touch
                     </Button>
                     <Button
-                      onClick={() => navigate('/projects')}
+                      to="/projects"
                       variant="secondary"
                       size="md"
                     >
@@ -530,7 +559,7 @@ const ProjectCaseStudy = () => {
               </div>
             </nav>
           </div>
-        </main>
+        </div>
       </div>
     </>
   );

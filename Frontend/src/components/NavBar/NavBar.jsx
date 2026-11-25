@@ -92,7 +92,7 @@ const NavBar = ({ onNavigate, isMobile = false }) => {
         return (
           <li key={item.id} className={styles.navItem}>
             <a
-              href={`#${item.targetId}`}
+              href={`/#${item.targetId}`}
               className={`${styles.navLink} ${active ? styles.active : ''} ${item.id === 'projects' ? styles.projectsLink : ''}`}
               onClick={(e) => handleClick(e, item)}
               aria-current={active ? 'page' : undefined}

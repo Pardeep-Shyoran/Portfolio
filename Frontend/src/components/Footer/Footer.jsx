@@ -186,32 +186,32 @@ const Footer = () => {
             <h3 className={styles.colTitle}>Navigation</h3>
             <ul className={styles.navList} role="list">
               <li>
-                <a href="#home" onClick={(e) => handleNavClick(e, 'home')} className={styles.navLink}>
+                <a href="/#home" onClick={(e) => handleNavClick(e, 'home')} className={styles.navLink}>
                   Home
                 </a>
               </li>
               <li>
-                <a href="#about" onClick={(e) => handleNavClick(e, 'about')} className={styles.navLink}>
+                <a href="/#about" onClick={(e) => handleNavClick(e, 'about')} className={styles.navLink}>
                   About
                 </a>
               </li>
               <li>
-                <a href="#featuredProjects" onClick={(e) => handleNavClick(e, 'featuredProjects')} className={styles.navLink}>
+                <a href="/#featuredProjects" onClick={(e) => handleNavClick(e, 'featuredProjects')} className={styles.navLink}>
                   Projects
                 </a>
               </li>
               <li>
-                <a href="#certificates" onClick={(e) => handleNavClick(e, 'certificates')} className={styles.navLink}>
+                <a href="/#certificates" onClick={(e) => handleNavClick(e, 'certificates')} className={styles.navLink}>
                   Certificates
                 </a>
               </li>
               <li>
-                <a href="#stats" onClick={(e) => handleNavClick(e, 'stats')} className={styles.navLink}>
+                <a href="/#stats" onClick={(e) => handleNavClick(e, 'stats')} className={styles.navLink}>
                   Stats
                 </a>
               </li>
               <li>
-                <a href="#contact" onClick={(e) => handleNavClick(e, 'contact')} className={styles.navLink}>
+                <a href="/#contact" onClick={(e) => handleNavClick(e, 'contact')} className={styles.navLink}>
                   Contact
                 </a>
               </li>

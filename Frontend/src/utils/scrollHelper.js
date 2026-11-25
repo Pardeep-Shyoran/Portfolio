@@ -10,6 +10,7 @@ gsap.registerPlugin(ScrollTrigger, ScrollSmoother, ScrollToPlugin)
  */
 export const prefersReducedMotion = () => {
   if (typeof window === 'undefined') return false
+  if (typeof navigator !== 'undefined' && navigator.webdriver) return true
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches
 }
 

@@ -1,4 +1,38 @@
 {
+    "headers": [
+        {
+            "source": "/(llms\\.txt|llms-full\\.txt|index\\.md|about\\.md|projects\\.md|certificates\\.md|stats\\.md|contact\\.md)",
+            "headers": [
+                { "key": "Access-Control-Allow-Origin", "value": "*" }
+            ]
+        },
+        {
+            "source": "/llms.txt",
+            "headers": [
+                { "key": "Content-Type", "value": "text/plain; charset=utf-8" }
+            ]
+        },
+        {
+            "source": "/llms-full.txt",
+            "headers": [
+                { "key": "Content-Type", "value": "text/plain; charset=utf-8" }
+            ]
+        },
+        {
+            "source": "/portfolio.json",
+            "headers": [
+                { "key": "Content-Type", "value": "application/json; charset=utf-8" },
+                { "key": "Access-Control-Allow-Origin", "value": "*" }
+            ]
+        },
+        {
+            "source": "/(.*)\\.md",
+            "headers": [
+                { "key": "Content-Type", "value": "text/markdown; charset=utf-8" },
+                { "key": "Access-Control-Allow-Origin", "value": "*" }
+            ]
+        }
+    ],
     "rewrites": [
         { "source": "/api/gfg/:username", "destination": "https://gfg-stats.tashif.codes/:username/stats" },
         { "source": "/api/gfg-summary/:username", "destination": "https://gfg-stats.tashif.codes/:username" },

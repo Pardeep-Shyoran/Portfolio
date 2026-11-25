@@ -1,5 +1,6 @@
-import { useState, useId, useEffect } from 'react'
+import { useState, useId, useEffect, useRef, useCallback } from 'react'
 import PropTypes from 'prop-types'
+import { CONTACT_FILL_EVENT } from '../../agent/webmcp'
 import styles from './ContactForm.module.css'
 
 const validate = (vals) => {
@@ -43,6 +44,7 @@ const ContactForm = ({ initialInquiryType = 'freelance' }) => {
   const [serverMessage, setServerMessage] = useState('')
   const [submittedSnapshot, setSubmittedSnapshot] = useState(null)
   const [copiedFallback, setCopiedFallback] = useState(false)
+  const formRef = useRef(null)
 
   // Update inquiry type if parent tabs change and form is still untouched
   useEffect(() => {
@@ -50,6 +52,117 @@ const ContactForm = ({ initialInquiryType = 'freelance' }) => {
       setValues((prev) => ({ ...prev, inquiryType: initialInquiryType }))
     }
   }, [initialInquiryType, touched])
+
+  const submitFormValues = useCallback(
+    async (vals) => {
+      if (status === 'submitting') return
+
+      const validationErrors = validate(vals)
+      setErrors(validationErrors)
+      setTouched({ name: true, email: true, message: true })
+
+      if (Object.keys(validationErrors).length > 0) {
+        const firstField = Object.keys(validationErrors)[0]
+        const el = document.getElementById(`${formId}-${firstField}`)
+        if (el) el.focus()
+        return
+      }
+
+      if (vals.website) {
+        setStatus('success')
+        setServerMessage('Thank you for reaching out!')
+        return
+      }
+
+      setStatus('submitting')
+      setServerMessage('')
+
+      const endpoint = import.meta.env.VITE_CONTACT_API_URL || '/api/contact'
+
+      try {
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json'
+          },
+          body: JSON.stringify({
+            name: vals.name.trim(),
+            email: vals.email.trim(),
+            inquiryType: vals.inquiryType,
+            subject: vals.subject.trim(),
+            message: vals.message.trim(),
+            timestamp: new Date().toISOString()
+          })
+        })
+
+        const data = await response.json().catch(() => ({}))
+
+        if (response.ok && data.ok !== false) {
+          setSubmittedSnapshot({
+            name: vals.name.trim(),
+            email: vals.email.trim(),
+            inquiryType: vals.inquiryType,
+            subject: vals.subject.trim(),
+            message: vals.message.trim()
+          })
+          setStatus('success')
+          setServerMessage(
+            data.message ||
+              'Your message has been received! Pardeep will review it and follow up within 24 hours.'
+          )
+          setValues({
+            name: '',
+            email: '',
+            inquiryType: vals.inquiryType,
+            subject: '',
+            message: '',
+            website: ''
+          })
+          setTouched({})
+          setErrors({})
+        } else {
+          setStatus('error')
+          setServerMessage(
+            data.error ||
+              `Submission failed (status ${response.status}). Please try again or use direct email.`
+          )
+        }
+      } catch {
+        setStatus('error')
+        setServerMessage(
+          'Unable to connect to the submission server. You can retry or send directly via email below.'
+        )
+      }
+    },
+    [formId, status]
+  )
+
+  // Listen for WebMCP / agent prefill & submit events
+  useEffect(() => {
+    const handleAgentFill = (event) => {
+      const detail = event.detail || {}
+      const nextValues = {
+        name: detail.name ?? '',
+        email: detail.email ?? '',
+        inquiryType: detail.inquiryType || initialInquiryType,
+        subject: detail.subject ?? '',
+        message: detail.message ?? '',
+        website: ''
+      }
+      setStatus('idle')
+      setValues(nextValues)
+      setTouched({ name: true, email: true, message: true })
+      setErrors(validate(nextValues))
+
+      if (detail.submit) {
+        submitFormValues(nextValues)
+      }
+    }
+
+    window.addEventListener(CONTACT_FILL_EVENT, handleAgentFill)
+    return () => window.removeEventListener(CONTACT_FILL_EVENT, handleAgentFill)
+  }, [initialInquiryType, submitFormValues])
 
   const handleInquiryChange = (type) => {
     setValues((prev) => ({ ...prev, inquiryType: type }))
@@ -74,90 +187,7 @@ const ContactForm = ({ initialInquiryType = 'freelance' }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-
-    // Prevent duplicate submission while in progress
-    if (status === 'submitting') return
-
-    const validationErrors = validate(values)
-    setErrors(validationErrors)
-    setTouched({ name: true, email: true, message: true })
-
-    if (Object.keys(validationErrors).length > 0) {
-      // Focus first error field for accessibility
-      const firstField = Object.keys(validationErrors)[0]
-      const el = document.getElementById(`${formId}-${firstField}`)
-      if (el) el.focus()
-      return
-    }
-
-    // Bot trap check
-    if (values.website) {
-      setStatus('success')
-      setServerMessage('Thank you for reaching out!')
-      return
-    }
-
-    setStatus('submitting')
-    setServerMessage('')
-
-    const endpoint = import.meta.env.VITE_CONTACT_API_URL || '/api/contact'
-
-    try {
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json'
-        },
-        body: JSON.stringify({
-          name: values.name.trim(),
-          email: values.email.trim(),
-          inquiryType: values.inquiryType,
-          subject: values.subject.trim(),
-          message: values.message.trim(),
-          timestamp: new Date().toISOString()
-        })
-      })
-
-      const data = await response.json().catch(() => ({}))
-
-      if (response.ok && data.ok !== false) {
-        setSubmittedSnapshot({
-          name: values.name.trim(),
-          email: values.email.trim(),
-          inquiryType: values.inquiryType,
-          subject: values.subject.trim(),
-          message: values.message.trim()
-        })
-        setStatus('success')
-        setServerMessage(
-          data.message ||
-            'Your message has been received! Pardeep will review it and follow up within 24 hours.'
-        )
-        // Reset form inputs cleanly
-        setValues({
-          name: '',
-          email: '',
-          inquiryType: values.inquiryType,
-          subject: '',
-          message: '',
-          website: ''
-        })
-        setTouched({})
-        setErrors({})
-      } else {
-        setStatus('error')
-        setServerMessage(
-          data.error ||
-            `Submission failed (status ${response.status}). Please try again or use direct email.`
-        )
-      }
-    } catch {
-      setStatus('error')
-      setServerMessage(
-        'Unable to connect to the submission server. You can retry or send directly via email below.'
-      )
-    }
+    await submitFormValues(values)
   }
 
   const handleResetForm = () => {
@@ -226,20 +256,20 @@ ${data.message}`
               'Thank you for reaching out. Your message has been safely delivered.'}
           </p>
           {submittedSnapshot && (
-            <div className={styles.receiptBox}>
+            <dl className={styles.receiptBox}>
               <div className={styles.receiptRow}>
-                <span className={styles.receiptLabel}>Sender</span>
-                <span className={styles.receiptValue}>{submittedSnapshot.name}</span>
+                <dt className={styles.receiptLabel}>Sender</dt>
+                <dd className={styles.receiptValue}>{submittedSnapshot.name}</dd>
               </div>
               <div className={styles.receiptRow}>
-                <span className={styles.receiptLabel}>Reply-to</span>
-                <span className={styles.receiptValue}>{submittedSnapshot.email}</span>
+                <dt className={styles.receiptLabel}>Reply-to</dt>
+                <dd className={styles.receiptValue}>{submittedSnapshot.email}</dd>
               </div>
               <div className={styles.receiptRow}>
-                <span className={styles.receiptLabel}>Category</span>
-                <span className={styles.receiptValue}>{submittedSnapshot.inquiryType}</span>
+                <dt className={styles.receiptLabel}>Category</dt>
+                <dd className={styles.receiptValue}>{submittedSnapshot.inquiryType}</dd>
               </div>
-            </div>
+            </dl>
           )}
           <div className={styles.statusActions}>
             <button
@@ -256,10 +286,13 @@ ${data.message}`
       {/* Main Interactive Form */}
       {status !== 'success' && (
         <form
+          ref={formRef}
           className={styles.form}
           onSubmit={handleSubmit}
           noValidate
           aria-label="Contact form for employment and freelance inquiries"
+          toolname="send_contact_inquiry"
+          tooldescription="Send a direct employment, freelance, or technical advisory inquiry to Pardeep Shyoran."
         >
           {/* Failure Alert Banner */}
           {status === 'error' && (
@@ -335,21 +368,28 @@ ${data.message}`
                 { id: 'employment', label: 'Full-Time Role' },
                 { id: 'consulting', label: 'Tech Advisory' },
                 { id: 'general', label: 'Other / Say Hi' }
-              ].map((item) => (
-                <button
-                  key={item.id}
-                  type="button"
-                  role="radio"
-                  aria-checked={values.inquiryType === item.id}
-                  className={`${styles.inquiryOption} ${
-                    values.inquiryType === item.id ? styles.inquiryOptionActive : ''
-                  }`}
-                  onClick={() => handleInquiryChange(item.id)}
-                >
-                  <span className={styles.inquiryRadioDot} aria-hidden="true" />
-                  <span>{item.label}</span>
-                </button>
-              ))}
+              ].map((item) => {
+                const checked = values.inquiryType === item.id
+                return (
+                  <label
+                    key={item.id}
+                    className={`${styles.inquiryOption} ${
+                      checked ? styles.inquiryOptionActive : ''
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="inquiryType"
+                      value={item.id}
+                      checked={checked}
+                      onChange={() => handleInquiryChange(item.id)}
+                      className={styles.inquiryNativeRadio}
+                    />
+                    <span className={styles.inquiryRadioDot} aria-hidden="true" />
+                    <span>{item.label}</span>
+                  </label>
+                )
+              })}
             </div>
           </div>
 

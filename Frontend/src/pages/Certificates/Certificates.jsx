@@ -1,7 +1,9 @@
 import { useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import Button from "../../components/Button/Button";
+import StructuredData from "../../components/StructuredData/StructuredData";
 import certificatesData from "../../data/certificates";
+import profileData from "../../data/profile";
 import styles from "./Certificates.module.css";
 
 const VerifiedIcon = () => (
@@ -41,18 +43,43 @@ const Certificates = () => {
   return (
     <>
       {isStandalonePage && (
-        <Helmet>
-          <title>Certificates & Credentials | Pardeep Shyoran</title>
-          <meta
-            name="description"
-            content="Verified certifications and credentials earned by Pardeep Shyoran in MERN stack development and full-stack engineering."
+        <>
+          <Helmet>
+            <title>Certificates & Credentials | Pardeep Shyoran</title>
+            <meta
+              name="description"
+              content="Verified certifications and credentials earned by Pardeep Shyoran in MERN stack development and full-stack engineering."
+            />
+            <meta
+              name="keywords"
+              content="Certificates, Pardeep Shyoran, MERN Stack, Full Stack, Credentials"
+            />
+            <link rel="canonical" href="https://pardeep-shyoran.me/certificates" />
+            <link rel="alternate" type="text/markdown" href="/certificates.md" title="Markdown version" />
+          </Helmet>
+          <StructuredData
+            data={{
+              "@context": "https://schema.org",
+              "@type": "CollectionPage",
+              name: "Certificates & Credentials — Pardeep Shyoran",
+              url: `${profileData.siteUrl}/certificates`,
+              mainEntity: {
+                "@type": "ItemList",
+                itemListElement: certificatesData.map((c, index) => ({
+                  "@type": "ListItem",
+                  position: index + 1,
+                  item: {
+                    "@type": "EducationalOccupationalCredential",
+                    name: c.title,
+                    credentialCategory: c.credentialType,
+                    recognizedBy: { "@type": "Organization", name: c.issuer },
+                    url: c.link,
+                  },
+                })),
+              },
+            }}
           />
-          <meta
-            name="keywords"
-            content="Certificates, Pardeep Shyoran, MERN Stack, Full Stack, Credentials"
-          />
-          <link rel="canonical" href="https://pardeep-shyoran.me/certificates" />
-        </Helmet>
+        </>
       )}
 
       <section

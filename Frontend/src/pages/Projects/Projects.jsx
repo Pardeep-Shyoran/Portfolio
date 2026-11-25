@@ -1,6 +1,10 @@
 import React, { useMemo, useState, useEffect, useRef } from "react";
+import { useSearchParams } from "react-router-dom";
 import ProjectCard from "../../components/ProjectCard/ProjectCard.jsx";
+import StructuredData from "../../components/StructuredData/StructuredData.jsx";
 import projectsData from "../../data/project.js";
+import profileData from "../../data/profile.js";
+import { prefersReducedMotion } from "../../utils/scrollHelper.js";
 import styles from "./Projects.module.css";
 import { Helmet } from "react-helmet";
 import gsap from "gsap";
@@ -15,8 +19,22 @@ const FILTER_OPTIONS = [
 ];
 
 const ProjectsPage = () => {
-  const [selectedFilter, setSelectedFilter] = useState("All");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const initialTag = searchParams.get("tag");
+  const matchedOption = FILTER_OPTIONS.find(
+    (opt) => opt.value.toLowerCase() === String(initialTag || "").toLowerCase()
+  );
+  const [selectedFilter, setSelectedFilter] = useState(matchedOption ? matchedOption.value : "All");
   const containerRef = useRef(null);
+
+  const handleSelectFilter = (value) => {
+    setSelectedFilter(value);
+    if (value === "All") {
+      setSearchParams({}, { replace: true });
+    } else {
+      setSearchParams({ tag: value }, { replace: true });
+    }
+  };
 
   // Compute live counts per technology filter
   const filterCounts = useMemo(() => {
@@ -44,8 +62,7 @@ const ProjectsPage = () => {
 
   // Subtle staggered entrance animation on filter change
   useEffect(() => {
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (prefersReducedMotion || !containerRef.current) return;
+    if (prefersReducedMotion() || !containerRef.current) return;
 
     const ctx = gsap.context(() => {
       const cards = containerRef.current.querySelectorAll(`.${styles.cardItem}`);
@@ -81,7 +98,25 @@ const ProjectsPage = () => {
           content="Pardeep Shyoran, Web Development, Full-Stack, React, Node.js, Express, MongoDB, Portfolio Projects"
         />
         <link rel="canonical" href="https://pardeep-shyoran.me/projects" />
+        <link rel="alternate" type="text/markdown" href="/projects.md" title="Markdown version" />
       </Helmet>
+      <StructuredData
+        data={{
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          name: "Selected Works — Pardeep Shyoran",
+          url: `${profileData.siteUrl}/projects`,
+          mainEntity: {
+            "@type": "ItemList",
+            itemListElement: projectsData.map((p, index) => ({
+              "@type": "ListItem",
+              position: index + 1,
+              name: p.title,
+              url: `${profileData.siteUrl}/projects/${p.slug}`,
+            })),
+          },
+        }}
+      />
 
       <div className={styles.page}>
         <section className={styles.introSection} aria-labelledby="page-heading">
@@ -107,7 +142,7 @@ const ProjectsPage = () => {
                   <button
                     key={value}
                     type="button"
-                    onClick={() => setSelectedFilter(value)}
+                    onClick={() => handleSelectFilter(value)}
                     className={`${styles.filterChip} ${isActive ? styles.activeChip : ""}`}
                     aria-pressed={isActive}
                   >
@@ -143,7 +178,7 @@ const ProjectsPage = () => {
                 </p>
                 <button
                   type="button"
-                  onClick={() => setSelectedFilter("All")}
+                  onClick={() => handleSelectFilter("All")}
                   className={styles.resetButton}
                 >
                   <FaRedo className={styles.resetIcon} aria-hidden="true" />

@@ -2,4 +2,5 @@ User-agent: *
 Allow: /
 Disallow: /api/
 
-Sitemap: https://pardeep-shyoran.vercel.app/sitemap.xml
+Sitemap: https://pardeep-shyoran.me/sitemap.xml
+# LLM & Agent Discovery: https://pardeep-shyoran.me/llms.txt
