@@ -21,6 +21,10 @@
   }
 }
 
+.standalonePage {
+  padding-top: clamp(6.5rem, 11vh, 7.5rem);
+}
+
 /* ==========================================================================
    Section Header (Consistent with Global Layout)
    ========================================================================== */
@@ -112,7 +116,7 @@
 .profileCard {
   padding: clamp(1.5rem, 2.5vw, 2.25rem);
   gap: 1.5rem;
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 
 .profileHeader {
@@ -129,6 +133,7 @@
   display: flex;
   align-items: center;
   gap: 1rem;
+  min-width: 0;
 }
 
 .avatarPill {
@@ -164,13 +169,17 @@
 }
 
 /* Light Theme: Show Dark/Black Emblem with optical scale matching */
+:global([data-theme="light"]) .avatarPill {
+  padding: 4px;
+}
+
 :global([data-theme="light"]) .darkThemeLogo {
   display: none;
 }
 
 :global([data-theme="light"]) .lightThemeLogo {
   display: block;
-  transform: scale(1.52);
+  transform: scale(1.2);
   transform-origin: center;
 }
 
@@ -178,6 +187,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.15rem;
+  min-width: 0;
 }
 
 .devName {
@@ -209,6 +219,8 @@
   font-weight: 600;
   color: var(--color-accent);
   font-family: var(--font-mono);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .pulseDot {
@@ -255,14 +267,15 @@
 /* Specs Matrix */
 .specsGrid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.85rem;
+  margin-top: auto;
   padding-top: 0.5rem;
 }
 
 @media (max-width: 600px) {
   .specsGrid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
@@ -274,6 +287,8 @@
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
+  min-width: 0;
+  overflow-wrap: break-word;
   transition: border-color var(--transition-fast);
 }
 
@@ -312,7 +327,6 @@
   border: 1px solid var(--color-border);
   display: flex;
   flex-direction: column;
-  height: 100%;
 }
 
 .consoleHeader {
@@ -323,13 +337,20 @@
   padding: 0.75rem 1rem;
   background: var(--color-surface-raised);
   border-bottom: 1px solid var(--color-border-subtle);
-  flex-wrap: wrap;
+  min-width: 0;
 }
 
 .windowDots {
   display: flex;
   align-items: center;
   gap: 6px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 420px) {
+  .windowDots {
+    display: none;
+  }
 }
 
 .windowDot {
@@ -346,7 +367,16 @@
   display: flex;
   align-items: center;
   gap: 0.35rem;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  max-width: 100%;
+  min-width: 0;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.tabList::-webkit-scrollbar {
+  display: none;
 }
 
 .tabBtn {
@@ -362,12 +392,14 @@
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
+  white-space: nowrap;
+  flex-shrink: 0;
   transition: all var(--transition-fast);
 }
 
 .tabBtn:hover {
   color: var(--color-text);
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--color-surface-hover);
 }
 
 .tabBtn:focus-visible {
@@ -401,8 +433,12 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  height: 100%;
+  flex: 1;
   min-width: 0;
+}
+
+.tabContent[hidden] {
+  display: none;
 }
 
 .terminalPrompt {
@@ -464,6 +500,8 @@
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
+  min-width: 0;
+  overflow-wrap: break-word;
 }
 
 .stepTitle {
@@ -481,23 +519,29 @@
 
 /* Code Snippet in Toolkit Tab */
 .codeSnippet {
+  margin: 0;
   background: var(--color-surface-raised);
   border: 1px solid var(--color-border-subtle);
   border-radius: var(--radius-md);
   padding: 1rem 1.15rem;
   font-family: var(--font-mono);
   font-size: 0.8rem;
-  line-height: 1.7;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+  line-height: 1.65;
   overflow-x: auto;
+  max-width: 100%;
+  white-space: pre;
 }
 
-.codeSnippet p {
-  margin: 0;
-  white-space: pre-wrap;
-  word-break: break-word;
+.codeSnippet code {
+  font-family: inherit;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: max-content;
+}
+
+.codeLine {
+  display: block;
 }
 
 .codeComment {
@@ -555,6 +599,8 @@
   font-size: 0.82rem;
   color: var(--color-text-muted);
   line-height: 1.45;
+  min-width: 0;
+  overflow-wrap: break-word;
 }
 
 .mindsetText strong {
@@ -601,7 +647,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 2rem;
+  gap: 1.25rem 2rem;
   flex-wrap: wrap;
   box-shadow: var(--shadow-sm);
   transition: border-color var(--transition-normal);
@@ -615,6 +661,8 @@
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
+  flex: 1 1 320px;
+  min-width: 0;
   max-width: 600px;
 }
 

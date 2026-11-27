@@ -9,7 +9,7 @@ import Button from "../../components/Button/Button";
 import StructuredData from "../../components/StructuredData/StructuredData";
 import profileData from "../../data/profile";
 import skillsData from "../../data/skills";
-import { smoothScrollTo, prefersReducedMotion } from "../../utils/scrollHelper";
+import { smoothScrollTo, prefersReducedMotion, refreshScrollTriggers } from "../../utils/scrollHelper";
 import styles from "./About.module.css";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -22,6 +22,7 @@ const About = () => {
   const isStandalonePage = location.pathname === "/about";
   const [activeTab, setActiveTab] = useState("workflow");
   const sectionRef = useRef(null);
+  const ctaRef = useRef(null);
 
   // Smooth scroll helper for section CTA buttons
   const handleNavigate = (e, targetId) => {
@@ -56,33 +57,55 @@ const About = () => {
     [],
   );
 
-  // GSAP entrance animation on scroll
+  // GSAP entrance animation on scroll & refresh triggers after lazy mount
   useGSAP(
     () => {
+      refreshScrollTriggers();
+
       if (prefersReducedMotion() || !sectionRef.current) return;
 
       const animElements = sectionRef.current.querySelectorAll("[data-about-anim]");
-      if (!animElements || animElements.length === 0) return;
-
-      gsap.fromTo(
-        animElements,
-        {
-          opacity: 0,
-          y: 24,
-        },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.7,
-          ease: "power2.out",
-          stagger: 0.08,
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top 82%",
-            once: true,
+      if (animElements && animElements.length > 0) {
+        gsap.fromTo(
+          animElements,
+          {
+            opacity: 0,
+            y: 24,
           },
-        },
-      );
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.7,
+            ease: "power2.out",
+            stagger: 0.08,
+            clearProps: "transform,opacity",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top 82%",
+              once: true,
+            },
+          },
+        );
+      }
+
+      if (ctaRef.current) {
+        gsap.fromTo(
+          ctaRef.current,
+          { opacity: 0, y: 20 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.65,
+            ease: "power2.out",
+            clearProps: "transform,opacity",
+            scrollTrigger: {
+              trigger: ctaRef.current,
+              start: "top 88%",
+              once: true,
+            },
+          },
+        );
+      }
     },
     { scope: sectionRef },
   );
@@ -127,7 +150,7 @@ const About = () => {
       <section
         id="about"
         ref={sectionRef}
-        className={styles.aboutSection}
+        className={`${styles.aboutSection} ${isStandalonePage ? styles.standalonePage : ""}`.trim()}
         aria-label="About Pardeep Shyoran - Web Developer"
       >
         {/* Section Header */}
@@ -316,23 +339,25 @@ const About = () => {
                   <span className={styles.promptCmd}>cat system_architecture.js</span>
                 </div>
 
-                <div className={styles.codeSnippet}>
-                  <p><span className={styles.codeComment}>// High-Performance Full-Stack Web Architecture</span></p>
-                  <p><span className={styles.codeKeyword}>export const</span> <span className={styles.codeFunc}>webStackArchitecture</span> = &#123;</p>
-                  <p>&nbsp;&nbsp;<span className={styles.jsonKey}>clientSide</span>: &#123;</p>
-                  <p>&nbsp;&nbsp;&nbsp;&nbsp;uiPattern: <span className={styles.jsonVal}>&quot;Modular React &middot; CSS Modules &middot; GSAP&quot;</span>,</p>
-                  <p>&nbsp;&nbsp;&nbsp;&nbsp;principles: <span className={styles.jsonVal}>&quot;Mobile-first &middot; Zero layout shifts &middot; WCAG AA&quot;</span></p>
-                  <p>&nbsp;&nbsp;&#125;,</p>
-                  <p>&nbsp;&nbsp;<span className={styles.jsonKey}>apiLayer</span>: &#123;</p>
-                  <p>&nbsp;&nbsp;&nbsp;&nbsp;server: <span className={styles.jsonVal}>&quot;Node.js &middot; Express REST Controllers&quot;</span>,</p>
-                  <p>&nbsp;&nbsp;&nbsp;&nbsp;security: <span className={styles.jsonVal}>&quot;JWT &middot; HTTP-only cookies &middot; Rate limiting&quot;</span></p>
-                  <p>&nbsp;&nbsp;&#125;,</p>
-                  <p>&nbsp;&nbsp;<span className={styles.jsonKey}>dataStorage</span>: &#123;</p>
-                  <p>&nbsp;&nbsp;&nbsp;&nbsp;documents: <span className={styles.jsonVal}>&quot;MongoDB &middot; Mongoose Indexed Schemas&quot;</span>,</p>
-                  <p>&nbsp;&nbsp;&nbsp;&nbsp;caching: <span className={styles.jsonVal}>&quot;Redis Cache &middot; AWS S3 Asset Cloud&quot;</span></p>
-                  <p>&nbsp;&nbsp;&#125;</p>
-                  <p>&#125;;</p>
-                </div>
+                <pre className={styles.codeSnippet}>
+                  <code>
+                    <span className={styles.codeLine}><span className={styles.codeComment}>// High-Performance Full-Stack Web Architecture</span></span>
+                    <span className={styles.codeLine}><span className={styles.codeKeyword}>export const</span> <span className={styles.codeFunc}>webStackArchitecture</span> = &#123;</span>
+                    <span className={styles.codeLine}>{"  "}<span className={styles.jsonKey}>clientSide</span>: &#123;</span>
+                    <span className={styles.codeLine}>{"    "}uiPattern: <span className={styles.jsonVal}>&quot;Modular React &middot; CSS Modules &middot; GSAP&quot;</span>,</span>
+                    <span className={styles.codeLine}>{"    "}principles: <span className={styles.jsonVal}>&quot;Mobile-first &middot; Zero layout shifts &middot; WCAG AA&quot;</span></span>
+                    <span className={styles.codeLine}>{"  "}&#125;,</span>
+                    <span className={styles.codeLine}>{"  "}<span className={styles.jsonKey}>apiLayer</span>: &#123;</span>
+                    <span className={styles.codeLine}>{"    "}server: <span className={styles.jsonVal}>&quot;Node.js &middot; Express REST Controllers&quot;</span>,</span>
+                    <span className={styles.codeLine}>{"    "}security: <span className={styles.jsonVal}>&quot;JWT &middot; HTTP-only cookies &middot; Rate limiting&quot;</span></span>
+                    <span className={styles.codeLine}>{"  "}&#125;,</span>
+                    <span className={styles.codeLine}>{"  "}<span className={styles.jsonKey}>dataStorage</span>: &#123;</span>
+                    <span className={styles.codeLine}>{"    "}documents: <span className={styles.jsonVal}>&quot;MongoDB &middot; Mongoose Indexed Schemas&quot;</span>,</span>
+                    <span className={styles.codeLine}>{"    "}caching: <span className={styles.jsonVal}>&quot;Redis Cache &middot; AWS S3 Asset Cloud&quot;</span></span>
+                    <span className={styles.codeLine}>{"  "}&#125;</span>
+                    <span className={styles.codeLine}>&#125;;</span>
+                  </code>
+                </pre>
               </div>
 
               <div
@@ -388,7 +413,7 @@ const About = () => {
 
       {/* Unified Contextual CTA Bridge - Positioned Seamlessly After Full Technical Dossier */}
       <div className={styles.ctaBridgeWrapper}>
-        <div className={styles.ctaBridge} data-about-anim>
+        <div ref={ctaRef} className={styles.ctaBridge} data-about-anim>
           <div className={styles.bridgeContent}>
             <h3 className={styles.bridgeHeading}>Looking for a passionate Web Developer?</h3>
             <p className={styles.bridgeSub}>

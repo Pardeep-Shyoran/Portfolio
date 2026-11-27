@@ -30,6 +30,7 @@ const Skills = () => {
             y: 0,
             duration: 0.6,
             ease: "power2.out",
+            clearProps: "transform,opacity",
             scrollTrigger: {
               trigger: sectionRef.current,
               start: "top 85%",
@@ -49,6 +50,7 @@ const Skills = () => {
             duration: 0.6,
             stagger: 0.08,
             ease: "power2.out",
+            clearProps: "transform,opacity",
             scrollTrigger: {
               trigger: sectionRef.current,
               start: "top 80%",
