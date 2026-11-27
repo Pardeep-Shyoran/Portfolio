@@ -1,67 +1,9 @@
-import { useState, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
+import { useState } from "react";
 import skillsData from "../../data/skills";
-import { prefersReducedMotion } from "../../utils/scrollHelper";
 import styles from "./Skills.module.css";
-
-gsap.registerPlugin(ScrollTrigger);
 
 const Skills = () => {
   const [activeCategory, setActiveCategory] = useState("all");
-  const sectionRef = useRef(null);
-  const gridRef = useRef(null);
-
-  // GSAP Entrance animation
-  useGSAP(
-    () => {
-      if (prefersReducedMotion() || !sectionRef.current) return;
-
-      const header = sectionRef.current.querySelector(`.${styles.header}`);
-      const cards = sectionRef.current.querySelectorAll(`.${styles.categoryCard}`);
-
-      if (header) {
-        gsap.fromTo(
-          header,
-          { opacity: 0, y: 20 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.6,
-            ease: "power2.out",
-            clearProps: "transform,opacity",
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: "top 85%",
-              once: true,
-            },
-          }
-        );
-      }
-
-      if (cards.length > 0) {
-        gsap.fromTo(
-          cards,
-          { opacity: 0, y: 24 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.6,
-            stagger: 0.08,
-            ease: "power2.out",
-            clearProps: "transform,opacity",
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: "top 80%",
-              once: true,
-            },
-          }
-        );
-      }
-    },
-    { scope: sectionRef }
-  );
 
   const getCategoryIcon = (categoryIcon) => {
     switch (categoryIcon) {
@@ -270,7 +212,6 @@ const Skills = () => {
   return (
     <section
       id="skills"
-      ref={sectionRef}
       className={styles.skillsSection}
       aria-label="Technical Skills and Stack"
     >
@@ -302,7 +243,6 @@ const Skills = () => {
 
       {/* Symmetrical, High-End Category Grid */}
       <div
-        ref={gridRef}
         id="skills-tabpanel"
         role="tabpanel"
         aria-labelledby={`skill-tab-${activeCategory}`}

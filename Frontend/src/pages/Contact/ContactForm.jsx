@@ -1,6 +1,6 @@
 import { useState, useId, useEffect, useRef, useCallback } from 'react'
 import PropTypes from 'prop-types'
-import { CONTACT_FILL_EVENT } from '../../agent/webmcp'
+import { CONTACT_FILL_EVENT, CONTACT_RESULT_EVENT } from '../../agent/webmcp'
 import styles from './ContactForm.module.css'
 
 const validate = (vals) => {
@@ -35,7 +35,7 @@ const ContactForm = ({ initialInquiryType = 'freelance' }) => {
     inquiryType: initialInquiryType,
     subject: '',
     message: '',
-    website: '' // Honeypot spam trap
+    website: '' // Honeypot spam trap (kept outside declarative WebMCP <form> schema)
   })
 
   const [touched, setTouched] = useState({})
@@ -45,6 +45,7 @@ const ContactForm = ({ initialInquiryType = 'freelance' }) => {
   const [submittedSnapshot, setSubmittedSnapshot] = useState(null)
   const [copiedFallback, setCopiedFallback] = useState(false)
   const formRef = useRef(null)
+  const submittingRef = useRef(false)
 
   // Update inquiry type if parent tabs change and form is still untouched
   useEffect(() => {
@@ -53,9 +54,28 @@ const ContactForm = ({ initialInquiryType = 'freelance' }) => {
     }
   }, [initialInquiryType, touched])
 
+  const getMailtoUrl = useCallback(
+    (draft) => {
+      const data = draft || values
+      const subjectLine =
+        data.subject?.trim() ||
+        `Portfolio Inquiry from ${data.name?.trim() || 'Visitor'} [${data.inquiryType}]`
+      const bodyText = `Hi Pardeep,\n\n${data.message?.trim() || ''}\n\n---\nName: ${
+        data.name?.trim() || 'Visitor'
+      }\nEmail: ${data.email?.trim() || 'Not specified'}\nType: ${data.inquiryType}`
+
+      return `mailto:pardeepshyoran@outlook.com?subject=${encodeURIComponent(
+        subjectLine
+      )}&body=${encodeURIComponent(bodyText)}`
+    },
+    [values]
+  )
+
   const submitFormValues = useCallback(
     async (vals) => {
-      if (status === 'submitting') return
+      if (submittingRef.current) {
+        return { ok: false, status: 'busy', error: 'Submission already in progress.' }
+      }
 
       const validationErrors = validate(vals)
       setErrors(validationErrors)
@@ -65,15 +85,26 @@ const ContactForm = ({ initialInquiryType = 'freelance' }) => {
         const firstField = Object.keys(validationErrors)[0]
         const el = document.getElementById(`${formId}-${firstField}`)
         if (el) el.focus()
-        return
+        return {
+          ok: false,
+          status: 'validation_error',
+          fieldErrors: validationErrors,
+          error: Object.values(validationErrors)[0],
+        }
       }
 
       if (vals.website) {
-        setStatus('success')
-        setServerMessage('Thank you for reaching out!')
-        return
+        setStatus('error')
+        setServerMessage('Spam protection triggered. Please submit via direct email if this was in error.')
+        return {
+          ok: false,
+          status: 'rejected',
+          error: 'Spam protection triggered.',
+          mailtoUrl: getMailtoUrl(vals),
+        }
       }
 
+      submittingRef.current = true
       setStatus('submitting')
       setServerMessage('')
 
@@ -96,21 +127,25 @@ const ContactForm = ({ initialInquiryType = 'freelance' }) => {
           })
         })
 
-        const data = await response.json().catch(() => ({}))
+        const contentType = response.headers.get('content-type') || ''
+        const isJson = contentType.toLowerCase().includes('application/json')
+        const data = isJson ? await response.json().catch(() => null) : null
 
-        if (response.ok && data.ok !== false) {
-          setSubmittedSnapshot({
+        if (response.ok && isJson && data?.ok === true) {
+          const snapshot = {
             name: vals.name.trim(),
             email: vals.email.trim(),
             inquiryType: vals.inquiryType,
             subject: vals.subject.trim(),
             message: vals.message.trim()
-          })
-          setStatus('success')
-          setServerMessage(
+          }
+          const successMsg =
             data.message ||
-              'Your message has been received! Pardeep will review it and follow up within 24 hours.'
-          )
+            'Your message has been received! Pardeep will review it and follow up within 24 hours.'
+
+          setSubmittedSnapshot(snapshot)
+          setStatus('success')
+          setServerMessage(successMsg)
           setValues({
             name: '',
             email: '',
@@ -121,27 +156,56 @@ const ContactForm = ({ initialInquiryType = 'freelance' }) => {
           })
           setTouched({})
           setErrors({})
-        } else {
-          setStatus('error')
-          setServerMessage(
-            data.error ||
-              `Submission failed (status ${response.status}). Please try again or use direct email.`
-          )
+
+          return {
+            ok: true,
+            status: 'submitted',
+            message: successMsg,
+            snapshot,
+          }
+        }
+
+        const errMsg = !isJson
+          ? `Submission endpoint returned unexpected content (${response.status}). Please use direct email below.`
+          : data?.error ||
+            `Submission failed (status ${response.status}). Please try again or use direct email.`
+
+        setStatus('error')
+        setServerMessage(errMsg)
+
+        return {
+          ok: false,
+          status: 'error',
+          httpStatus: response.status,
+          code: data?.code || null,
+          fallback: data?.fallback || 'mailto',
+          error: errMsg,
+          mailtoUrl: getMailtoUrl(vals),
         }
       } catch {
-        setStatus('error')
-        setServerMessage(
+        const errMsg =
           'Unable to connect to the submission server. You can retry or send directly via email below.'
-        )
+        setStatus('error')
+        setServerMessage(errMsg)
+        return {
+          ok: false,
+          status: 'network_error',
+          fallback: 'mailto',
+          error: errMsg,
+          mailtoUrl: getMailtoUrl(vals),
+        }
+      } finally {
+        submittingRef.current = false
       }
     },
-    [formId, status]
+    [formId, getMailtoUrl]
   )
 
-  // Listen for WebMCP / agent prefill & submit events
+  // Listen for WebMCP / agent prefill & submit events and return deterministic outcome
   useEffect(() => {
-    const handleAgentFill = (event) => {
+    const handleAgentFill = async (event) => {
       const detail = event.detail || {}
+      const requestId = detail.requestId
       const nextValues = {
         name: detail.name ?? '',
         email: detail.email ?? '',
@@ -150,13 +214,47 @@ const ContactForm = ({ initialInquiryType = 'freelance' }) => {
         message: detail.message ?? '',
         website: ''
       }
+
+      const validationErrors = validate(nextValues)
       setStatus('idle')
       setValues(nextValues)
       setTouched({ name: true, email: true, message: true })
-      setErrors(validate(nextValues))
+      setErrors(validationErrors)
 
       if (detail.submit) {
-        submitFormValues(nextValues)
+        const result = await submitFormValues(nextValues)
+        if (requestId) {
+          window.dispatchEvent(
+            new CustomEvent(CONTACT_RESULT_EVENT, {
+              detail: {
+                requestId,
+                populated: true,
+                submitted: Boolean(result.ok),
+                ...result,
+              },
+            })
+          )
+        }
+        return
+      }
+
+      if (requestId) {
+        const valid = Object.keys(validationErrors).length === 0
+        window.dispatchEvent(
+          new CustomEvent(CONTACT_RESULT_EVENT, {
+            detail: {
+              requestId,
+              ok: valid,
+              populated: true,
+              submitted: false,
+              valid,
+              fieldErrors: valid ? undefined : validationErrors,
+              note: valid
+                ? 'Contact form populated for review.'
+                : 'Contact form populated, but contains validation errors.',
+            },
+          })
+        )
       }
     }
 
@@ -185,29 +283,25 @@ const ContactForm = ({ initialInquiryType = 'freelance' }) => {
     setErrors((prev) => ({ ...prev, [name]: fieldErrors[name] }))
   }
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault()
-    await submitFormValues(values)
+    const submissionPromise = submitFormValues(values)
+
+    if (e.nativeEvent?.agentInvoked && typeof e.nativeEvent?.respondWith === 'function') {
+      e.nativeEvent.respondWith(
+        submissionPromise.then((res) => ({
+          content: [{ type: 'text', text: JSON.stringify(res, null, 2) }],
+        }))
+      )
+    }
+
+    return submissionPromise
   }
 
   const handleResetForm = () => {
     setStatus('idle')
     setServerMessage('')
     setSubmittedSnapshot(null)
-  }
-
-  const getMailtoUrl = (draft) => {
-    const data = draft || values
-    const subjectLine =
-      data.subject?.trim() ||
-      `Portfolio Inquiry from ${data.name?.trim() || 'Visitor'} [${data.inquiryType}]`
-    const bodyText = `Hi Pardeep,\n\n${data.message?.trim() || ''}\n\n---\nName: ${
-      data.name?.trim() || 'Visitor'
-    }\nEmail: ${data.email?.trim() || 'Not specified'}\nType: ${data.inquiryType}`
-
-    return `mailto:pardeepshyoran@outlook.com?subject=${encodeURIComponent(
-      subjectLine
-    )}&body=${encodeURIComponent(bodyText)}`
   }
 
   const handleCopyDraft = async () => {
@@ -228,7 +322,7 @@ ${data.message}`
   }
 
   return (
-    <div className={styles.formContainer}>
+    <div className={styles.formContainer} data-contact-form-ready="true">
       {/* Success View */}
       {status === 'success' && (
         <div
@@ -285,190 +379,270 @@ ${data.message}`
 
       {/* Main Interactive Form */}
       {status !== 'success' && (
-        <form
-          ref={formRef}
-          className={styles.form}
-          onSubmit={handleSubmit}
-          noValidate
-          aria-label="Contact form for employment and freelance inquiries"
-          toolname="send_contact_inquiry"
-          tooldescription="Send a direct employment, freelance, or technical advisory inquiry to Pardeep Shyoran."
-        >
-          {/* Failure Alert Banner */}
-          {status === 'error' && (
-            <div
-              className={styles.statusCardError}
-              role="alert"
-              aria-live="assertive"
-            >
-              <div className={styles.errorHeader}>
-                <svg
-                  className={styles.errorIcon}
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  aria-hidden="true"
-                >
-                  <circle cx="12" cy="12" r="10" />
-                  <line x1="12" y1="8" x2="12" y2="12" />
-                  <line x1="12" y1="16" x2="12.01" y2="16" />
-                </svg>
-                <div className={styles.errorTextWrap}>
-                  <strong className={styles.errorTitle}>Submission Issue</strong>
-                  <p className={styles.errorMessage}>{serverMessage}</p>
+        <>
+          <form
+            ref={formRef}
+            className={styles.form}
+            onSubmit={handleSubmit}
+            noValidate
+            aria-label="Contact form for employment and freelance inquiries"
+            toolname="send_contact_inquiry"
+            tooldescription="Send a direct employment, freelance, or technical advisory inquiry to Pardeep Shyoran."
+          >
+            {/* Failure Alert Banner */}
+            {status === 'error' && (
+              <div
+                className={styles.statusCardError}
+                role="alert"
+                aria-live="assertive"
+              >
+                <div className={styles.errorHeader}>
+                  <svg
+                    className={styles.errorIcon}
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="8" x2="12" y2="12" />
+                    <line x1="12" y1="16" x2="12.01" y2="16" />
+                  </svg>
+                  <div className={styles.errorTextWrap}>
+                    <strong className={styles.errorTitle}>Submission Issue</strong>
+                    <p className={styles.errorMessage}>{serverMessage}</p>
+                  </div>
+                </div>
+                <div className={styles.errorActions}>
+                  <a
+                    href={getMailtoUrl()}
+                    className={styles.btnFallbackMail}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <svg
+                      className={styles.btnIcon}
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      aria-hidden="true"
+                    >
+                      <rect width="20" height="16" x="2" y="4" rx="2" />
+                      <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                    </svg>
+                    <span>Open in Email Client</span>
+                  </a>
+                  <button
+                    type="button"
+                    className={styles.btnFallbackCopy}
+                    onClick={handleCopyDraft}
+                    aria-label="Copy message text to clipboard"
+                  >
+                    {copiedFallback ? 'Copied to Clipboard!' : 'Copy Message Text'}
+                  </button>
                 </div>
               </div>
-              <div className={styles.errorActions}>
-                <a
-                  href={getMailtoUrl()}
-                  className={styles.btnFallbackMail}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <svg
-                    className={styles.btnIcon}
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    aria-hidden="true"
-                  >
-                    <rect width="20" height="16" x="2" y="4" rx="2" />
-                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-                  </svg>
-                  <span>Open in Email Client</span>
-                </a>
-                <button
-                  type="button"
-                  className={styles.btnFallbackCopy}
-                  onClick={handleCopyDraft}
-                  aria-label="Copy message text to clipboard"
-                >
-                  {copiedFallback ? 'Copied to Clipboard!' : 'Copy Message Text'}
-                </button>
+            )}
+
+            {/* Inquiry Type Segmented Selector */}
+            <div className={styles.fieldGroup}>
+              <label className={styles.fieldLabel} id={`${formId}-inquiry-label`}>
+                What brings you here?
+              </label>
+              <div
+                className={styles.inquiryGrid}
+                role="radiogroup"
+                aria-labelledby={`${formId}-inquiry-label`}
+              >
+                {[
+                  { id: 'freelance', label: 'Freelance / Project' },
+                  { id: 'employment', label: 'Full-Time Role' },
+                  { id: 'consulting', label: 'Tech Advisory' },
+                  { id: 'general', label: 'Other / Say Hi' }
+                ].map((item) => {
+                  const checked = values.inquiryType === item.id
+                  return (
+                    <label
+                      key={item.id}
+                      className={`${styles.inquiryOption} ${
+                        checked ? styles.inquiryOptionActive : ''
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name="inquiryType"
+                        value={item.id}
+                        checked={checked}
+                        onChange={() => handleInquiryChange(item.id)}
+                        className={styles.inquiryNativeRadio}
+                        toolparamdescription="Category of inquiry: freelance, employment, consulting, or general."
+                      />
+                      <span className={styles.inquiryRadioDot} aria-hidden="true" />
+                      <span>{item.label}</span>
+                    </label>
+                  )
+                })}
               </div>
             </div>
-          )}
 
-          {/* Inquiry Type Segmented Selector */}
-          <div className={styles.fieldGroup}>
-            <label className={styles.fieldLabel} id={`${formId}-inquiry-label`}>
-              What brings you here?
-            </label>
-            <div
-              className={styles.inquiryGrid}
-              role="radiogroup"
-              aria-labelledby={`${formId}-inquiry-label`}
-            >
-              {[
-                { id: 'freelance', label: 'Freelance / Project' },
-                { id: 'employment', label: 'Full-Time Role' },
-                { id: 'consulting', label: 'Tech Advisory' },
-                { id: 'general', label: 'Other / Say Hi' }
-              ].map((item) => {
-                const checked = values.inquiryType === item.id
-                return (
-                  <label
-                    key={item.id}
-                    className={`${styles.inquiryOption} ${
-                      checked ? styles.inquiryOptionActive : ''
-                    }`}
+            {/* Name & Email Row */}
+            <div className={styles.row}>
+              {/* Name Field */}
+              <div className={styles.fieldGroup}>
+                <label htmlFor={`${formId}-name`} className={styles.fieldLabel}>
+                  Your Name <span className={styles.requiredMark}>*</span>
+                </label>
+                <input
+                  id={`${formId}-name`}
+                  name="name"
+                  type="text"
+                  autoComplete="name"
+                  required
+                  minLength={2}
+                  value={values.name}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  aria-required="true"
+                  aria-invalid={touched.name && Boolean(errors.name)}
+                  aria-describedby={
+                    touched.name && errors.name ? `${formId}-name-error` : undefined
+                  }
+                  placeholder="e.g. Alex Morgan"
+                  toolparamdescription="Sender full name (minimum 2 characters)."
+                  className={`${styles.input} ${
+                    touched.name && errors.name ? styles.inputError : ''
+                  }`}
+                  disabled={status === 'submitting'}
+                />
+                {touched.name && errors.name && (
+                  <p
+                    id={`${formId}-name-error`}
+                    className={styles.fieldError}
+                    role="alert"
                   >
-                    <input
-                      type="radio"
-                      name="inquiryType"
-                      value={item.id}
-                      checked={checked}
-                      onChange={() => handleInquiryChange(item.id)}
-                      className={styles.inquiryNativeRadio}
-                    />
-                    <span className={styles.inquiryRadioDot} aria-hidden="true" />
-                    <span>{item.label}</span>
-                  </label>
-                )
-              })}
-            </div>
-          </div>
+                    <svg
+                      className={styles.inlineErrorIcon}
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      aria-hidden="true"
+                    >
+                      <circle cx="12" cy="12" r="10" />
+                      <line x1="12" y1="8" x2="12" y2="12" />
+                      <line x1="12" y1="16" x2="12.01" y2="16" />
+                    </svg>
+                    <span>{errors.name}</span>
+                  </p>
+                )}
+              </div>
 
-          {/* Name & Email Row */}
-          <div className={styles.row}>
-            {/* Name Field */}
+              {/* Email Field */}
+              <div className={styles.fieldGroup}>
+                <label htmlFor={`${formId}-email`} className={styles.fieldLabel}>
+                  Email Address <span className={styles.requiredMark}>*</span>
+                </label>
+                <input
+                  id={`${formId}-email`}
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  required
+                  value={values.email}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  aria-required="true"
+                  aria-invalid={touched.email && Boolean(errors.email)}
+                  aria-describedby={
+                    touched.email && errors.email ? `${formId}-email-error` : undefined
+                  }
+                  placeholder="name@company.com"
+                  toolparamdescription="Valid reply-to email address."
+                  className={`${styles.input} ${
+                    touched.email && errors.email ? styles.inputError : ''
+                  }`}
+                  disabled={status === 'submitting'}
+                />
+                {touched.email && errors.email && (
+                  <p
+                    id={`${formId}-email-error`}
+                    className={styles.fieldError}
+                    role="alert"
+                  >
+                    <svg
+                      className={styles.inlineErrorIcon}
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      aria-hidden="true"
+                    >
+                      <circle cx="12" cy="12" r="10" />
+                      <line x1="12" y1="8" x2="12" y2="12" />
+                      <line x1="12" y1="16" x2="12.01" y2="16" />
+                    </svg>
+                    <span>{errors.email}</span>
+                  </p>
+                )}
+              </div>
+            </div>
+
+            {/* Subject Field (Optional) */}
             <div className={styles.fieldGroup}>
-              <label htmlFor={`${formId}-name`} className={styles.fieldLabel}>
-                Your Name <span className={styles.requiredMark}>*</span>
+              <label htmlFor={`${formId}-subject`} className={styles.fieldLabel}>
+                Subject <span className={styles.optionalMark}>(Optional)</span>
               </label>
               <input
-                id={`${formId}-name`}
-                name="name"
+                id={`${formId}-subject`}
+                name="subject"
                 type="text"
-                autoComplete="name"
-                value={values.name}
+                value={values.subject}
                 onChange={handleChange}
-                onBlur={handleBlur}
-                aria-required="true"
-                aria-invalid={touched.name && Boolean(errors.name)}
-                aria-describedby={
-                  touched.name && errors.name ? `${formId}-name-error` : undefined
-                }
-                placeholder="e.g. Alex Morgan"
-                className={`${styles.input} ${
-                  touched.name && errors.name ? styles.inputError : ''
-                }`}
+                placeholder="e.g. Senior Frontend Engineer role or Next.js MVP build"
+                toolparamdescription="Optional inquiry subject line."
+                className={styles.input}
                 disabled={status === 'submitting'}
               />
-              {touched.name && errors.name && (
-                <p
-                  id={`${formId}-name-error`}
-                  className={styles.fieldError}
-                  role="alert"
-                >
-                  <svg
-                    className={styles.inlineErrorIcon}
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    aria-hidden="true"
-                  >
-                    <circle cx="12" cy="12" r="10" />
-                    <line x1="12" y1="8" x2="12" y2="12" />
-                    <line x1="12" y1="16" x2="12.01" y2="16" />
-                  </svg>
-                  <span>{errors.name}</span>
-                </p>
-              )}
             </div>
 
-            {/* Email Field */}
+            {/* Message Field */}
             <div className={styles.fieldGroup}>
-              <label htmlFor={`${formId}-email`} className={styles.fieldLabel}>
-                Email Address <span className={styles.requiredMark}>*</span>
-              </label>
-              <input
-                id={`${formId}-email`}
-                name="email"
-                type="email"
-                autoComplete="email"
-                value={values.email}
+              <div className={styles.labelRow}>
+                <label htmlFor={`${formId}-message`} className={styles.fieldLabel}>
+                  Project or Opportunity Details <span className={styles.requiredMark}>*</span>
+                </label>
+                <span className={styles.charCount}>
+                  {values.message.length > 0 ? `${values.message.length} chars` : 'Min 10 chars'}
+                </span>
+              </div>
+              <textarea
+                id={`${formId}-message`}
+                name="message"
+                rows={5}
+                required
+                minLength={10}
+                value={values.message}
                 onChange={handleChange}
                 onBlur={handleBlur}
                 aria-required="true"
-                aria-invalid={touched.email && Boolean(errors.email)}
+                aria-invalid={touched.message && Boolean(errors.message)}
                 aria-describedby={
-                  touched.email && errors.email ? `${formId}-email-error` : undefined
+                  touched.message && errors.message ? `${formId}-message-error` : undefined
                 }
-                placeholder="name@company.com"
-                className={`${styles.input} ${
-                  touched.email && errors.email ? styles.inputError : ''
+                placeholder="Tell me about what you are building, timeline expectations, stack preferences, or team requirements..."
+                toolparamdescription="Detailed inquiry message (minimum 10 characters)."
+                className={`${styles.textarea} ${
+                  touched.message && errors.message ? styles.inputError : ''
                 }`}
                 disabled={status === 'submitting'}
               />
-              {touched.email && errors.email && (
+              {touched.message && errors.message && (
                 <p
-                  id={`${formId}-email-error`}
+                  id={`${formId}-message-error`}
                   className={styles.fieldError}
                   role="alert"
                 >
@@ -484,81 +658,50 @@ ${data.message}`
                     <line x1="12" y1="8" x2="12" y2="12" />
                     <line x1="12" y1="16" x2="12.01" y2="16" />
                   </svg>
-                  <span>{errors.email}</span>
+                  <span>{errors.message}</span>
                 </p>
               )}
             </div>
-          </div>
 
-          {/* Subject Field (Optional) */}
-          <div className={styles.fieldGroup}>
-            <label htmlFor={`${formId}-subject`} className={styles.fieldLabel}>
-              Subject <span className={styles.optionalMark}>(Optional)</span>
-            </label>
-            <input
-              id={`${formId}-subject`}
-              name="subject"
-              type="text"
-              value={values.subject}
-              onChange={handleChange}
-              placeholder="e.g. Senior Frontend Engineer role or Next.js MVP build"
-              className={styles.input}
-              disabled={status === 'submitting'}
-            />
-          </div>
-
-          {/* Message Field */}
-          <div className={styles.fieldGroup}>
-            <div className={styles.labelRow}>
-              <label htmlFor={`${formId}-message`} className={styles.fieldLabel}>
-                Project or Opportunity Details <span className={styles.requiredMark}>*</span>
-              </label>
-              <span className={styles.charCount}>
-                {values.message.length > 0 ? `${values.message.length} chars` : 'Min 10 chars'}
-              </span>
-            </div>
-            <textarea
-              id={`${formId}-message`}
-              name="message"
-              rows={5}
-              value={values.message}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              aria-required="true"
-              aria-invalid={touched.message && Boolean(errors.message)}
-              aria-describedby={
-                touched.message && errors.message ? `${formId}-message-error` : undefined
-              }
-              placeholder="Tell me about what you are building, timeline expectations, stack preferences, or team requirements..."
-              className={`${styles.textarea} ${
-                touched.message && errors.message ? styles.inputError : ''
-              }`}
-              disabled={status === 'submitting'}
-            />
-            {touched.message && errors.message && (
-              <p
-                id={`${formId}-message-error`}
-                className={styles.fieldError}
-                role="alert"
-              >
-                <svg
-                  className={styles.inlineErrorIcon}
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  aria-hidden="true"
-                >
-                  <circle cx="12" cy="12" r="10" />
-                  <line x1="12" y1="8" x2="12" y2="12" />
-                  <line x1="12" y1="16" x2="12.01" y2="16" />
-                </svg>
-                <span>{errors.message}</span>
+            {/* Form Footer & Primary Action */}
+            <div className={styles.formFooter}>
+              <p className={styles.privacyNote}>
+                🔒 Privacy-first: No tracking. Information is used solely to respond to your inquiry.
               </p>
-            )}
-          </div>
+              <button
+                type="submit"
+                className={styles.submitBtn}
+                disabled={status === 'submitting'}
+                aria-busy={status === 'submitting'}
+              >
+                {status === 'submitting' ? (
+                  <>
+                    <span className={styles.spinner} aria-hidden="true" />
+                    <span>Sending Message...</span>
+                  </>
+                ) : (
+                  <>
+                    <span>Send Message</span>
+                    <svg
+                      className={styles.submitArrow}
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      aria-hidden="true"
+                    >
+                      <line x1="5" y1="12" x2="19" y2="12" />
+                      <polyline points="12 5 19 12 12 19" />
+                    </svg>
+                  </>
+                )}
+              </button>
+            </div>
+          </form>
 
-          {/* Hidden Bot Honeypot */}
+          {/* Bot Honeypot positioned outside <form toolname="..."> so declarative WebMCP does not expose it as a tool parameter */}
           <div className={styles.honeypot} aria-hidden="true">
             <label htmlFor={`${formId}-website`}>Website</label>
             <input
@@ -571,44 +714,7 @@ ${data.message}`
               onChange={handleChange}
             />
           </div>
-
-          {/* Form Footer & Primary Action */}
-          <div className={styles.formFooter}>
-            <p className={styles.privacyNote}>
-              🔒 Privacy-first: No tracking. Information is used solely to respond to your inquiry.
-            </p>
-            <button
-              type="submit"
-              className={styles.submitBtn}
-              disabled={status === 'submitting'}
-              aria-busy={status === 'submitting'}
-            >
-              {status === 'submitting' ? (
-                <>
-                  <span className={styles.spinner} aria-hidden="true" />
-                  <span>Sending Message...</span>
-                </>
-              ) : (
-                <>
-                  <span>Send Message</span>
-                  <svg
-                    className={styles.submitArrow}
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    aria-hidden="true"
-                  >
-                    <line x1="5" y1="12" x2="19" y2="12" />
-                    <polyline points="12 5 19 12 12 19" />
-                  </svg>
-                </>
-              )}
-            </button>
-          </div>
-        </form>
+        </>
       )}
     </div>
   )

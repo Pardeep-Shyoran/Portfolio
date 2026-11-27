@@ -1,20 +1,20 @@
-import React, { lazy, Suspense, useRef, useEffect } from "react";
+import React, { lazy, useEffect } from "react";
 import styles from "./Home.module.css";
 import { Helmet } from "react-helmet";
 import FeaturedProjects from "../../components/FeaturedProjects/FeaturedProjects";
+import DeferredSection from "../../components/DeferredSection/DeferredSection";
+import { requestSectionMount } from "../../utils/sectionMount";
 import Button from "../../components/Button/Button";
 import StructuredData from "../../components/StructuredData/StructuredData";
 import profileData from "../../data/profile";
 import projectsData from "../../data/project";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
-import { useLocation } from "react-router-dom";
-import { smoothScrollTo, prefersReducedMotion } from "../../utils/scrollHelper";
+import { useLocation, useNavigate } from "react-router-dom";
+import { smoothScrollTo } from "../../utils/scrollHelper";
 
 const About = lazy(() => import("../About/About"));
 const Certificates = lazy(() => import("../Certificates/Certificates"));
-const Contact = lazy(() => import("../Contact/Contact"));
 const Stats = lazy(() => import("../Stats/Stats"));
+const Contact = lazy(() => import("../Contact/Contact"));
 
 const ResumeIcon = () => (
   <svg className={styles.buttonIcon} viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -46,46 +46,41 @@ const ExternalLinkIcon = () => (
   </svg>
 );
 
+const CodolioIcon = () => (
+  <svg className={styles.profileLogo} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="16 18 22 12 16 6" />
+    <polyline points="8 6 2 12 8 18" />
+  </svg>
+);
+
 const Home = () => {
   const location = useLocation();
-  const heroRef = useRef(null);
+  const navigate = useNavigate();
   const heroHighlights = ["React + Node.js", "API Architecture", "Performance UI", "MongoDB"];
 
-  // Refined entrance sequence: subtle displacement, quick ease, full cleanup
-  useGSAP(() => {
-    if (prefersReducedMotion()) return;
-
-    const elements = heroRef.current?.querySelectorAll("[data-hero-anim]");
-    if (!elements || elements.length === 0) return;
-
-    gsap.fromTo(
-      elements,
-      { opacity: 0, y: 14 },
-      {
-        opacity: 1,
-        y: 0,
-        duration: 0.55,
-        stagger: 0.06,
-        ease: "power2.out",
-        clearProps: "transform,opacity",
-      }
-    );
-  }, { scope: heroRef });
-
-  // Handle route state scroll targets with support for lazy-loaded sections
+  // Handle route state scroll targets cleanly via React Router
   useEffect(() => {
     const targetId = location.state?.scrollTarget;
     if (!targetId) return;
 
-    // Small delay to allow Suspense fallbacks of lazy sections to settle
-    const timer = setTimeout(() => {
-      smoothScrollTo(targetId);
-      // Clear location.state so subsequent page refreshes do not re-scroll to this section
-      window.history.replaceState({}, document.title, window.location.pathname);
-    }, 100);
+    requestSectionMount(targetId);
 
-    return () => clearTimeout(timer);
-  }, [location.state]);
+    let attempts = 0;
+    let rafId = 0;
+    const tryScroll = () => {
+      const cleanId = targetId === "home" ? "home" : targetId;
+      if (document.getElementById(cleanId) || attempts >= 30) {
+        smoothScrollTo(targetId === "home" ? 0 : targetId);
+        navigate(location.pathname, { replace: true, state: {} });
+        return;
+      }
+      attempts += 1;
+      rafId = requestAnimationFrame(tryScroll);
+    };
+
+    rafId = requestAnimationFrame(tryScroll);
+    return () => cancelAnimationFrame(rafId);
+  }, [location.state, location.pathname, navigate]);
 
   const onProjectsClick = (e) => {
     e?.preventDefault?.();
@@ -98,7 +93,6 @@ const Home = () => {
   };
 
   const codolioProfileUrl = profileData.profiles.codolio.cardUrl;
-  const codolioLogoUrl = "https://codolio.com/codolio_assets/codolio.svg";
 
   const homeStructuredData = {
     "@context": "https://schema.org",
@@ -159,7 +153,7 @@ const Home = () => {
       <StructuredData data={homeStructuredData} />
 
       {/* Hero Section */}
-      <section id="home" className={styles.heroSection} ref={heroRef}>
+      <section id="home" className={styles.heroSection}>
         <div className={styles.heroInner}>
           {/* Left Column: Personal Developer Intro & Actions */}
           <div className={styles.heroContent}>
@@ -241,7 +235,7 @@ const Home = () => {
                 className={styles.profileBadge}
                 title="View Codolio Profile (GFG + LeetCode achievements)"
               >
-                <img className={styles.profileLogo} src={codolioLogoUrl} alt="" aria-hidden="true" />
+                <CodolioIcon />
                 <span className={styles.profileLabel}>Codolio</span>
                 <span className={styles.profileMeta}>Stats Card</span>
                 <ExternalLinkIcon />
@@ -277,8 +271,11 @@ const Home = () => {
               <div className={styles.devCardHeader}>
                 <div className={styles.devProfileGroup}>
                   <img
-                    src="https://ik.imagekit.io/00zfvrear/Images/cropped_circle_image.png"
+                    src="https://ik.imagekit.io/00zfvrear/Images/cropped_circle_image.png?tr=w-128,h-128,f-auto,q-85"
                     alt="Pardeep Shyoran"
+                    width="44"
+                    height="44"
+                    decoding="async"
                     className={styles.devAvatar}
                   />
                   <div className={styles.devMeta}>
@@ -345,19 +342,29 @@ const Home = () => {
       </section>
 
       {/* Downstream Sections */}
-      <Suspense fallback={<div style={{ minHeight: "300px" }} />}>
-        <About />
-      </Suspense>
+      <DeferredSection
+        id="about"
+        matchIds={["about", "skills"]}
+        minHeight="320px"
+        rootMargin="120px"
+        render={() => <About />}
+      />
       <FeaturedProjects />
-      <Suspense fallback={<div style={{ minHeight: "300px" }} />}>
-        <Certificates />
-      </Suspense>
-      <Suspense fallback={<div style={{ minHeight: "300px" }} />}>
-        <Stats />
-      </Suspense>
-      <Suspense fallback={<div style={{ minHeight: "300px" }} />}>
-        <Contact />
-      </Suspense>
+      <DeferredSection
+        id="certificates"
+        minHeight="280px"
+        render={() => <Certificates />}
+      />
+      <DeferredSection
+        id="stats"
+        minHeight="320px"
+        render={() => <Stats />}
+      />
+      <DeferredSection
+        id="contact"
+        minHeight="360px"
+        render={() => <Contact />}
+      />
     </>
   );
 };

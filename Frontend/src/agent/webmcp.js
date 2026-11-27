@@ -1,13 +1,35 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import profileData from '../data/profile'
 import projectsData from '../data/project'
-import skillsData from '../data/skills'
-import certificatesData from '../data/certificates'
-import { statsCache } from '../utils/statsCache'
 import { smoothScrollTo } from '../utils/scrollHelper'
+import { requestSectionMount } from '../utils/sectionMount'
 
 const CONTACT_FILL_EVENT = 'portfolio:agent-fill-contact'
+const CONTACT_RESULT_EVENT = 'portfolio:agent-contact-result'
+
+const VALID_STATIC_ROUTES = new Set([
+  '/',
+  '/about',
+  '/projects',
+  '/certificates',
+  '/stats',
+  '/contact',
+])
+
+const VALID_HOME_SECTIONS = new Set([
+  'home',
+  'about',
+  'skills',
+  'featuredProjects',
+  'certificates',
+  'stats',
+  'contact',
+])
+
+const loadSkillsData = () => import('../data/skills').then((m) => m.default)
+const loadCertificatesData = () => import('../data/certificates').then((m) => m.default)
+const loadStatsCache = () => import('../utils/statsCache').then((m) => m.statsCache)
 
 function formatTextResult(payload) {
   return {
@@ -18,6 +40,79 @@ function formatTextResult(payload) {
       },
     ],
   }
+}
+
+function waitForElement(elementId, timeoutMs = 2500) {
+  if (typeof document === 'undefined') return Promise.resolve(null)
+  const existing = document.getElementById(elementId)
+  if (existing) return Promise.resolve(existing)
+
+  return new Promise((resolve) => {
+    const start = Date.now()
+    const check = () => {
+      const el = document.getElementById(elementId)
+      if (el) {
+        observer.disconnect()
+        resolve(el)
+        return
+      }
+      if (Date.now() - start >= timeoutMs) {
+        observer.disconnect()
+        resolve(null)
+      }
+    }
+
+    const observer = new MutationObserver(check)
+    observer.observe(document.body, { childList: true, subtree: true })
+    setTimeout(() => {
+      observer.disconnect()
+      resolve(document.getElementById(elementId))
+    }, timeoutMs)
+  })
+}
+
+function waitForSelector(selector, timeoutMs = 3000) {
+  if (typeof document === 'undefined') return Promise.resolve(null)
+  const existing = document.querySelector(selector)
+  if (existing) return Promise.resolve(existing)
+
+  return new Promise((resolve) => {
+    const observer = new MutationObserver(() => {
+      const el = document.querySelector(selector)
+      if (el) {
+        observer.disconnect()
+        resolve(el)
+      }
+    })
+    observer.observe(document.body, { childList: true, subtree: true })
+    setTimeout(() => {
+      observer.disconnect()
+      resolve(document.querySelector(selector))
+    }, timeoutMs)
+  })
+}
+
+async function fetchJsonWithTimeout(url, timeoutMs = 4500) {
+  const controller = new AbortController()
+  const timer = setTimeout(() => controller.abort(), timeoutMs)
+  try {
+    const res = await fetch(url, { signal: controller.signal })
+    if (!res.ok) throw new Error(`HTTP ${res.status}`)
+    return await res.json()
+  } finally {
+    clearTimeout(timer)
+  }
+}
+
+function isKnownRoute(rawRoute) {
+  if (typeof rawRoute !== 'string' || !rawRoute.startsWith('/')) return false
+  const cleanPath = rawRoute.split('?')[0].split('#')[0].replace(/\/+$/, '') || '/'
+  if (VALID_STATIC_ROUTES.has(cleanPath)) return true
+  if (cleanPath.startsWith('/projects/')) {
+    const slug = cleanPath.slice('/projects/'.length)
+    return projectsData.some((p) => p.slug === slug)
+  }
+  return false
 }
 
 function buildToolDefinitions({ navigate, getPathname }) {
@@ -49,7 +144,7 @@ function buildToolDefinitions({ navigate, getPathname }) {
     {
       name: 'list_projects',
       description:
-        'List portfolio projects with optional filtering by technology tag, category, or featured status.',
+        'List portfolio projects with optional filtering by technology tag or featured status.',
       inputSchema: {
         type: 'object',
         properties: {
@@ -116,6 +211,7 @@ function buildToolDefinitions({ navigate, getPathname }) {
         const project = projectsData.find((p) => p.slug.toLowerCase() === slug)
         if (!project) {
           return formatTextResult({
+            ok: false,
             error: `Project with slug "${slug}" not found.`,
             availableSlugs: projectsData.map((p) => p.slug),
           })
@@ -139,6 +235,7 @@ function buildToolDefinitions({ navigate, getPathname }) {
       },
       annotations: { readOnlyHint: true, idempotentHint: true },
       execute: async (input = {}) => {
+        const skillsData = await loadSkillsData()
         const category = String(input.category || 'all').toLowerCase()
         const result =
           category === 'all'
@@ -156,22 +253,96 @@ function buildToolDefinitions({ navigate, getPathname }) {
         properties: {},
       },
       annotations: { readOnlyHint: true, idempotentHint: true },
-      execute: async () => formatTextResult(certificatesData),
+      execute: async () => formatTextResult(await loadCertificatesData()),
     },
     {
       name: 'get_coding_stats',
       description:
-        'Retrieve Pardeep’s coding metrics across GitHub, LeetCode, and GeeksforGeeks (live cached data when available, or verified snapshot).',
+        'Retrieve Pardeep’s coding metrics across GitHub, LeetCode, and GeeksforGeeks (live or cached data with verified snapshot fallback).',
       inputSchema: {
         type: 'object',
-        properties: {},
+        properties: {
+          refresh: {
+            type: 'boolean',
+            description: 'If true, attempt to fetch fresh live metrics from platform APIs before falling back to cache/snapshot.',
+          },
+        },
       },
       annotations: { readOnlyHint: true, idempotentHint: true },
-      execute: async () => {
-        const github = statsCache.getRaw('github') || profileData.statsSnapshot.github
-        const leetcode = statsCache.getRaw('leetcode') || profileData.statsSnapshot.leetcode
-        const gfg = statsCache.getRaw('gfg') || profileData.statsSnapshot.gfg
+      execute: async (input = {}) => {
+        const statsCache = await loadStatsCache()
+
+        const forceRefresh = Boolean(input.refresh)
+        const ghUser = profileData.statsSnapshot.github.username
+        const lcUser = profileData.statsSnapshot.leetcode.username
+        const gfgUser = profileData.statsSnapshot.gfg.username
+
+        let github = !forceRefresh ? statsCache.get('github') : null
+        let leetcode = !forceRefresh ? statsCache.get('leetcode') : null
+        let gfg = !forceRefresh ? statsCache.get('gfg') : null
+
+        const sources = {
+          github: github ? 'cache' : 'snapshot',
+          leetcode: leetcode ? 'cache' : 'snapshot',
+          gfg: gfg ? 'cache' : 'snapshot',
+        }
+
+        if (forceRefresh || !github || !leetcode || !gfg) {
+          const [ghRes, lcRes, gfgStatsRes, gfgSummaryRes] = await Promise.allSettled([
+            !github ? fetchJsonWithTimeout(`https://api.github.com/users/${ghUser}`) : Promise.resolve(null),
+            !leetcode ? fetchJsonWithTimeout(`https://leetcode-api-faisalshohag.vercel.app/${lcUser}`) : Promise.resolve(null),
+            !gfg ? fetchJsonWithTimeout(`/api/gfg/${gfgUser}`) : Promise.resolve(null),
+            !gfg ? fetchJsonWithTimeout(`/api/gfg-summary/${gfgUser}`) : Promise.resolve(null),
+          ])
+
+          if (!github && ghRes.status === 'fulfilled' && ghRes.value?.login) {
+            github = ghRes.value
+            statsCache.set('github', github)
+            sources.github = 'live'
+          }
+          if (!leetcode && lcRes.status === 'fulfilled' && typeof lcRes.value?.totalSolved === 'number') {
+            leetcode = lcRes.value
+            statsCache.set('leetcode', leetcode)
+            sources.leetcode = 'live'
+          }
+          if (!gfg) {
+            const gfgStatsOk = gfgStatsRes.status === 'fulfilled' && gfgStatsRes.value?.data?.totalSolved
+            const gfgSummaryOk = gfgSummaryRes.status === 'fulfilled' && gfgSummaryRes.value?.data?.totalActiveDays
+            if (gfgStatsOk || gfgSummaryOk) {
+              const s = gfgStatsOk ? gfgStatsRes.value.data : {}
+              const sum = gfgSummaryOk ? gfgSummaryRes.value.data : {}
+              gfg = {
+                totalSolved: s.totalSolved ?? profileData.statsSnapshot.gfg.totalSolved,
+                easy: s.byDifficulty?.easy ?? profileData.statsSnapshot.gfg.easy,
+                medium: s.byDifficulty?.medium ?? profileData.statsSnapshot.gfg.medium,
+                basicSchool:
+                  s.byDifficulty
+                    ? (s.byDifficulty.basic ?? 0) + (s.byDifficulty.school ?? 0)
+                    : profileData.statsSnapshot.gfg.basicSchool,
+                activeDays: sum.totalActiveDays ?? profileData.statsSnapshot.gfg.activeDays,
+              }
+              statsCache.set('gfg', gfg)
+              sources.gfg = 'live'
+            }
+          }
+        }
+
+        if (!github) {
+          github = statsCache.getRaw('github') || profileData.statsSnapshot.github
+          if (statsCache.getRaw('github')) sources.github = 'stale-cache'
+        }
+        if (!leetcode) {
+          leetcode = statsCache.getRaw('leetcode') || profileData.statsSnapshot.leetcode
+          if (statsCache.getRaw('leetcode')) sources.leetcode = 'stale-cache'
+        }
+        if (!gfg) {
+          gfg = statsCache.getRaw('gfg') || profileData.statsSnapshot.gfg
+          if (statsCache.getRaw('gfg')) sources.gfg = 'stale-cache'
+        }
+
         return formatTextResult({
+          fetchedAt: new Date().toISOString(),
+          sources,
           summary: profileData.statsSnapshot.summary,
           github,
           leetcode,
@@ -183,13 +354,13 @@ function buildToolDefinitions({ navigate, getPathname }) {
     {
       name: 'navigate_portfolio',
       description:
-        'Navigate the portfolio UI to a specific route (/, /about, /projects, /projects/:slug, /certificates, /stats, /contact) or scroll to a home section (home, about, skills, featuredProjects, certificates, stats, contact).',
+        'Navigate the portfolio UI to a specific route (/, /about, /projects, /projects?tag=React, /projects/:slug, /certificates, /stats, /contact) or scroll to a home section (home, about, skills, featuredProjects, certificates, stats, contact).',
       inputSchema: {
         type: 'object',
         properties: {
           route: {
             type: 'string',
-            description: 'Target route path, e.g. /projects or /projects/kodrax.',
+            description: 'Target route path, e.g. /projects, /projects?tag=React, or /projects/kodrax.',
           },
           sectionId: {
             type: 'string',
@@ -204,26 +375,48 @@ function buildToolDefinitions({ navigate, getPathname }) {
         const sectionId = typeof input.sectionId === 'string' ? input.sectionId.trim() : ''
 
         if (targetRoute) {
+          if (!isKnownRoute(targetRoute)) {
+            return formatTextResult({
+              ok: false,
+              error: `Unknown route "${targetRoute}".`,
+              availableRoutes: [
+                ...VALID_STATIC_ROUTES,
+                ...projectsData.map((p) => `/projects/${p.slug}`),
+              ],
+            })
+          }
           navigate(targetRoute)
-          return formatTextResult({ navigatedTo: targetRoute })
+          return formatTextResult({ ok: true, navigatedTo: targetRoute })
         }
 
         if (sectionId) {
+          if (!VALID_HOME_SECTIONS.has(sectionId)) {
+            return formatTextResult({
+              ok: false,
+              error: `Unknown sectionId "${sectionId}".`,
+              availableSections: [...VALID_HOME_SECTIONS],
+            })
+          }
+
+          requestSectionMount(sectionId)
+
           if (getPathname() !== '/') {
             navigate('/', { state: { scrollTarget: sectionId } })
+            await waitForElement(sectionId === 'home' ? 'home' : sectionId, 2500)
           } else {
+            await waitForElement(sectionId === 'home' ? 'home' : sectionId, 2500)
             smoothScrollTo(sectionId === 'home' ? 0 : sectionId)
           }
-          return formatTextResult({ scrolledToSection: sectionId })
+          return formatTextResult({ ok: true, scrolledToSection: sectionId })
         }
 
-        return formatTextResult({ error: 'Provide either route or sectionId.' })
+        return formatTextResult({ ok: false, error: 'Provide either route or sectionId.' })
       },
     },
     {
       name: 'prepare_or_submit_contact',
       description:
-        'Populate the portfolio contact form with inquiry details and optionally submit it.',
+        'Populate the portfolio contact form with inquiry details and optionally submit it, returning validation or delivery status.',
       inputSchema: {
         type: 'object',
         properties: {
@@ -238,14 +431,16 @@ function buildToolDefinitions({ navigate, getPathname }) {
           message: { type: 'string', description: 'Detailed message (min 10 chars).' },
           submit: {
             type: 'boolean',
-            description: 'If true, also submit the form immediately after populating fields.',
+            description: 'If true, submit the form after populating fields and wait for server/validation outcome.',
           },
         },
         required: ['name', 'email', 'message'],
       },
       annotations: { readOnlyHint: false, destructiveHint: false },
       execute: async (input = {}) => {
+        const requestId = `req_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`
         const detail = {
+          requestId,
           name: String(input.name || ''),
           email: String(input.email || ''),
           inquiryType: input.inquiryType || 'freelance',
@@ -254,22 +449,43 @@ function buildToolDefinitions({ navigate, getPathname }) {
           submit: Boolean(input.submit),
         }
 
-        if (getPathname() !== '/contact' && getPathname() !== '/') {
+        const currentPath = getPathname()
+        if (currentPath !== '/contact' && currentPath !== '/') {
           navigate('/contact')
-          await new Promise((r) => setTimeout(r, 150))
-        } else if (getPathname() === '/') {
+        } else if (currentPath === '/') {
+          requestSectionMount('contact')
           smoothScrollTo('contact')
         }
 
-        window.dispatchEvent(new CustomEvent(CONTACT_FILL_EVENT, { detail }))
-        return formatTextResult({
-          ok: true,
-          populated: true,
-          submitted: detail.submit,
-          note: detail.submit
-            ? 'Form populated and submission triggered. Inspect the form status banner for server confirmation or email fallback.'
-            : 'Contact form populated for review.',
+        const readyNode = await waitForSelector('[data-contact-form-ready="true"]', 3000)
+        if (!readyNode) {
+          return formatTextResult({
+            ok: false,
+            error: 'Contact form did not mount within timeout.',
+          })
+        }
+
+        const outcome = await new Promise((resolve) => {
+          const timer = setTimeout(() => {
+            window.removeEventListener(CONTACT_RESULT_EVENT, onResult)
+            resolve({
+              ok: false,
+              error: 'Timed out waiting for contact form response.',
+            })
+          }, 15000)
+
+          const onResult = (event) => {
+            if (event.detail?.requestId !== requestId) return
+            clearTimeout(timer)
+            window.removeEventListener(CONTACT_RESULT_EVENT, onResult)
+            resolve(event.detail)
+          }
+
+          window.addEventListener(CONTACT_RESULT_EVENT, onResult)
+          window.dispatchEvent(new CustomEvent(CONTACT_FILL_EVENT, { detail }))
         })
+
+        return formatTextResult(outcome)
       },
     },
   ]
@@ -277,31 +493,55 @@ function buildToolDefinitions({ navigate, getPathname }) {
 
 /**
  * Registers imperative WebMCP tools when `navigator.modelContext` is available
- * and exposes a lightweight read-only discovery registry for agent runtimes.
+ * and exposes a lightweight discovery & invocation registry for agent runtimes.
  */
 export function AgentBridge() {
   const navigate = useNavigate()
   const location = useLocation()
+  const pathnameRef = useRef(location.pathname)
+
+  useEffect(() => {
+    pathnameRef.current = location.pathname
+  }, [location.pathname])
 
   useEffect(() => {
     const tools = buildToolDefinitions({
       navigate,
-      getPathname: () => location.pathname,
+      getPathname: () => pathnameRef.current,
     })
 
-    // Expose read-safe runtime metadata for browser automation agents
     if (typeof window !== 'undefined') {
+      const toolMap = new Map(tools.map((t) => [t.name, t]))
       window.__PORTFOLIO_AGENT_CONTEXT__ = {
-        schemaVersion: '1.0',
+        schemaVersion: '1.1',
         llmsTxt: '/llms.txt',
         llmsFullTxt: '/llms-full.txt',
         portfolioJson: '/portfolio.json',
+        aiCatalogJson: '/.well-known/ai-catalog.json',
+        sitemapXml: '/sitemap.xml',
+        routes: [
+          '/',
+          '/about',
+          '/projects',
+          '/certificates',
+          '/stats',
+          '/contact',
+          ...projectsData.map((p) => `/projects/${p.slug}`),
+        ],
         tools: tools.map((t) => ({
           name: t.name,
           description: t.description,
           inputSchema: t.inputSchema,
+          annotations: t.annotations,
           execute: t.execute,
         })),
+        invoke: async (name, input = {}) => {
+          const tool = toolMap.get(name)
+          if (!tool) {
+            return formatTextResult({ ok: false, error: `Unknown tool "${name}".` })
+          }
+          return tool.execute(input)
+        },
       }
     }
 
@@ -333,9 +573,9 @@ export function AgentBridge() {
         }
       }
     }
-  }, [navigate, location.pathname])
+  }, [navigate])
 
   return null
 }
 
-export { CONTACT_FILL_EVENT }
+export { CONTACT_FILL_EVENT, CONTACT_RESULT_EVENT }

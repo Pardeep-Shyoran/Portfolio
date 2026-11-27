@@ -152,7 +152,14 @@ const CanvasBackground = ({
 			})
 		}
 
-		handleResize(true)
+		// Defer initial grid draw until after first paint so it never blocks FCP/LCP
+		let idleId = 0
+		let timeoutId = 0
+		if ('requestIdleCallback' in window) {
+			idleId = window.requestIdleCallback(() => handleResize(true), { timeout: 600 })
+		} else {
+			timeoutId = setTimeout(() => handleResize(true), 0)
+		}
 		const onResize = () => handleResize(false)
 		const onOrientation = () => handleResize(true)
 
@@ -171,6 +178,8 @@ const CanvasBackground = ({
 		mo.observe(document.documentElement, { attributes: true })
 
 		return () => {
+			if (idleId && 'cancelIdleCallback' in window) window.cancelIdleCallback(idleId)
+			if (timeoutId) clearTimeout(timeoutId)
 			window.removeEventListener('resize', onResize)
 			window.removeEventListener('orientationchange', onOrientation)
 			mo.disconnect()

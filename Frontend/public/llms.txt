@@ -13,6 +13,7 @@
 
 - [Full LLM Dossier (https://pardeep-shyoran.me/llms-full.txt)](https://pardeep-shyoran.me/llms-full.txt): Complete single-file Markdown profile, skills, all project case studies, credentials, and stats.
 - [Structured Portfolio JSON (https://pardeep-shyoran.me/portfolio.json)](https://pardeep-shyoran.me/portfolio.json): Complete JSON representation of identity, projects, skills, certificates, stats, and routes.
+- [Agentic Resource Discovery Catalog (https://pardeep-shyoran.me/.well-known/ai-catalog.json)](https://pardeep-shyoran.me/.well-known/ai-catalog.json): ARD 1.0 capability manifest indexing machine-readable endpoints and WebMCP tools.
 - [Sitemap (https://pardeep-shyoran.me/sitemap.xml)](https://pardeep-shyoran.me/sitemap.xml): Canonical route and case-study index.
 
 ## Pages (HTML & Markdown)

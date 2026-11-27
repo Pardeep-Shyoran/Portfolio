@@ -1,7 +1,16 @@
 {
+    "$schema": "https://openapi.vercel.sh/vercel.json",
+    "cleanUrls": true,
+    "trailingSlash": false,
     "headers": [
         {
-            "source": "/(llms\\.txt|llms-full\\.txt|index\\.md|about\\.md|projects\\.md|certificates\\.md|stats\\.md|contact\\.md)",
+            "source": "/assets/(.*)",
+            "headers": [
+                { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+            ]
+        },
+        {
+            "source": "/(llms\\.txt|llms-full\\.txt|sitemap\\.xml|robots\\.txt)",
             "headers": [
                 { "key": "Access-Control-Allow-Origin", "value": "*" }
             ]
@@ -9,13 +18,15 @@
         {
             "source": "/llms.txt",
             "headers": [
-                { "key": "Content-Type", "value": "text/plain; charset=utf-8" }
+                { "key": "Content-Type", "value": "text/plain; charset=utf-8" },
+                { "key": "X-Robots-Tag", "value": "all" }
             ]
         },
         {
             "source": "/llms-full.txt",
             "headers": [
-                { "key": "Content-Type", "value": "text/plain; charset=utf-8" }
+                { "key": "Content-Type", "value": "text/plain; charset=utf-8" },
+                { "key": "X-Robots-Tag", "value": "all" }
             ]
         },
         {
@@ -26,10 +37,53 @@
             ]
         },
         {
+            "source": "/.well-known/ai-catalog.json",
+            "headers": [
+                { "key": "Content-Type", "value": "application/json; charset=utf-8" },
+                { "key": "Access-Control-Allow-Origin", "value": "*" },
+                { "key": "X-Robots-Tag", "value": "all" }
+            ]
+        },
+        {
+            "source": "/.well-known/ard.json",
+            "headers": [
+                { "key": "Content-Type", "value": "application/json; charset=utf-8" },
+                { "key": "Access-Control-Allow-Origin", "value": "*" },
+                { "key": "X-Robots-Tag", "value": "all" }
+            ]
+        },
+        {
+            "source": "/.well-known/mcp-server-card.json",
+            "headers": [
+                { "key": "Content-Type", "value": "application/json; charset=utf-8" },
+                { "key": "Access-Control-Allow-Origin", "value": "*" }
+            ]
+        },
+        {
+            "source": "/ai-catalog.json",
+            "headers": [
+                { "key": "Content-Type", "value": "application/json; charset=utf-8" },
+                { "key": "Access-Control-Allow-Origin", "value": "*" },
+                { "key": "X-Robots-Tag", "value": "all" }
+            ]
+        },
+        {
+            "source": "/sitemap.xml",
+            "headers": [
+                { "key": "Content-Type", "value": "application/xml; charset=utf-8" }
+            ]
+        },
+        {
             "source": "/(.*)\\.md",
             "headers": [
                 { "key": "Content-Type", "value": "text/markdown; charset=utf-8" },
                 { "key": "Access-Control-Allow-Origin", "value": "*" }
+            ]
+        },
+        {
+            "source": "/(|about|projects|certificates|stats|contact|projects/.*)",
+            "headers": [
+                { "key": "Link", "value": "</llms.txt>; rel=\"alternate\"; type=\"text/plain\", </portfolio.json>; rel=\"alternate\"; type=\"application/json\", </.well-known/ai-catalog.json>; rel=\"ai-catalog\"; type=\"application/json\", </.well-known/ard.json>; rel=\"ard\"; type=\"application/json\"" }
             ]
         }
     ],
@@ -37,6 +91,9 @@
         { "source": "/api/gfg/:username", "destination": "https://gfg-stats.tashif.codes/:username/stats" },
         { "source": "/api/gfg-summary/:username", "destination": "https://gfg-stats.tashif.codes/:username" },
         { "source": "/api/gfg-heatmap/:username", "destination": "https://gfg-stats.tashif.codes/:username/heatmap" },
-        { "source": "/(.*)", "destination": "/" }
+        {
+            "source": "/((?!api/|assets/|\\.well-known/|about/?$|projects/?$|projects/(?:kodrax|rivo|lite-insta|moodswinger|fokus|windows-11|github-profile-search)/?$|certificates/?$|stats/?$|contact/?$|llms\\.txt$|llms-full\\.txt$|portfolio\\.json$|ai-catalog\\.json$|sitemap\\.xml$|robots\\.txt$|.*\\.md$|.*\\.[a-zA-Z0-9]+$).*)",
+            "destination": "/index.html"
+        }
     ]
 }

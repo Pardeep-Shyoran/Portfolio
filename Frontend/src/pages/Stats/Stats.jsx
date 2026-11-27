@@ -1,18 +1,12 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
-import { prefersReducedMotion } from "../../utils/scrollHelper";
 import StructuredData from "../../components/StructuredData/StructuredData";
 import profileData from "../../data/profile";
 import GitHubCalendar from "../../components/GitHub/GitHub.jsx";
 import LeetCode from "../../components/LeetCode/LeetCode.jsx";
 import GFG from "../../components/GFG/GFG.jsx";
 import styles from "./Stats.module.css";
-
-gsap.registerPlugin(ScrollTrigger);
 
 const CODOLIO_URL = profileData.profiles.codolio.cardUrl;
 const SUMMARY_METRICS = profileData.statsSnapshot.summary;
@@ -28,39 +22,6 @@ const Stats = () => {
   const location = useLocation();
   const isStandalonePage = location.pathname === "/stats";
   const [activePlatform, setActivePlatform] = useState("all");
-  const sectionRef = useRef(null);
-
-  useGSAP(
-    () => {
-      if (prefersReducedMotion() || !sectionRef.current) return;
-
-      const header = sectionRef.current.querySelector(`.${styles.header}`);
-      const summaryBar = sectionRef.current.querySelector(`.${styles.summaryBar}`);
-      const platformArea = sectionRef.current.querySelector(`.${styles.platformArea}`);
-
-      const animTargets = [header, summaryBar, platformArea].filter(Boolean);
-
-      if (animTargets.length > 0) {
-        gsap.fromTo(
-          animTargets,
-          { opacity: 0, y: 18 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.55,
-            stagger: 0.08,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: "top 82%",
-              once: true,
-            },
-          }
-        );
-      }
-    },
-    { scope: sectionRef }
-  );
 
   const HeadingTag = isStandalonePage ? "h1" : "h2";
 
@@ -99,7 +60,6 @@ const Stats = () => {
 
       <section
         id="stats"
-        ref={sectionRef}
         className={styles.statsSection}
         aria-label="Developer Statistics and Coding Activity"
       >

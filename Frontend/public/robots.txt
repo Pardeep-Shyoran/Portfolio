@@ -1,6 +1,8 @@
 User-agent: *
 Allow: /
+Allow: /.well-known/
 Disallow: /api/
 
 Sitemap: https://pardeep-shyoran.me/sitemap.xml
 # LLM & Agent Discovery: https://pardeep-shyoran.me/llms.txt
+# Agentic Resource Discovery: https://pardeep-shyoran.me/.well-known/ai-catalog.json

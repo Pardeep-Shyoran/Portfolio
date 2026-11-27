@@ -2,12 +2,12 @@ import React, { lazy, Suspense } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import Home from '../pages/Home/Home'
 
-// Lazy load non-landing page views
+// Lazy load secondary route views so initial "/" hydration stays minimal
 const About = lazy(() => import('../pages/About/About'))
 const Contact = lazy(() => import('../pages/Contact/Contact'))
-const Projects = lazy(() => import('../pages/Projects/Projects'))
 const Stats = lazy(() => import('../pages/Stats/Stats'))
 const Certificates = lazy(() => import('../pages/Certificates/Certificates'))
+const Projects = lazy(() => import('../pages/Projects/Projects'))
 const ProjectCaseStudy = lazy(() => import('../pages/ProjectCaseStudy/ProjectCaseStudy'))
 const PageNotFound = lazy(() => import('../pages/PageNotFound/PageNotFound'))
 

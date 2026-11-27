@@ -106,16 +106,19 @@ const Footer = () => {
     smoothScrollTo(0)
   }
 
-  const handleNavClick = (e, targetId) => {
+  const handleNavClick = (e, targetId, path) => {
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) {
+      return
+    }
     e.preventDefault()
-    if (location.pathname !== '/') {
-      navigate('/', { state: { scrollTarget: targetId } })
-    } else {
+    if (location.pathname === '/') {
       if (targetId === 'home') {
         smoothScrollTo(0)
       } else {
         smoothScrollTo(targetId)
       }
+    } else {
+      navigate(path)
     }
   }
 
@@ -186,32 +189,32 @@ const Footer = () => {
             <h3 className={styles.colTitle}>Navigation</h3>
             <ul className={styles.navList} role="list">
               <li>
-                <a href="/#home" onClick={(e) => handleNavClick(e, 'home')} className={styles.navLink}>
+                <a href="/" onClick={(e) => handleNavClick(e, 'home', '/')} className={styles.navLink}>
                   Home
                 </a>
               </li>
               <li>
-                <a href="/#about" onClick={(e) => handleNavClick(e, 'about')} className={styles.navLink}>
+                <a href="/about" onClick={(e) => handleNavClick(e, 'about', '/about')} className={styles.navLink}>
                   About
                 </a>
               </li>
               <li>
-                <a href="/#featuredProjects" onClick={(e) => handleNavClick(e, 'featuredProjects')} className={styles.navLink}>
+                <a href="/projects" onClick={(e) => handleNavClick(e, 'featuredProjects', '/projects')} className={styles.navLink}>
                   Projects
                 </a>
               </li>
               <li>
-                <a href="/#certificates" onClick={(e) => handleNavClick(e, 'certificates')} className={styles.navLink}>
+                <a href="/certificates" onClick={(e) => handleNavClick(e, 'certificates', '/certificates')} className={styles.navLink}>
                   Certificates
                 </a>
               </li>
               <li>
-                <a href="/#stats" onClick={(e) => handleNavClick(e, 'stats')} className={styles.navLink}>
+                <a href="/stats" onClick={(e) => handleNavClick(e, 'stats', '/stats')} className={styles.navLink}>
                   Stats
                 </a>
               </li>
               <li>
-                <a href="/#contact" onClick={(e) => handleNavClick(e, 'contact')} className={styles.navLink}>
+                <a href="/contact" onClick={(e) => handleNavClick(e, 'contact', '/contact')} className={styles.navLink}>
                   Contact
                 </a>
               </li>
@@ -285,7 +288,19 @@ const Footer = () => {
           </div>
 
           <div className={styles.techNote}>
-            Designed & engineered with precision.
+            <span>Designed &amp; engineered with precision.</span>
+            {' · '}
+            <a href="/llms.txt" className={styles.navLink} style={{ display: 'inline', fontSize: 'inherit' }}>
+              llms.txt
+            </a>
+            {' · '}
+            <a href="/portfolio.json" className={styles.navLink} style={{ display: 'inline', fontSize: 'inherit' }}>
+              portfolio.json
+            </a>
+            {' · '}
+            <a href="/.well-known/ai-catalog.json" className={styles.navLink} style={{ display: 'inline', fontSize: 'inherit' }}>
+              ai-catalog.json
+            </a>
           </div>
 
           <button

@@ -57,7 +57,7 @@ const NavBar = ({ onNavigate, isMobile = false }) => {
     }
 
     window.addEventListener('scroll', handleScroll, { passive: true })
-    updateActive()
+    rafId = requestAnimationFrame(updateActive)
     return () => {
       window.removeEventListener('scroll', handleScroll)
       cancelAnimationFrame(rafId)
@@ -65,17 +65,22 @@ const NavBar = ({ onNavigate, isMobile = false }) => {
   }, [location.pathname])
 
   const handleClick = (e, item) => {
+    // Allow modified clicks (open in new tab/window) to follow the canonical href
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) {
+      return
+    }
+
     e.preventDefault()
     onNavigate?.()
 
-    if (location.pathname !== '/') {
-      navigate('/', { state: { scrollTarget: item.targetId } })
-    } else {
+    if (location.pathname === '/') {
       if (item.targetId === 'home') {
         smoothScrollTo(0)
       } else {
         smoothScrollTo(item.targetId)
       }
+    } else {
+      navigate(item.path)
     }
   }
 
@@ -92,7 +97,7 @@ const NavBar = ({ onNavigate, isMobile = false }) => {
         return (
           <li key={item.id} className={styles.navItem}>
             <a
-              href={`/#${item.targetId}`}
+              href={item.path}
               className={`${styles.navLink} ${active ? styles.active : ''} ${item.id === 'projects' ? styles.projectsLink : ''}`}
               onClick={(e) => handleClick(e, item)}
               aria-current={active ? 'page' : undefined}

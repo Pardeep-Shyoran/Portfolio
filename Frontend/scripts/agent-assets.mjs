@@ -29,10 +29,200 @@ const writeOutput = (filePath, content) => {
   fs.writeFileSync(filePath, content, 'utf8')
 }
 
-export function buildPortfolioJson() {
+function readExistingGeneratedAt(portfolioJsonPath) {
+  try {
+    if (!fs.existsSync(portfolioJsonPath)) return null
+    const parsed = JSON.parse(fs.readFileSync(portfolioJsonPath, 'utf8'))
+    return typeof parsed?.generatedAt === 'string' ? parsed.generatedAt : null
+  } catch {
+    return null
+  }
+}
+
+function readExistingSitemapLastmod(sitemapPath) {
+  try {
+    if (!fs.existsSync(sitemapPath)) return null
+    const xml = fs.readFileSync(sitemapPath, 'utf8')
+    const match = xml.match(/<lastmod>(\d{4}-\d{2}-\d{2})<\/lastmod>/)
+    return match ? match[1] : null
+  } catch {
+    return null
+  }
+}
+
+function readExistingAiCatalogUpdatedAt(catalogPath) {
+  try {
+    if (!fs.existsSync(catalogPath)) return null
+    const parsed = JSON.parse(fs.readFileSync(catalogPath, 'utf8'))
+    const ts = parsed?.entries?.[0]?.updatedAt
+    return typeof ts === 'string' ? ts : null
+  } catch {
+    return null
+  }
+}
+
+export function buildMcpServerCardJson() {
+  const base = profileData.siteUrl
   return {
     schemaVersion: '1.0',
-    generatedAt: new Date().toISOString(),
+    name: `${profileData.name} Portfolio WebMCP`,
+    protocol: 'webmcp',
+    transport: 'navigator.modelContext',
+    siteUrl: base,
+    documentationUrl: `${base}/llms.txt`,
+    tools: [
+      {
+        name: 'get_developer_profile',
+        description:
+          'Retrieve Pardeep Shyoran’s developer profile, availability, location, resume URL, direct contact info, and social links.',
+        readOnly: true,
+      },
+      {
+        name: 'list_projects',
+        description: 'List portfolio projects with optional filtering by technology tag or featured status.',
+        readOnly: true,
+      },
+      {
+        name: 'get_project_case_study',
+        description: 'Retrieve full case study details for a specific project by slug.',
+        readOnly: true,
+      },
+      {
+        name: 'list_skills',
+        description: 'List categorized technical skills and tools.',
+        readOnly: true,
+      },
+      {
+        name: 'list_certificates',
+        description: 'Retrieve verified certifications, credential IDs, issuers, and verification URLs.',
+        readOnly: true,
+      },
+      {
+        name: 'get_coding_stats',
+        description: 'Retrieve coding metrics across GitHub, LeetCode, and GeeksforGeeks.',
+        readOnly: true,
+      },
+      {
+        name: 'navigate_portfolio',
+        description: 'Navigate the portfolio UI to a route or scroll to a home section.',
+        readOnly: false,
+      },
+      {
+        name: 'prepare_or_submit_contact',
+        description: 'Populate the portfolio contact form and optionally submit it.',
+        readOnly: false,
+      },
+      {
+        name: 'send_contact_inquiry',
+        description: 'Declarative WebMCP contact form at /contact.',
+        declarativeForm: `${base}/contact`,
+        readOnly: false,
+      },
+    ],
+  }
+}
+
+export function buildAiCatalogJson(updatedAt = new Date().toISOString()) {
+  const base = profileData.siteUrl
+  const hostname = new URL(base).hostname
+
+  return {
+    specVersion: '1.0',
+    host: {
+      displayName: `${profileData.name} — ${profileData.role}`,
+      identifier: `did:web:${hostname}`,
+      documentationUrl: `${base}/llms.txt`,
+      logoUrl: profileData.avatarUrl,
+    },
+    entries: [
+      {
+        identifier: `urn:air:${hostname}:dataset:portfolio-json`,
+        displayName: 'Structured Portfolio JSON',
+        type: 'application/json',
+        url: `${base}/portfolio.json`,
+        description:
+          'Complete structured JSON representation of Pardeep Shyoran’s developer identity, technical skills, project case studies, credentials, coding stats, and canonical routes.',
+        tags: ['portfolio', 'full-stack', 'mern', 'developer', 'resume'],
+        capabilities: [
+          'DeveloperProfile',
+          'ProjectCaseStudies',
+          'TechnicalSkills',
+          'CodingMetrics',
+          'Credentials',
+        ],
+        representativeQueries: [
+          'What full-stack projects has Pardeep Shyoran built?',
+          'List Pardeep Shyoran’s React, Node.js, and MongoDB skills',
+          'Get Pardeep Shyoran’s contact email, availability, and resume URL',
+        ],
+        version: '1.0.0',
+        updatedAt,
+      },
+      {
+        identifier: `urn:air:${hostname}:doc:llms-txt`,
+        displayName: 'LLM Context Summary (llms.txt)',
+        type: 'text/plain',
+        url: `${base}/llms.txt`,
+        description:
+          'Concise Markdown index of Pardeep Shyoran’s portfolio pages, project case studies, and machine-readable endpoints.',
+        tags: ['llms.txt', 'documentation', 'index', 'portfolio'],
+        representativeQueries: [
+          'Summarize Pardeep Shyoran’s portfolio for an AI agent',
+          'Find Markdown endpoints for Pardeep Shyoran’s projects',
+        ],
+        version: '1.0.0',
+        updatedAt,
+      },
+      {
+        identifier: `urn:air:${hostname}:doc:llms-full-txt`,
+        displayName: 'Full LLM Portfolio Dossier (llms-full.txt)',
+        type: 'text/markdown',
+        url: `${base}/llms-full.txt`,
+        description:
+          'Complete single-file Markdown dossier containing bio, development workflow, skills, all project case studies, certifications, coding metrics, and contact details.',
+        tags: ['llms-full.txt', 'markdown', 'case-studies', 'dossier'],
+        representativeQueries: [
+          'Read detailed case studies for KodraX, Rivo, and Lite-Insta',
+          'Inspect Pardeep Shyoran’s verified certifications and coding stats',
+        ],
+        version: '1.0.0',
+        updatedAt,
+      },
+      {
+        identifier: `urn:air:${hostname}:webmcp:portfolio-tools`,
+        displayName: 'Portfolio WebMCP Browser Tools',
+        type: 'application/mcp-server-card+json',
+        url: `${base}/.well-known/mcp-server-card.json`,
+        description:
+          'Client-side WebMCP tools registered via navigator.modelContext and declarative HTML form attributes for querying portfolio data, navigating routes, and submitting contact inquiries.',
+        tags: ['webmcp', 'browser-tools', 'navigation', 'contact-form'],
+        capabilities: [
+          'get_developer_profile',
+          'list_projects',
+          'get_project_case_study',
+          'list_skills',
+          'list_certificates',
+          'get_coding_stats',
+          'navigate_portfolio',
+          'prepare_or_submit_contact',
+          'send_contact_inquiry',
+        ],
+        representativeQueries: [
+          'Filter Pardeep Shyoran’s projects by React or Socket.IO',
+          'Fetch Pardeep Shyoran’s live GitHub, LeetCode, and GeeksforGeeks coding stats',
+          'Submit an employment or freelance inquiry via the portfolio contact form',
+        ],
+        version: '1.0.0',
+        updatedAt,
+      },
+    ],
+  }
+}
+
+export function buildPortfolioJson(generatedAt = new Date().toISOString()) {
+  return {
+    schemaVersion: '1.0',
+    generatedAt,
     siteUrl: profileData.siteUrl,
     person: {
       name: profileData.name,
@@ -157,6 +347,7 @@ export function buildLlmsTxt() {
 
 - [Full LLM Dossier (${base}/llms-full.txt)](${base}/llms-full.txt): Complete single-file Markdown profile, skills, all project case studies, credentials, and stats.
 - [Structured Portfolio JSON (${base}/portfolio.json)](${base}/portfolio.json): Complete JSON representation of identity, projects, skills, certificates, stats, and routes.
+- [Agentic Resource Discovery Catalog (${base}/.well-known/ai-catalog.json)](${base}/.well-known/ai-catalog.json): ARD 1.0 capability manifest indexing machine-readable endpoints and WebMCP tools.
 - [Sitemap (${base}/sitemap.xml)](${base}/sitemap.xml): Canonical route and case-study index.
 
 ## Pages (HTML & Markdown)
@@ -350,8 +541,7 @@ export function buildLlmsFullTxt() {
   ].join('\n\n')
 }
 
-export function buildSitemapXml() {
-  const today = new Date().toISOString().slice(0, 10)
+export function buildSitemapXml(lastmod = new Date().toISOString().slice(0, 10)) {
   const urls = [
     { loc: `${profileData.siteUrl}/`, priority: '1.0' },
     { loc: `${profileData.siteUrl}/about`, priority: '0.8' },
@@ -369,7 +559,7 @@ export function buildSitemapXml() {
     .map(
       (u) => `  <url>
     <loc>${escapeXml(u.loc)}</loc>
-    <lastmod>${today}</lastmod>
+    <lastmod>${lastmod}</lastmod>
     <priority>${u.priority}</priority>
   </url>`
     )
@@ -385,8 +575,52 @@ ${entries}
 export function generatePublicAgentAssets(publicDir) {
   writeOutput(path.join(publicDir, 'llms.txt'), buildLlmsTxt())
   writeOutput(path.join(publicDir, 'llms-full.txt'), buildLlmsFullTxt())
-  writeOutput(path.join(publicDir, 'portfolio.json'), `${JSON.stringify(buildPortfolioJson(), null, 2)}\n`)
-  writeOutput(path.join(publicDir, 'sitemap.xml'), buildSitemapXml())
+
+  const portfolioJsonPath = path.join(publicDir, 'portfolio.json')
+  const existingGeneratedAt = readExistingGeneratedAt(portfolioJsonPath)
+  if (existingGeneratedAt) {
+    const candidateWithExistingTs = `${JSON.stringify(buildPortfolioJson(existingGeneratedAt), null, 2)}\n`
+    const existingRaw = fs.readFileSync(portfolioJsonPath, 'utf8')
+    if (candidateWithExistingTs !== existingRaw) {
+      writeOutput(portfolioJsonPath, `${JSON.stringify(buildPortfolioJson(), null, 2)}\n`)
+    }
+  } else {
+    writeOutput(portfolioJsonPath, `${JSON.stringify(buildPortfolioJson(), null, 2)}\n`)
+  }
+
+  const sitemapPath = path.join(publicDir, 'sitemap.xml')
+  const existingLastmod = readExistingSitemapLastmod(sitemapPath)
+  if (existingLastmod) {
+    const candidateSitemap = buildSitemapXml(existingLastmod)
+    const existingSitemap = fs.readFileSync(sitemapPath, 'utf8')
+    if (candidateSitemap !== existingSitemap) {
+      writeOutput(sitemapPath, buildSitemapXml())
+    }
+  } else {
+    writeOutput(sitemapPath, buildSitemapXml())
+  }
+
+  const wellKnownCatalogPath = path.join(publicDir, '.well-known', 'ai-catalog.json')
+  const wellKnownArdPath = path.join(publicDir, '.well-known', 'ard.json')
+  const rootCatalogPath = path.join(publicDir, 'ai-catalog.json')
+  const mcpCardPath = path.join(publicDir, '.well-known', 'mcp-server-card.json')
+  const existingCatalogTs = readExistingAiCatalogUpdatedAt(wellKnownCatalogPath)
+  let aiCatalogContent
+  if (existingCatalogTs) {
+    const candidateCatalog = `${JSON.stringify(buildAiCatalogJson(existingCatalogTs), null, 2)}\n`
+    const existingCatalogRaw = fs.readFileSync(wellKnownCatalogPath, 'utf8')
+    aiCatalogContent =
+      candidateCatalog === existingCatalogRaw
+        ? existingCatalogRaw
+        : `${JSON.stringify(buildAiCatalogJson(), null, 2)}\n`
+  } else {
+    aiCatalogContent = `${JSON.stringify(buildAiCatalogJson(), null, 2)}\n`
+  }
+  writeOutput(wellKnownCatalogPath, aiCatalogContent)
+  writeOutput(wellKnownArdPath, aiCatalogContent)
+  writeOutput(rootCatalogPath, aiCatalogContent)
+  writeOutput(mcpCardPath, `${JSON.stringify(buildMcpServerCardJson(), null, 2)}\n`)
+
   writeOutput(path.join(publicDir, 'index.md'), buildIndexMarkdown())
   writeOutput(path.join(publicDir, 'about.md'), buildAboutMarkdown())
   writeOutput(path.join(publicDir, 'projects.md'), buildProjectsIndexMarkdown())
@@ -403,12 +637,36 @@ export function generatePublicAgentAssets(publicDir) {
  * Phase 2: Build-time Static HTML Pre-rendering for Non-JS Agents & Crawlers
  * ============================================================================ */
 
+function renderSharedSiteHeader() {
+  return `
+      <header>
+        <p><strong>${escapeHtml(profileData.name)}</strong> — ${escapeHtml(profileData.role)}</p>
+        <p>${escapeHtml(profileData.availability.status)} · ${escapeHtml(profileData.location.display)}</p>
+        <nav aria-label="Primary Navigation">
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/projects">Projects</a></li>
+            <li><a href="/certificates">Certificates</a></li>
+            <li><a href="/stats">Coding Stats</a></li>
+            <li><a href="/contact">Contact</a></li>
+            <li><a href="${escapeHtml(profileData.resumeUrl)}">Resume (PDF)</a></li>
+            <li><a href="/llms.txt">llms.txt</a></li>
+            <li><a href="/llms-full.txt">llms-full.txt</a></li>
+            <li><a href="/portfolio.json">portfolio.json</a></li>
+            <li><a href="/.well-known/ai-catalog.json">ai-catalog.json</a></li>
+          </ul>
+        </nav>
+      </header>`
+}
+
 function getRouteMetaList() {
   const base = profileData.siteUrl
   const basePerson = {
     '@type': 'Person',
     name: profileData.name,
     jobTitle: profileData.role,
+    alternateName: profileData.alternateNames,
     url: base,
     email: `mailto:${profileData.contact.email}`,
     sameAs: [
@@ -419,6 +677,9 @@ function getRouteMetaList() {
     ],
     knowsAbout: skillsData.flatMap((c) => c.skills.map((s) => s.name)),
   }
+
+  const sharedHeader = renderSharedSiteHeader()
+  const stats = profileData.statsSnapshot
 
   const routes = [
     {
@@ -441,29 +702,25 @@ function getRouteMetaList() {
             url: `${base}/`,
             mainEntity: basePerson,
           },
+          {
+            '@type': 'ItemList',
+            name: 'Featured Projects',
+            itemListElement: projectsData
+              .filter((p) => p.featured)
+              .map((p, index) => ({
+                '@type': 'ListItem',
+                position: index + 1,
+                name: p.title,
+                url: `${base}/projects/${p.slug}`,
+              })),
+          },
         ],
       },
-      bodyHtml: `
-        <header>
+      bodyHtml: `${sharedHeader}
+        <main id="main-content">
           <h1>${escapeHtml(profileData.name)} — ${escapeHtml(profileData.role)}</h1>
           <p>${escapeHtml(profileData.headline)}</p>
           <p>${escapeHtml(profileData.summary)}</p>
-          <p>Status: ${escapeHtml(profileData.availability.status)} · Location: ${escapeHtml(profileData.location.display)}</p>
-          <nav aria-label="Primary Navigation">
-            <ul>
-              <li><a href="/">Home</a></li>
-              <li><a href="/about">About</a></li>
-              <li><a href="/projects">Projects</a></li>
-              <li><a href="/certificates">Certificates</a></li>
-              <li><a href="/stats">Coding Stats</a></li>
-              <li><a href="/contact">Contact</a></li>
-              <li><a href="${escapeHtml(profileData.resumeUrl)}">Resume (PDF)</a></li>
-              <li><a href="/llms.txt">llms.txt</a></li>
-              <li><a href="/portfolio.json">portfolio.json</a></li>
-            </ul>
-          </nav>
-        </header>
-        <main id="main-content">
           <section aria-label="Featured Projects">
             <h2>Featured Projects</h2>
             <ul>
@@ -471,10 +728,11 @@ function getRouteMetaList() {
                 .filter((p) => p.featured)
                 .map(
                   (p) =>
-                    `<li><a href="/projects/${escapeHtml(p.slug)}"><strong>${escapeHtml(p.title)}</strong></a> — ${escapeHtml(p.shortDescription)} (${escapeHtml(p.tags.join(', '))})</li>`
+                    `<li><a href="/projects/${escapeHtml(p.slug)}"><strong>${escapeHtml(p.title)}</strong></a> — ${escapeHtml(p.shortDescription)} (${escapeHtml(p.tags.join(', '))}) · <a href="/projects/${escapeHtml(p.slug)}.md">Markdown</a></li>`
                 )
                 .join('\n              ')}
             </ul>
+            <p><a href="/projects">Explore All ${projectsData.length} Projects</a></p>
           </section>
           <section aria-label="Core Skills">
             <h2>Skills &amp; Technologies</h2>
@@ -487,9 +745,17 @@ function getRouteMetaList() {
                 .join('\n              ')}
             </ul>
           </section>
+          <section aria-label="Coding Stats Snapshot">
+            <h2>Coding Stats</h2>
+            <ul>
+              ${stats.summary
+                .map((m) => `<li><strong>${escapeHtml(m.label)}</strong>: ${escapeHtml(m.value)} (${escapeHtml(m.hint)})</li>`)
+                .join('\n              ')}
+            </ul>
+          </section>
           <section aria-label="Contact">
             <h2>Contact</h2>
-            <p>Email: <a href="mailto:${escapeHtml(profileData.contact.email)}">${escapeHtml(profileData.contact.email)}</a> · Phone: <a href="${escapeHtml(profileData.contact.phoneHref)}">${escapeHtml(profileData.contact.phone)}</a></p>
+            <p>Email: <a href="mailto:${escapeHtml(profileData.contact.email)}">${escapeHtml(profileData.contact.email)}</a> · Phone: <a href="${escapeHtml(profileData.contact.phoneHref)}">${escapeHtml(profileData.contact.phone)}</a> · <a href="/contact">Contact Form</a></p>
           </section>
         </main>`,
     },
@@ -506,15 +772,33 @@ function getRouteMetaList() {
         url: `${base}/about`,
         mainEntity: basePerson,
       },
-      bodyHtml: `
+      bodyHtml: `${sharedHeader}
         <main id="main-content">
           <h1>About ${escapeHtml(profileData.name)}</h1>
           <p>${escapeHtml(profileData.summary)}</p>
+          <dl>
+            <dt>Primary Role</dt><dd>${escapeHtml(profileData.role)}</dd>
+            <dt>Location &amp; Status</dt><dd>${escapeHtml(profileData.location.display)} · ${escapeHtml(profileData.availability.status)}</dd>
+          </dl>
+          <h2>Development Workflow</h2>
+          <ol>
+            <li><strong>UI Architecture &amp; Mobile-First Design</strong>: Semantic layouts, responsive grids, and accessible components before writing state.</li>
+            <li><strong>Full-Stack API &amp; Schema Integration</strong>: Connecting React frontends to Node.js/Express endpoints with strict validation and JWT auth.</li>
+            <li><strong>Performance Tuning &amp; Interaction Polish</strong>: Optimizing Core Web Vitals, eliminating layout shifts, and purposeful GSAP animations.</li>
+            <li><strong>Testing, Audit &amp; Production Shipping</strong>: Validating endpoints in Postman, Git workflows, and containerized deployments.</li>
+          </ol>
+          <h2>Engineering Mindset</h2>
+          <ul>
+            <li><strong>Modular UI Components</strong>: Reusable, self-contained components with clean props.</li>
+            <li><strong>Speed Is a Feature</strong>: Lightweight bundles, responsive imagery, and snappy feedback.</li>
+            <li><strong>Predictable API Contracts</strong>: Consistent JSON schemas and indexed Mongoose models.</li>
+            <li><strong>Universal Accessibility</strong>: Semantic HTML, keyboard navigability, and clear contrast ratios.</li>
+          </ul>
           <h2>Skills &amp; Technologies</h2>
           ${skillsData
             .map(
               (cat) =>
-                `<section><h3>${escapeHtml(cat.category)}</h3><ul>${cat.skills
+                `<section><h3>${escapeHtml(cat.category)} (${escapeHtml(cat.tagline)})</h3><ul>${cat.skills
                   .map((s) => `<li>${escapeHtml(s.name)}</li>`)
                   .join('')}</ul></section>`
             )
@@ -543,14 +827,15 @@ function getRouteMetaList() {
           })),
         },
       },
-      bodyHtml: `
+      bodyHtml: `${sharedHeader}
         <main id="main-content">
           <h1>Selected Works</h1>
+          <p>A curated catalog of ${projectsData.length} full-stack platforms, real-time collaboration engines, and frontend experiments.</p>
           <ul>
             ${projectsData
               .map(
                 (p) =>
-                  `<li><article><h2><a href="/projects/${escapeHtml(p.slug)}">${escapeHtml(p.title)}</a></h2><p>${escapeHtml(p.subtitle)}</p><p>${escapeHtml(p.description)}</p><p>Stack: ${escapeHtml(p.tags.join(', '))}</p><p><a href="${escapeHtml(p.demoUrl)}">Live Demo</a> · <a href="${escapeHtml(p.repoUrl)}">GitHub Repository</a></p></article></li>`
+                  `<li><article><h2><a href="/projects/${escapeHtml(p.slug)}">${escapeHtml(p.title)}</a></h2><p>${escapeHtml(p.subtitle)} · ${escapeHtml(p.category)}</p><p>${escapeHtml(p.description)}</p><p>Stack: ${escapeHtml(p.tags.join(', '))}</p><p><a href="/projects/${escapeHtml(p.slug)}">Case Study</a> · <a href="/projects/${escapeHtml(p.slug)}.md">Markdown</a> · <a href="${escapeHtml(p.demoUrl)}">Live Demo</a> · <a href="${escapeHtml(p.repoUrl)}">GitHub Repository</a></p></article></li>`
               )
               .join('\n            ')}
           </ul>
@@ -583,14 +868,14 @@ function getRouteMetaList() {
           })),
         },
       },
-      bodyHtml: `
+      bodyHtml: `${sharedHeader}
         <main id="main-content">
           <h1>Certifications &amp; Specializations</h1>
           <ul>
             ${certificatesData
               .map(
                 (c) =>
-                  `<li><article><h2>${escapeHtml(c.title)}</h2><p>${escapeHtml(c.issuer)} (${escapeHtml(c.year)}) · ID: ${escapeHtml(c.credentialId)}</p><p>${escapeHtml(c.summary)}</p><p><a href="${escapeHtml(c.link)}">Verify Credential</a></p></article></li>`
+                  `<li><article><h2>${escapeHtml(c.title)}</h2><p>${escapeHtml(c.issuer)} (${escapeHtml(c.year)}) · ${escapeHtml(c.credentialType)} · ID: ${escapeHtml(c.credentialId)}</p><p>${escapeHtml(c.summary)}</p><p>Skills: ${escapeHtml(c.skills.join(', '))}</p><p><a href="${escapeHtml(c.link)}">Verify Credential</a></p></article></li>`
               )
               .join('\n            ')}
           </ul>
@@ -610,15 +895,34 @@ function getRouteMetaList() {
         url: `${base}/stats`,
         about: basePerson,
       },
-      bodyHtml: `
+      bodyHtml: `${sharedHeader}
         <main id="main-content">
           <h1>Coding Stats</h1>
+          <h2>Summary Metrics</h2>
           <ul>
-            ${profileData.statsSnapshot.summary
+            ${stats.summary
               .map((m) => `<li><strong>${escapeHtml(m.label)}</strong>: ${escapeHtml(m.value)} (${escapeHtml(m.hint)})</li>`)
               .join('\n            ')}
           </ul>
-          <p><a href="${escapeHtml(profileData.profiles.github.url)}">GitHub</a> · <a href="${escapeHtml(profileData.profiles.leetcode.url)}">LeetCode</a> · <a href="${escapeHtml(profileData.profiles.gfg.url)}">GeeksforGeeks</a> · <a href="${escapeHtml(profileData.profiles.codolio.cardUrl)}">Codolio</a></p>
+          <h2>GitHub (@${escapeHtml(stats.github.username)})</h2>
+          <ul>
+            <li>Public Repositories: ${escapeHtml(stats.github.publicRepos)}</li>
+            <li>Followers / Following: ${escapeHtml(stats.github.followers)} / ${escapeHtml(stats.github.following)}</li>
+            <li><a href="${escapeHtml(profileData.profiles.github.url)}">GitHub Profile</a></li>
+          </ul>
+          <h2>LeetCode (@${escapeHtml(stats.leetcode.username)})</h2>
+          <ul>
+            <li>Total Solved: ${escapeHtml(stats.leetcode.totalSolved)} (Easy: ${escapeHtml(stats.leetcode.easySolved)}, Medium: ${escapeHtml(stats.leetcode.mediumSolved)}, Hard: ${escapeHtml(stats.leetcode.hardSolved)})</li>
+            <li>Global Rank: ~${escapeHtml(Math.round(stats.leetcode.ranking / 1000))}k</li>
+            <li><a href="${escapeHtml(profileData.profiles.leetcode.url)}">LeetCode Profile</a></li>
+          </ul>
+          <h2>GeeksforGeeks (@${escapeHtml(stats.gfg.username)})</h2>
+          <ul>
+            <li>Total Solved: ${escapeHtml(stats.gfg.totalSolved)} (Easy: ${escapeHtml(stats.gfg.easy)}, Medium: ${escapeHtml(stats.gfg.medium)}, Basic/School: ${escapeHtml(stats.gfg.basicSchool)})</li>
+            <li>Active Days: ${escapeHtml(stats.gfg.activeDays)}</li>
+            <li><a href="${escapeHtml(profileData.profiles.gfg.url)}">GeeksforGeeks Profile</a></li>
+          </ul>
+          <p><a href="${escapeHtml(profileData.profiles.codolio.cardUrl)}">View Codolio Stats Card</a></p>
         </main>`,
     },
     {
@@ -643,12 +947,24 @@ function getRouteMetaList() {
           },
         },
       },
-      bodyHtml: `
+      bodyHtml: `${sharedHeader}
         <main id="main-content">
           <h1>Contact ${escapeHtml(profileData.name)}</h1>
-          <p>Email: <a href="mailto:${escapeHtml(profileData.contact.email)}">${escapeHtml(profileData.contact.email)}</a></p>
-          <p>Phone / WhatsApp: <a href="${escapeHtml(profileData.contact.phoneHref)}">${escapeHtml(profileData.contact.phone)}</a></p>
-          <p>Location: ${escapeHtml(profileData.location.display)} · Response time: ${escapeHtml(profileData.availability.responseTime)}</p>
+          <p>Available for: ${escapeHtml(profileData.availability.types.join(', '))}. Response time: ${escapeHtml(profileData.availability.responseTime)}.</p>
+          <h2>Direct Channels</h2>
+          <ul>
+            <li>Email: <a href="mailto:${escapeHtml(profileData.contact.email)}">${escapeHtml(profileData.contact.email)}</a></li>
+            <li>Phone / WhatsApp: <a href="${escapeHtml(profileData.contact.phoneHref)}">${escapeHtml(profileData.contact.phone)}</a> (${escapeHtml(profileData.location.timezone)})</li>
+            <li>Location: ${escapeHtml(profileData.location.display)}</li>
+            <li>Resume: <a href="${escapeHtml(profileData.resumeUrl)}">View Resume PDF</a></li>
+          </ul>
+          <h2>Verified Profiles</h2>
+          <ul>
+            <li><a href="${escapeHtml(profileData.profiles.github.url)}">GitHub</a></li>
+            <li><a href="${escapeHtml(profileData.profiles.linkedin.url)}">LinkedIn</a></li>
+            <li><a href="${escapeHtml(profileData.profiles.x.url)}">X (Twitter)</a></li>
+            <li><a href="${escapeHtml(profileData.profiles.codolio.url)}">Codolio</a></li>
+          </ul>
         </main>`,
     },
     ...projectsData.map((p) => ({
@@ -679,7 +995,7 @@ function getRouteMetaList() {
           },
         ],
       },
-      bodyHtml: `
+      bodyHtml: `${sharedHeader}
         <main id="main-content">
           <nav aria-label="Breadcrumb"><a href="/projects">All Projects</a></nav>
           <article>
@@ -705,12 +1021,70 @@ function getRouteMetaList() {
                     .join('')}</ul>`
                 : ''
             }
+            ${
+              p.challenges?.length
+                ? `<h2>Engineering Challenges &amp; Solutions</h2><ul>${p.challenges
+                    .map(
+                      (c) =>
+                        `<li><strong>Challenge:</strong> ${escapeHtml(c.challenge)}<br /><strong>Solution:</strong> ${escapeHtml(c.solution)}</li>`
+                    )
+                    .join('')}</ul>`
+                : ''
+            }
+            ${
+              p.learnings?.length
+                ? `<h2>Key Takeaways</h2><ul>${p.learnings
+                    .map((l) => `<li>${escapeHtml(l)}</li>`)
+                    .join('')}</ul>`
+                : ''
+            }
           </article>
         </main>`,
     })),
   ]
 
   return routes
+}
+
+function renderMetaBlock(item) {
+  return `<!-- PRERENDER_META_START -->
+    <meta
+      name="description"
+      data-prerendered="true"
+      content="${escapeHtml(item.description)}"
+    />
+    <meta property="og:title" content="${escapeHtml(item.title)}" />
+    <meta property="og:description" content="${escapeHtml(item.description)}" />
+    <link rel="canonical" data-prerendered="true" href="${escapeHtml(item.canonical)}" />
+    <link rel="alternate" type="text/markdown" data-prerendered="true" href="${escapeHtml(item.markdownHref)}" title="Markdown version" />
+    <link rel="alternate" type="text/plain" href="/llms.txt" title="LLM Context Summary" />
+    <link rel="alternate" type="text/plain" href="/llms-full.txt" title="Full LLM Dossier" />
+    <link rel="alternate" type="application/json" href="/portfolio.json" title="Structured Portfolio JSON" />
+    <link rel="ai-catalog" type="application/json" href="/.well-known/ai-catalog.json" title="Agentic Resource Discovery Catalog" />
+    <link rel="ard" type="application/json" href="/.well-known/ard.json" title="Agentic Resource Discovery Manifest" />
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml" title="Sitemap" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="${escapeHtml(item.canonical)}" />
+    <meta
+      property="og:image"
+      content="${escapeHtml(profileData.ogImageUrl)}"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="${escapeHtml(item.title)}" />
+    <meta name="twitter:description" content="${escapeHtml(item.description)}" />
+    <meta
+      name="twitter:image"
+      content="${escapeHtml(profileData.ogImageUrl)}"
+    />
+    <meta name="twitter:creator" content="@PardeepShyoran" />
+    <!-- PRERENDER_META_END -->`
+}
+
+function renderJsonLdBlock(item) {
+  const json = JSON.stringify(item.jsonLd).replace(/<\//g, '<\\/')
+  return `<!-- PRERENDER_JSONLD_START -->
+    <script type="application/ld+json" data-prerendered="true">${json}</script>
+    <!-- PRERENDER_JSONLD_END -->`
 }
 
 export function prerenderDistRoutes(distDir) {
@@ -723,30 +1097,27 @@ export function prerenderDistRoutes(distDir) {
   for (const item of routes) {
     let html = templateHtml
 
-    // Update <title>
     html = html.replace(/<title>[\s\S]*?<\/title>/i, `<title>${escapeHtml(item.title)}</title>`)
 
-    // Update meta description
     html = html.replace(
-      /<meta\s+name="description"[\s\S]*?\/>/i,
-      `<meta name="description" content="${escapeHtml(item.description)}" />`
+      /<!-- PRERENDER_META_START -->[\s\S]*?<!-- PRERENDER_META_END -->/,
+      renderMetaBlock(item)
     )
 
-    // Update canonical link
     html = html.replace(
-      /<link\s+rel="canonical"[\s\S]*?\/>/i,
-      `<link rel="canonical" href="${escapeHtml(item.canonical)}" />`
+      /<!-- PRERENDER_JSONLD_START -->[\s\S]*?<!-- PRERENDER_JSONLD_END -->/,
+      renderJsonLdBlock(item)
     )
 
-    // Inject route-specific alternate markdown link & JSON-LD right before </head>
-    const headAdditions = `    <link rel="alternate" type="text/markdown" href="${escapeHtml(item.markdownHref)}" title="Markdown version" />\n    <script type="application/ld+json">${JSON.stringify(item.jsonLd).replace(/<\//g, '<\\/')}</script>\n  </head>`
-    html = html.replace('</head>', headAdditions)
-
-    // Inject semantic fallback inside <div id="root">...</div> (React 19 createRoot replaces it on boot)
-    html = html.replace(
-      '<div id="root"></div>',
-      `<div id="root">${item.bodyHtml}</div>`
-    )
+    const wrappedBody = `<div id="root"><!-- PRERENDER_ROOT_START -->${item.bodyHtml}<!-- PRERENDER_ROOT_END --></div>`
+    if (/<!-- PRERENDER_ROOT_START -->/.test(html)) {
+      html = html.replace(
+        /<div id="root"><!-- PRERENDER_ROOT_START -->[\s\S]*?<!-- PRERENDER_ROOT_END --><\/div>/,
+        wrappedBody
+      )
+    } else {
+      html = html.replace('<div id="root"></div>', wrappedBody)
+    }
 
     const targetPath =
       item.route === '/'

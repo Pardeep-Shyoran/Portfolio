@@ -54,6 +54,7 @@
   background-color: var(--color-accent);
   flex-shrink: 0;
   box-shadow: 0 0 8px var(--color-accent-subtle);
+  will-change: transform, opacity;
   animation: pulseDot 2.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
@@ -416,6 +417,7 @@
   border-radius: 50%;
   background-color: var(--color-accent);
   box-shadow: 0 0 6px var(--color-accent);
+  will-change: transform, opacity;
   animation: pulseDot 2s infinite;
 }
 

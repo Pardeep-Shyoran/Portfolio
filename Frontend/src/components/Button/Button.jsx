@@ -41,7 +41,7 @@ const Button = ({
         target={target}
         rel={target === '_blank' ? 'noopener noreferrer' : undefined}
         className={buttonClasses}
-        aria-disabled={disabled}
+        aria-disabled={disabled || undefined}
         tabIndex={disabled ? -1 : undefined}
         {...rest}
       >

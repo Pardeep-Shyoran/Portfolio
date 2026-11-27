@@ -1,0 +1,108 @@
+{
+  "specVersion": "1.0",
+  "host": {
+    "displayName": "Pardeep Shyoran — Full-Stack Web Developer",
+    "identifier": "did:web:pardeep-shyoran.me",
+    "documentationUrl": "https://pardeep-shyoran.me/llms.txt",
+    "logoUrl": "https://ik.imagekit.io/00zfvrear/Images/cropped_circle_image.png"
+  },
+  "entries": [
+    {
+      "identifier": "urn:air:pardeep-shyoran.me:dataset:portfolio-json",
+      "displayName": "Structured Portfolio JSON",
+      "type": "application/json",
+      "url": "https://pardeep-shyoran.me/portfolio.json",
+      "description": "Complete structured JSON representation of Pardeep Shyoran’s developer identity, technical skills, project case studies, credentials, coding stats, and canonical routes.",
+      "tags": [
+        "portfolio",
+        "full-stack",
+        "mern",
+        "developer",
+        "resume"
+      ],
+      "capabilities": [
+        "DeveloperProfile",
+        "ProjectCaseStudies",
+        "TechnicalSkills",
+        "CodingMetrics",
+        "Credentials"
+      ],
+      "representativeQueries": [
+        "What full-stack projects has Pardeep Shyoran built?",
+        "List Pardeep Shyoran’s React, Node.js, and MongoDB skills",
+        "Get Pardeep Shyoran’s contact email, availability, and resume URL"
+      ],
+      "version": "1.0.0",
+      "updatedAt": "2026-11-27T04:43:49.688Z"
+    },
+    {
+      "identifier": "urn:air:pardeep-shyoran.me:doc:llms-txt",
+      "displayName": "LLM Context Summary (llms.txt)",
+      "type": "text/plain",
+      "url": "https://pardeep-shyoran.me/llms.txt",
+      "description": "Concise Markdown index of Pardeep Shyoran’s portfolio pages, project case studies, and machine-readable endpoints.",
+      "tags": [
+        "llms.txt",
+        "documentation",
+        "index",
+        "portfolio"
+      ],
+      "representativeQueries": [
+        "Summarize Pardeep Shyoran’s portfolio for an AI agent",
+        "Find Markdown endpoints for Pardeep Shyoran’s projects"
+      ],
+      "version": "1.0.0",
+      "updatedAt": "2026-11-27T04:43:49.688Z"
+    },
+    {
+      "identifier": "urn:air:pardeep-shyoran.me:doc:llms-full-txt",
+      "displayName": "Full LLM Portfolio Dossier (llms-full.txt)",
+      "type": "text/markdown",
+      "url": "https://pardeep-shyoran.me/llms-full.txt",
+      "description": "Complete single-file Markdown dossier containing bio, development workflow, skills, all project case studies, certifications, coding metrics, and contact details.",
+      "tags": [
+        "llms-full.txt",
+        "markdown",
+        "case-studies",
+        "dossier"
+      ],
+      "representativeQueries": [
+        "Read detailed case studies for KodraX, Rivo, and Lite-Insta",
+        "Inspect Pardeep Shyoran’s verified certifications and coding stats"
+      ],
+      "version": "1.0.0",
+      "updatedAt": "2026-11-27T04:43:49.688Z"
+    },
+    {
+      "identifier": "urn:air:pardeep-shyoran.me:webmcp:portfolio-tools",
+      "displayName": "Portfolio WebMCP Browser Tools",
+      "type": "application/mcp-server-card+json",
+      "url": "https://pardeep-shyoran.me/.well-known/mcp-server-card.json",
+      "description": "Client-side WebMCP tools registered via navigator.modelContext and declarative HTML form attributes for querying portfolio data, navigating routes, and submitting contact inquiries.",
+      "tags": [
+        "webmcp",
+        "browser-tools",
+        "navigation",
+        "contact-form"
+      ],
+      "capabilities": [
+        "get_developer_profile",
+        "list_projects",
+        "get_project_case_study",
+        "list_skills",
+        "list_certificates",
+        "get_coding_stats",
+        "navigate_portfolio",
+        "prepare_or_submit_contact",
+        "send_contact_inquiry"
+      ],
+      "representativeQueries": [
+        "Filter Pardeep Shyoran’s projects by React or Socket.IO",
+        "Fetch Pardeep Shyoran’s live GitHub, LeetCode, and GeeksforGeeks coding stats",
+        "Submit an employment or freelance inquiry via the portfolio contact form"
+      ],
+      "version": "1.0.0",
+      "updatedAt": "2026-11-27T04:43:49.688Z"
+    }
+  ]
+}

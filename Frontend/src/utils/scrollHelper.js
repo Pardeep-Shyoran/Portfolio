@@ -1,9 +1,4 @@
-import gsap from 'gsap'
-import { ScrollSmoother } from 'gsap/ScrollSmoother'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { ScrollToPlugin } from 'gsap/ScrollToPlugin'
-
-gsap.registerPlugin(ScrollTrigger, ScrollSmoother, ScrollToPlugin)
+import { requestSectionMount } from './sectionMount'
 
 /**
  * Checks if the user has requested reduced motion.
@@ -15,31 +10,29 @@ export const prefersReducedMotion = () => {
 }
 
 /**
- * Refreshes all active ScrollTriggers to recalculate layout positions.
+ * Refreshes active ScrollTriggers if GSAP ScrollTrigger has been loaded.
  */
 export const refreshScrollTriggers = () => {
+  if (typeof window === 'undefined') return
+  const st = window.__PORTFOLIO_SCROLL_TRIGGER__
+  if (!st) return
   requestAnimationFrame(() => {
-    ScrollTrigger.refresh()
+    st.refresh()
   })
 }
 
+const getActiveSmoother = () =>
+  typeof window !== 'undefined' ? window.__PORTFOLIO_SMOOTHER__ || null : null
+
 /**
- * Unified smooth scroll utility that harmonizes GSAP's ScrollSmoother,
- * GSAP ScrollToPlugin, and native scrolling.
- *
- * Automatically respects `prefers-reduced-motion` and avoids scroll locking.
- *
- * @param {string|Element|number} target - Element ID (string), DOM element, or scroll position number (e.g. 0 for top)
- * @param {Object} [options]
- * @param {number} [options.offsetY] - Pixel offset for sticky headers (defaults to header height + 20)
- * @param {number} [options.duration] - GSAP tween duration (default: 0.7)
- * @param {Function} [options.onComplete] - Callback on arrival
+ * Unified smooth scroll utility that harmonizes GSAP's ScrollSmoother (when active on desktop)
+ * and native smooth/instant scrolling without forcing GSAP into the critical initial bundle.
  */
 export const smoothScrollTo = (target, options = {}) => {
   if (typeof window === 'undefined') return
 
   const isReduced = prefersReducedMotion()
-  const smoother = ScrollSmoother.get()
+  const smoother = getActiveSmoother()
   const header = document.querySelector('header')
   const headerHeight = header ? header.offsetHeight : 68
   const defaultOffset = headerHeight + 20
@@ -63,13 +56,10 @@ export const smoothScrollTo = (target, options = {}) => {
         setTimeout(options.onComplete, 600)
       }
     } else {
-      gsap.to(window, {
-        duration: options.duration ?? 0.6,
-        scrollTo: { y: 0 },
-        ease: 'power2.inOut',
-        overwrite: 'auto',
-        onComplete: options.onComplete,
-      })
+      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
+      if (options.onComplete) {
+        setTimeout(options.onComplete, 500)
+      }
     }
     return
   }
@@ -78,20 +68,19 @@ export const smoothScrollTo = (target, options = {}) => {
   let element = null
   if (typeof target === 'string') {
     const cleanId = target.startsWith('#') ? target.slice(1) : target
+    requestSectionMount(cleanId)
     element = document.getElementById(cleanId)
   } else if (target instanceof Element) {
     element = target
   }
 
   if (!element) {
-    // If element doesn't exist yet (e.g. lazy loaded), do nothing or warn gently
     return
   }
 
   // 3. Perform scroll
   if (isReduced) {
     element.scrollIntoView({ behavior: 'instant', block: 'start' })
-    // Adjust for sticky header
     window.scrollBy(0, -offsetY)
     options.onComplete?.()
     return
@@ -103,15 +92,10 @@ export const smoothScrollTo = (target, options = {}) => {
       setTimeout(options.onComplete, 700)
     }
   } else {
-    gsap.to(window, {
-      duration: options.duration ?? 0.7,
-      scrollTo: {
-        y: element,
-        offsetY,
-      },
-      ease: 'power2.inOut',
-      overwrite: 'auto',
-      onComplete: options.onComplete,
-    })
+    const targetTop = Math.max(0, element.getBoundingClientRect().top + window.scrollY - offsetY)
+    window.scrollTo({ top: targetTop, left: 0, behavior: 'smooth' })
+    if (options.onComplete) {
+      setTimeout(options.onComplete, 600)
+    }
   }
 }

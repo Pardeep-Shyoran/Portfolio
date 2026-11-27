@@ -2,8 +2,8 @@ import { NavLink, useLocation } from 'react-router-dom'
 import styles from './Logo.module.css'
 import { smoothScrollTo } from '../../utils/scrollHelper'
 
-const DARK_THEME_LOGO = 'https://ik.imagekit.io/00zfvrear/Images/Minimalist%20Cream%20Ribbon%20F%20Logo.png?updatedAt=1792666504824'
-const LIGHT_THEME_LOGO = 'https://ik.imagekit.io/00zfvrear/Images/Abstract%20S-P%20Monogram%20Emblem-Photoroom.png?updatedAt=1792666504838'
+const DARK_THEME_LOGO = 'https://ik.imagekit.io/00zfvrear/Images/Minimalist%20Cream%20Ribbon%20F%20Logo.png?updatedAt=1792666504824&tr=w-96,h-96,c-at_max,f-auto,q-85'
+const LIGHT_THEME_LOGO = 'https://ik.imagekit.io/00zfvrear/Images/Abstract%20S-P%20Monogram%20Emblem-Photoroom.png?updatedAt=1792666504838&tr=w-96,h-96,c-at_max,f-auto,q-85'
 
 const Logo = () => {
   const location = useLocation()
@@ -28,6 +28,8 @@ const Logo = () => {
           <img
             src={DARK_THEME_LOGO}
             alt=""
+            width="36"
+            height="36"
             className={`${styles.logoImg} ${styles.darkThemeLogo}`}
             loading="eager"
             decoding="async"
@@ -36,6 +38,8 @@ const Logo = () => {
           <img
             src={LIGHT_THEME_LOGO}
             alt=""
+            width="36"
+            height="36"
             className={`${styles.logoImg} ${styles.lightThemeLogo}`}
             loading="eager"
             decoding="async"

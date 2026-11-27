@@ -1,28 +1,21 @@
-import { useState, useMemo, useRef } from "react";
+import { useState, useMemo } from "react";
 import { useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
 import Skills from "../Skills/Skills";
 import Button from "../../components/Button/Button";
 import StructuredData from "../../components/StructuredData/StructuredData";
 import profileData from "../../data/profile";
 import skillsData from "../../data/skills";
-import { smoothScrollTo, prefersReducedMotion, refreshScrollTriggers } from "../../utils/scrollHelper";
+import { smoothScrollTo } from "../../utils/scrollHelper";
 import styles from "./About.module.css";
 
-gsap.registerPlugin(ScrollTrigger);
-
-const DARK_THEME_LOGO = 'https://ik.imagekit.io/00zfvrear/Images/Minimalist%20Cream%20Ribbon%20F%20Logo.png?updatedAt=1792666504824';
-const LIGHT_THEME_LOGO = 'https://ik.imagekit.io/00zfvrear/Images/Abstract%20S-P%20Monogram%20Emblem-Photoroom.png?updatedAt=1792666504838';
+const DARK_THEME_LOGO = 'https://ik.imagekit.io/00zfvrear/Images/Minimalist%20Cream%20Ribbon%20F%20Logo.png?updatedAt=1792666504824&tr=w-120,h-120,c-at_max,f-auto,q-85';
+const LIGHT_THEME_LOGO = 'https://ik.imagekit.io/00zfvrear/Images/Abstract%20S-P%20Monogram%20Emblem-Photoroom.png?updatedAt=1792666504838&tr=w-120,h-120,c-at_max,f-auto,q-85';
 
 const About = () => {
   const location = useLocation();
   const isStandalonePage = location.pathname === "/about";
   const [activeTab, setActiveTab] = useState("workflow");
-  const sectionRef = useRef(null);
-  const ctaRef = useRef(null);
 
   // Smooth scroll helper for section CTA buttons
   const handleNavigate = (e, targetId) => {
@@ -55,59 +48,6 @@ const About = () => {
       },
     ],
     [],
-  );
-
-  // GSAP entrance animation on scroll & refresh triggers after lazy mount
-  useGSAP(
-    () => {
-      refreshScrollTriggers();
-
-      if (prefersReducedMotion() || !sectionRef.current) return;
-
-      const animElements = sectionRef.current.querySelectorAll("[data-about-anim]");
-      if (animElements && animElements.length > 0) {
-        gsap.fromTo(
-          animElements,
-          {
-            opacity: 0,
-            y: 24,
-          },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.7,
-            ease: "power2.out",
-            stagger: 0.08,
-            clearProps: "transform,opacity",
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: "top 82%",
-              once: true,
-            },
-          },
-        );
-      }
-
-      if (ctaRef.current) {
-        gsap.fromTo(
-          ctaRef.current,
-          { opacity: 0, y: 20 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.65,
-            ease: "power2.out",
-            clearProps: "transform,opacity",
-            scrollTrigger: {
-              trigger: ctaRef.current,
-              start: "top 88%",
-              once: true,
-            },
-          },
-        );
-      }
-    },
-    { scope: sectionRef },
   );
 
   // Dynamic heading tag
@@ -149,7 +89,6 @@ const About = () => {
 
       <section
         id="about"
-        ref={sectionRef}
         className={`${styles.aboutSection} ${isStandalonePage ? styles.standalonePage : ""}`.trim()}
         aria-label="About Pardeep Shyoran - Web Developer"
       >
@@ -175,15 +114,19 @@ const About = () => {
                   <img
                     src={DARK_THEME_LOGO}
                     alt=""
+                    width="44"
+                    height="44"
                     className={`${styles.logoImg} ${styles.darkThemeLogo}`}
-                    loading="eager"
+                    loading="lazy"
                     decoding="async"
                   />
                   <img
                     src={LIGHT_THEME_LOGO}
                     alt=""
+                    width="44"
+                    height="44"
                     className={`${styles.logoImg} ${styles.lightThemeLogo}`}
-                    loading="eager"
+                    loading="lazy"
                     decoding="async"
                   />
                 </div>
@@ -413,7 +356,7 @@ const About = () => {
 
       {/* Unified Contextual CTA Bridge - Positioned Seamlessly After Full Technical Dossier */}
       <div className={styles.ctaBridgeWrapper}>
-        <div ref={ctaRef} className={styles.ctaBridge} data-about-anim>
+        <div className={styles.ctaBridge} data-about-anim>
           <div className={styles.bridgeContent}>
             <h3 className={styles.bridgeHeading}>Looking for a passionate Web Developer?</h3>
             <p className={styles.bridgeSub}>

@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "1.0",
+  "name": "Pardeep Shyoran Portfolio WebMCP",
+  "protocol": "webmcp",
+  "transport": "navigator.modelContext",
+  "siteUrl": "https://pardeep-shyoran.me",
+  "documentationUrl": "https://pardeep-shyoran.me/llms.txt",
+  "tools": [
+    {
+      "name": "get_developer_profile",
+      "description": "Retrieve Pardeep Shyoran’s developer profile, availability, location, resume URL, direct contact info, and social links.",
+      "readOnly": true
+    },
+    {
+      "name": "list_projects",
+      "description": "List portfolio projects with optional filtering by technology tag or featured status.",
+      "readOnly": true
+    },
+    {
+      "name": "get_project_case_study",
+      "description": "Retrieve full case study details for a specific project by slug.",
+      "readOnly": true
+    },
+    {
+      "name": "list_skills",
+      "description": "List categorized technical skills and tools.",
+      "readOnly": true
+    },
+    {
+      "name": "list_certificates",
+      "description": "Retrieve verified certifications, credential IDs, issuers, and verification URLs.",
+      "readOnly": true
+    },
+    {
+      "name": "get_coding_stats",
+      "description": "Retrieve coding metrics across GitHub, LeetCode, and GeeksforGeeks.",
+      "readOnly": true
+    },
+    {
+      "name": "navigate_portfolio",
+      "description": "Navigate the portfolio UI to a route or scroll to a home section.",
+      "readOnly": false
+    },
+    {
+      "name": "prepare_or_submit_contact",
+      "description": "Populate the portfolio contact form and optionally submit it.",
+      "readOnly": false
+    },
+    {
+      "name": "send_contact_inquiry",
+      "description": "Declarative WebMCP contact form at /contact.",
+      "declarativeForm": "https://pardeep-shyoran.me/contact",
+      "readOnly": false
+    }
+  ]
+}

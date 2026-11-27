@@ -18,14 +18,16 @@ const Header = () => {
 
   // Track scroll position for header visual density and floating pill state
   useEffect(() => {
+    let rafId = 0
     const handleScroll = () => {
       const scrollY = window.scrollY || document.documentElement.scrollTop || 0
       setIsScrolled(scrollY > 20)
     }
     window.addEventListener('scroll', handleScroll, { passive: true })
     document.addEventListener('scroll', handleScroll, { passive: true })
-    handleScroll()
+    rafId = requestAnimationFrame(handleScroll)
     return () => {
+      cancelAnimationFrame(rafId)
       window.removeEventListener('scroll', handleScroll)
       document.removeEventListener('scroll', handleScroll)
     }
@@ -100,13 +102,16 @@ const Header = () => {
   }, [menuOpen])
 
   const handleContactClick = (e) => {
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) {
+      return
+    }
     e.preventDefault()
     setMenuOpen(false)
 
-    if (location.pathname !== '/') {
-      navigate('/', { state: { scrollTarget: 'contact' } })
-    } else {
+    if (location.pathname === '/') {
       smoothScrollTo('contact')
+    } else {
+      navigate('/contact')
     }
   }
 
@@ -134,11 +139,12 @@ const Header = () => {
             </div>
 
             <Button
+              to="/contact"
               variant="secondary"
               size="sm"
               onClick={handleContactClick}
               className={styles.headerContactBtn}
-              aria-label="Jump to Contact section"
+              aria-label="Contact Pardeep Shyoran"
             >
               Contact
             </Button>
@@ -171,12 +177,14 @@ const Header = () => {
       />
 
       {/* Mobile Slide-in Drawer */}
-      <aside
+      <div
         id="mobile-navigation-drawer"
         className={`${styles.mobileDrawer} ${menuOpen ? styles.drawerOpen : ''}`}
         role="dialog"
         aria-modal="true"
         aria-label="Mobile Navigation"
+        aria-hidden={!menuOpen || undefined}
+        inert={!menuOpen}
         ref={menuRef}
       >
         <div className={styles.drawerHeader}>
@@ -211,6 +219,7 @@ const Header = () => {
             </div>
 
             <Button
+              to="/contact"
               variant="primary"
               size="md"
               onClick={handleContactClick}
@@ -254,7 +263,7 @@ const Header = () => {
             </div>
           </div>
         </div>
-      </aside>
+      </div>
     </>
   )
 }

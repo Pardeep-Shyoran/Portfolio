@@ -20,12 +20,22 @@ const FILTER_OPTIONS = [
 
 const ProjectsPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const initialTag = searchParams.get("tag");
+  const rawTag = (searchParams.get("tag") || "").trim();
   const matchedOption = FILTER_OPTIONS.find(
-    (opt) => opt.value.toLowerCase() === String(initialTag || "").toLowerCase()
+    (opt) => opt.value.toLowerCase() === rawTag.toLowerCase()
   );
-  const [selectedFilter, setSelectedFilter] = useState(matchedOption ? matchedOption.value : "All");
+  const activeTagFromUrl = rawTag
+    ? matchedOption
+      ? matchedOption.value
+      : rawTag
+    : "All";
+  const [selectedFilter, setSelectedFilter] = useState(activeTagFromUrl);
   const containerRef = useRef(null);
+
+  // Keep filter state synchronized when URL query parameters change (e.g. via WebMCP navigation)
+  useEffect(() => {
+    setSelectedFilter(activeTagFromUrl);
+  }, [activeTagFromUrl]);
 
   const handleSelectFilter = (value) => {
     setSelectedFilter(value);
@@ -36,16 +46,26 @@ const ProjectsPage = () => {
     }
   };
 
+  const filterOptions = useMemo(() => {
+    if (
+      selectedFilter === "All" ||
+      FILTER_OPTIONS.some((opt) => opt.value.toLowerCase() === selectedFilter.toLowerCase())
+    ) {
+      return FILTER_OPTIONS;
+    }
+    return [...FILTER_OPTIONS, { label: selectedFilter, value: selectedFilter }];
+  }, [selectedFilter]);
+
   // Compute live counts per technology filter
   const filterCounts = useMemo(() => {
     const counts = { All: projectsData.length };
-    FILTER_OPTIONS.slice(1).forEach(({ value }) => {
+    filterOptions.slice(1).forEach(({ value }) => {
       counts[value] = projectsData.filter((p) =>
         p.tags?.some((t) => t.toLowerCase().includes(value.toLowerCase()))
       ).length;
     });
     return counts;
-  }, []);
+  }, [filterOptions]);
 
   // Filter projects by selected technology
   const visibleProjects = useMemo(() => {
@@ -135,7 +155,7 @@ const ProjectsPage = () => {
               role="group"
               aria-label="Filter projects by technology"
             >
-              {FILTER_OPTIONS.map(({ label, value }) => {
+              {filterOptions.map(({ label, value }) => {
                 const isActive = selectedFilter === value;
                 const count = filterCounts[value] || 0;
                 return (
