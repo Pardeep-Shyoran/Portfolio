@@ -8,7 +8,18 @@ import { prefersReducedMotion } from "../../utils/scrollHelper.js";
 import styles from "./Projects.module.css";
 import { Helmet } from "react-helmet";
 import gsap from "gsap";
-import { FaFolderOpen, FaRedo } from "react-icons/fa";
+// Inline SVGs replace react-icons to eliminate the vendor-icons chunk from the critical path
+const FaFolderOpen = ({ className }) => (
+  <svg className={className} viewBox="0 0 576 512" fill="currentColor" aria-hidden="true">
+    <path d="M572.694 292.093L500.27 416.248A63.997 63.997 0 0 1 444.989 448H45.025c-18.26 0-31.023-18.5-24.634-35.572l72.424-192C99.44 203.231 116.027 192 134.482 192H544c18.654 0 31.3 19.071 28.694 100.093zM64 224L0 448V64c0-35.346 28.654-64 64-64h220.284c14.142 0 27.714 5.629 37.713 15.627l37.37 37.372A64.028 64.028 0 0 0 405.08 68H512c35.346 0 64 28.654 64 64v32H144c-27.042 0-51.049 16.714-60.496 42.023z"/>
+  </svg>
+);
+
+const FaRedo = ({ className }) => (
+  <svg className={className} viewBox="0 0 512 512" fill="currentColor" aria-hidden="true">
+    <path d="M500.33 0h-47.41a12 12 0 0 0-12 12.57l4 72A247.16 247.16 0 0 0 256 8C119.34 8 7.9 119.53 8 256.19 8.1 393.07 119.1 504 256 504a247.1 247.1 0 0 0 166.18-63.91 12 12 0 0 0 .48-17.43l-34-34a12 12 0 0 0-16.38-.55A176 176 0 1 1 402.1 157.8l-101.53-4.87a12 12 0 0 0-12.57 12v47.41a12 12 0 0 0 12 12h200.33a12 12 0 0 0 12-12V12a12 12 0 0 0-12-12z"/>
+  </svg>
+);
 
 const FILTER_OPTIONS = [
   { label: "All", value: "All" },

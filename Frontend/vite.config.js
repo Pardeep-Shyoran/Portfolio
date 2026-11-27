@@ -146,7 +146,8 @@ export default defineConfig({
           (dep) =>
             !dep.includes('vendor-calendar') &&
             !dep.includes('vendor-gsap') &&
-            !dep.includes('vendor-icons')
+            !dep.includes('vendor-icons') &&
+            !dep.includes('vendor-react')
         ),
     },
     rollupOptions: {

@@ -1,6 +1,29 @@
 /* Google Fonts loaded non-blocking via <link> in index.html */
 
 /* ==========================================================================
+   Font Fallback Metrics — eliminates CLS caused by web-font swap
+   Inter → size-adjust tuned to match Inter's advance-width on system-ui
+   Syne  → size-adjust tuned to match Syne's advance-width on system-ui
+   ========================================================================== */
+@font-face {
+  font-family: 'Inter Fallback';
+  src: local('Arial');
+  ascent-override: 90.49%;
+  descent-override: 22.56%;
+  line-gap-override: 0%;
+  size-adjust: 107.06%;
+}
+
+@font-face {
+  font-family: 'Syne Fallback';
+  src: local('Arial');
+  ascent-override: 95%;
+  descent-override: 25%;
+  line-gap-override: 0%;
+  size-adjust: 103%;
+}
+
+/* ==========================================================================
    Centralized Design Token & Theme System (Matte Luxury OLED)
    ========================================================================== */
 
@@ -111,10 +134,11 @@
 /* 3. Global Structural Tokens */
 :root {
   /* Typography Families */
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  /* size-adjust fallback fonts inserted before system fonts to minimise CLS */
+  --font-sans: 'Inter', 'Inter Fallback', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --font-body: var(--font-sans);
-  --font-heading: 'Syne', var(--font-sans);
-  --font-display: 'Syne', var(--font-sans);
+  --font-heading: 'Syne', 'Syne Fallback', 'Inter Fallback', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-display: 'Syne', 'Syne Fallback', 'Inter Fallback', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-mono: 'Fira Code', 'SFMono-Regular', Consolas, Menlo, Monaco, monospace;
   --font-script: 'Yellowtail', cursive;
   --font-stat: 'Antonio', var(--font-sans);
